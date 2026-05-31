@@ -26,7 +26,11 @@
     </div>
     <div class="hero-media">
       <div class="r-media" style="aspect-ratio:4/4.6;border-radius:var(--radius-lg)" data-ph="imagem de lifestyle">
-        {%- if s.image != blank -%}<img src="{{ s.image | image_url: width: 1200 }}" alt="{{ s.image.alt | escape }}">{%- endif -%}
+        {%- if s.image != blank -%}
+          <img src="{{ s.image | image_url: width: 1200 }}" alt="{{ s.image.alt | escape }}">
+        {%- else -%}
+          <img src="{{ 'hero-image.jpg' | asset_url }}" alt="Corgi a brincar com uma bola" loading="eager">
+        {%- endif -%}
       </div>
       {%- if s.badge_text != blank -%}
         <div class="hero-badge"><div><div class="star">★★★★★</div><b>{{ s.badge_text }}</b><span>{{ s.badge_sub }}</span></div></div>
