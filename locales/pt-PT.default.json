@@ -1,0 +1,27 @@
+{
+  "general": {
+    "page": "Página",
+    "search": {
+      "placeholder": "Pesquisar",
+      "results_with_count": "{{ count }} resultados"
+    },
+    "404": {
+      "title": "Página não encontrada"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Adicionar ao carrinho",
+      "sold_out": "Esgotado",
+      "on_sale": "Em promoção"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Carrinho",
+      "empty": "O teu carrinho está vazio",
+      "checkout": "Finalizar compra",
+      "subtotal": "Subtotal"
+    }
+  }
+}

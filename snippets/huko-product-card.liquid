@@ -1,0 +1,63 @@
+{%- comment -%}
+  Renders a HUKO product card.
+  Usage: {% render 'huko-product-card', card_product: product %}
+{%- endcomment -%}
+{%- liquid
+  assign p = card_product
+  assign variant = p.selected_or_first_available_variant
+  assign on_sale = false
+  if p.compare_at_price > p.price
+    assign on_sale = true
+  endif
+  assign downcased_tags = p.tags | join: ',' | downcase
+-%}
+
+<article class="pcard">
+  <div class="pcard-media">
+    <div class="pcard-tags">
+      {%- if downcased_tags contains 'mais-vendido' -%}<span class="tag best">Mais vendido</span>{%- endif -%}
+      {%- if downcased_tags contains 'novo' -%}<span class="tag new">Novo</span>{%- endif -%}
+      {%- if downcased_tags contains 'premium' -%}<span class="tag premium">Premium</span>{%- endif -%}
+    </div>
+    <button class="wish" aria-label="Adicionar aos favoritos" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 21c5-3 8-7 8-11a4 4 0 0 0-8-1 4 4 0 0 0-8 1c0 4 3 8 8 11Z"/></svg></button>
+    <a href="{{ p.url }}">
+      <div class="r-media" style="aspect-ratio:1/1.12" data-ph="{{ p.title | escape }}">
+        {%- if p.featured_image -%}
+          <img src="{{ p.featured_image | image_url: width: 600 }}" alt="{{ p.featured_image.alt | default: p.title | escape }}" loading="lazy" width="600" height="672">
+        {%- endif -%}
+      </div>
+    </a>
+    {%- if p.available -%}
+      <form class="quick-add" method="post" action="{{ routes.cart_add_url }}" data-cart-form>
+        <input type="hidden" name="id" value="{{ variant.id }}">
+        <button class="btn btn-primary btn-block" type="submit">Adicionar ao carrinho</button>
+      </form>
+    {%- endif -%}
+  </div>
+
+  <div class="pcard-body">
+    {%- if p.metafields.reviews.rating.value != blank -%}
+      {%- assign rating = p.metafields.reviews.rating.value.rating | round: 1 -%}
+      <div class="pcard-rating"><span class="stars">★★★★★</span> {{ rating }} ({{ p.metafields.reviews.rating_count.value }})</div>
+    {%- endif -%}
+    <h3><a href="{{ p.url }}">{{ p.title }}</a></h3>
+    <div class="price">
+      {{ p.price | money }}
+      {%- if on_sale -%}<span class="was">{{ p.compare_at_price | money }}</span>{%- endif -%}
+    </div>
+
+    {%- comment -%} Colour swatches from a "Cor"/"Color" option, using each value's variant image {%- endcomment -%}
+    {%- for option in p.options_with_values -%}
+      {%- assign oname = option.name | downcase -%}
+      {%- if oname == 'cor' or oname == 'color' or oname == 'cores' -%}
+        <div class="swatches">
+          {%- for value in option.values limit: 5 -%}
+            {%- assign vimg = value.variant.image | default: p.featured_image -%}
+            <span class="swatch" title="{{ value }}"
+              style="{% if vimg %}background-image:url({{ vimg | image_url: width: 40 }});background-size:cover{% else %}background:var(--cream-2){% endif %}"></span>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</article>

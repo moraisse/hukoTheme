@@ -1,0 +1,73 @@
+<footer class="footer" data-screen-label="Footer">
+  <div class="wrap footer-top">
+    <div class="footer-brand">
+      <a href="{{ routes.root_url }}" class="logo">
+        <img src="{% if settings.logo_light != blank %}{{ settings.logo_light | image_url: width: 400 }}{% else %}{{ 'logo-huko-cream.png' | asset_url }}{% endif %}" alt="{{ shop.name | escape }}" style="height:34px">
+      </a>
+      {%- if section.settings.tagline != blank -%}<p>{{ section.settings.tagline }}</p>{%- endif -%}
+      <div class="footer-social">
+        {%- if section.settings.instagram != blank -%}
+          <a href="{{ section.settings.instagram }}" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg></a>
+        {%- endif -%}
+        {%- if section.settings.tiktok != blank -%}
+          <a href="{{ section.settings.tiktok }}" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 4c.5 2.5 2 4 4.5 4.3V11c-1.7 0-3.3-.5-4.5-1.4V15a5 5 0 1 1-5-5c.3 0 .7 0 1 .1v2.8a2.3 2.3 0 1 0 1.5 2.1V4H15Z"/></svg></a>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'menu' -%}
+        <div class="footer-col" {{ block.shopify_attributes }}>
+          <h4>{{ block.settings.title }}</h4>
+          <ul>
+            {%- for link in linklists[block.settings.menu].links -%}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  <div class="wrap footer-bottom">
+    <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }} · {{ section.settings.credit }}</span>
+    {%- if section.settings.show_payment -%}
+      <div class="pay">
+        {%- for type in shop.enabled_payment_types -%}
+          <span class="chip">{{ type | replace: '_', ' ' | upcase }}</span>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Rodapé",
+  "settings": [
+    { "type": "textarea", "id": "tagline", "label": "Texto da marca", "default": "Acessórios premium para cães e gatos — design europeu, materiais selecionados e bem-estar em primeiro lugar." },
+    { "type": "text", "id": "credit", "label": "Crédito", "default": "Feito com cuidado na Europa" },
+    { "type": "checkbox", "id": "show_payment", "label": "Mostrar métodos de pagamento", "default": true },
+    { "type": "header", "content": "Redes sociais" },
+    { "type": "url", "id": "instagram", "label": "Instagram" },
+    { "type": "url", "id": "tiktok", "label": "TikTok" }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Coluna de links",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título", "default": "Loja" },
+        { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "menu", "settings": { "title": "Loja" } },
+      { "type": "menu", "settings": { "title": "Apoio ao cliente" } },
+      { "type": "menu", "settings": { "title": "A HUKO" } }
+    ]
+  }
+}
+{% endschema %}

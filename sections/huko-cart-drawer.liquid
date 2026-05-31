@@ -1,0 +1,101 @@
+{%- liquid
+  assign threshold = section.settings.free_shipping_threshold | times: 100
+  assign remaining = threshold | minus: cart.total_price
+  assign pct = 0
+  if threshold > 0
+    assign pct = cart.total_price | times: 100.0 | divided_by: threshold
+    if pct > 100
+      assign pct = 100
+    endif
+  endif
+-%}
+
+<div class="scrim" id="cart-scrim"></div>
+<aside class="drawer" id="cart" data-scrim="cart-scrim" aria-label="Carrinho">
+  <div class="drawer-head">
+    <h3>O teu carrinho <span class="count">· {{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}itens{% endif %}</span></h3>
+    <button class="iconbtn" data-close="cart" aria-label="Fechar" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+
+  {%- if section.settings.show_free_shipping and threshold > 0 -%}
+    <div class="ship-bar">
+      {%- if remaining > 0 -%}
+        <p>Faltam <b>{{ remaining | money }}</b> para teres <b>envio grátis</b>.</p>
+      {%- else -%}
+        <p><b>Boa!</b> Tens <b>envio grátis</b>. 🎉</p>
+      {%- endif -%}
+      <div class="ship-track"><div class="ship-fill" style="width:{{ pct }}%"></div></div>
+    </div>
+  {%- endif -%}
+
+  {%- if cart.item_count > 0 -%}
+    <div class="drawer-items">
+      {%- for item in cart.items -%}
+        <div class="citem">
+          <div class="r-media" style="width:74px;height:84px" data-ph="produto">
+            {%- if item.image -%}<img src="{{ item.image | image_url: width: 160 }}" alt="{{ item.title | escape }}">{%- endif -%}
+          </div>
+          <div>
+            <h4><a href="{{ item.url }}">{{ item.product.title }}</a></h4>
+            {%- unless item.product.has_only_default_variant -%}
+              <div class="opt">{{ item.variant.title }}</div>
+            {%- endunless -%}
+            <div class="qty" data-stepper data-line-key="{{ item.key }}">
+              <button data-step="-" aria-label="Menos" type="button"><svg viewBox="0 0 24 24" width="14" fill="none" stroke="currentColor"><path d="M5 12h14"/></svg></button>
+              <span data-qty>{{ item.quantity }}</span>
+              <button data-step="+" aria-label="Mais" type="button"><svg viewBox="0 0 24 24" width="14" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg></button>
+            </div>
+          </div>
+          <div>
+            <div class="cprice">{{ item.final_line_price | money }}</div>
+            <a class="remove" href="#" data-remove-key="{{ item.key }}">Remover</a>
+          </div>
+        </div>
+      {%- endfor -%}
+
+      {%- assign up = section.settings.upsell_product -%}
+      {%- if up != blank -%}
+        {%- assign upp = all_products[up] -%}
+        {%- if upp != blank and upp.available -%}
+          <form class="upsell" method="post" action="{{ routes.cart_add_url }}" data-cart-form>
+            <input type="hidden" name="id" value="{{ upp.selected_or_first_available_variant.id }}">
+            <div class="r-media" style="width:56px;height:64px" data-ph="produto">
+              {%- if upp.featured_image -%}<img src="{{ upp.featured_image | image_url: width: 130 }}" alt="{{ upp.title | escape }}">{%- endif -%}
+            </div>
+            <div>
+              <h5>{{ upp.title }}</h5>
+              <span>Combina na perfeição · {{ upp.price | money }}</span>
+            </div>
+            <button class="add" type="submit">+ Juntar</button>
+          </form>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+
+    <div class="drawer-foot">
+      <div class="row"><span>Subtotal</span><span>{{ cart.total_price | money }}</span></div>
+      <div class="row"><span>Envio</span><span>Calculado no checkout</span></div>
+      <div class="row total"><span>Total</span><span>{{ cart.total_price | money }}</span></div>
+      <form action="{{ routes.cart_url }}" method="post">
+        <button class="btn btn-primary btn-block btn-lg" type="submit" name="checkout">Finalizar compra</button>
+      </form>
+      <p class="note">Pagamento seguro · Devoluções em 30 dias</p>
+    </div>
+  {%- else -%}
+    <div class="drawer-items" style="display:flex;align-items:center;justify-content:center;text-align:center;flex-direction:column;gap:14px;padding:60px 24px">
+      <p style="font-family:var(--font-ui);color:var(--muted)">O teu carrinho está vazio.</p>
+      <a href="{{ routes.all_products_collection_url }}" class="btn btn-dark" data-close="cart">Começar a comprar</a>
+    </div>
+  {%- endif -%}
+</aside>
+
+{% schema %}
+{
+  "name": "Carrinho lateral",
+  "settings": [
+    { "type": "checkbox", "id": "show_free_shipping", "label": "Mostrar barra de envio grátis", "default": true },
+    { "type": "number", "id": "free_shipping_threshold", "label": "Valor para envio grátis (na moeda da loja)", "default": 50 },
+    { "type": "product", "id": "upsell_product", "label": "Produto sugerido (upsell)" }
+  ]
+}
+{% endschema %}

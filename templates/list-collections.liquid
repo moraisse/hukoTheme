@@ -1,0 +1,16 @@
+<section class="section" data-screen-label="Coleções">
+  <div class="wrap">
+    <div class="sec-head"><div><span class="eyebrow">Explorar</span><h2>Coleções</h2></div></div>
+    <div class="cat-grid">
+      {%- for collection in collections -%}
+        <a class="cat-card" href="{{ collection.url }}">
+          <div class="r-media" style="aspect-ratio:1/1.04" data-ph="{{ collection.title | escape }}">
+            {%- if collection.image -%}<img src="{{ collection.image | image_url: width: 700 }}" alt="{{ collection.title | escape }}" loading="lazy">{%- endif -%}
+          </div>
+          <div class="cat-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M7 17 17 7M9 7h8v8"/></svg></div>
+          <div class="cat-body"><h3>{{ collection.title }}</h3><span>{{ collection.products_count }} produtos</span></div>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>

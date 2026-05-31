@@ -1,0 +1,56 @@
+{%- assign s = section.settings -%}
+<section class="editorial section" data-screen-label="Editorial">
+  <div class="wrap ed-grid">
+    <div class="r-media" style="aspect-ratio:1/1.08;border-radius:var(--radius-lg)" data-ph="imagem de lifestyle">
+      {%- if s.image != blank -%}<img src="{{ s.image | image_url: width: 1100 }}" alt="{{ s.image.alt | escape }}" loading="lazy">{%- endif -%}
+    </div>
+    <div class="ed-copy">
+      {%- if s.eyebrow != blank -%}<span class="eyebrow">{{ s.eyebrow }}</span>{%- endif -%}
+      <h2>{{ s.heading }}</h2>
+      {%- if s.text != blank -%}<p>{{ s.text }}</p>{%- endif -%}
+      {%- if section.blocks.size > 0 -%}
+        <div class="ed-stats">
+          {%- for block in section.blocks -%}
+            <div {{ block.shopify_attributes }}><div class="n">{{ block.settings.number }}</div><div class="l">{{ block.settings.label }}</div></div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+      {%- if s.button_label != blank -%}<a href="{{ s.button_link }}" class="btn btn-outline-forest">{{ s.button_label }}</a>{%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Editorial",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Imagem" },
+    { "type": "text", "id": "eyebrow", "label": "Sobre-título", "default": "A nossa filosofia" },
+    { "type": "textarea", "id": "heading", "label": "Título", "default": "Design que respeita o teu espaço. Conforto que respeita o teu pet." },
+    { "type": "textarea", "id": "text", "label": "Texto", "default": "A HUKO pets seleciona acessórios que unem estética, durabilidade e funcionalidade. Porque os produtos dos nossos animais também fazem parte da nossa casa." },
+    { "type": "text", "id": "button_label", "label": "Botão", "default": "Conhecer a marca" },
+    { "type": "url", "id": "button_link", "label": "Link do botão" }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Estatística",
+      "settings": [
+        { "type": "text", "id": "number", "label": "Número", "default": "100%" },
+        { "type": "text", "id": "label", "label": "Etiqueta", "default": "Materiais testados" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Editorial",
+      "blocks": [
+        { "type": "stat", "settings": { "number": "100%", "label": "Materiais testados" } },
+        { "type": "stat", "settings": { "number": "24h", "label": "Expedição rápida" } },
+        { "type": "stat", "settings": { "number": "30 dias", "label": "Trocas sem custos" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

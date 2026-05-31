@@ -1,0 +1,203 @@
+{%- liquid
+  assign product = product
+  assign current_variant = product.selected_or_first_available_variant
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+  endif
+  assign featured_media = current_variant.featured_media | default: product.featured_media
+-%}
+
+<main class="wrap pdp" data-screen-label="Página de produto">
+  {%- comment -%} Breadcrumb {%- endcomment -%}
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="{{ routes.root_url }}">Início</a>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m9 6 6 6-6 6"/></svg>
+    {%- if collection -%}
+      <a href="{{ collection.url }}">{{ collection.title }}</a>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m9 6 6 6-6 6"/></svg>
+    {%- endif -%}
+    <span>{{ product.title }}</span>
+  </nav>
+
+  <div class="pdp-grid">
+    {%- comment -%} GALLERY {%- endcomment -%}
+    <div class="gallery">
+      <div class="gallery-thumbs">
+        {%- for media in product.media limit: 6 -%}
+          <div class="r-media{% if forloop.first %} active{% endif %}" data-thumb data-full="{{ media | image_url: width: 1200 }}"
+               style="aspect-ratio:1/1.15;border-radius:var(--radius-sm)">
+            <img src="{{ media | image_url: width: 160 }}" alt="{{ media.alt | default: product.title | escape }}">
+          </div>
+        {%- endfor -%}
+      </div>
+      <div class="gallery-main">
+        <div class="r-media" style="aspect-ratio:1/1.16;border-radius:var(--radius)" data-ph="{{ product.title | escape }}">
+          {%- if featured_media -%}
+            <img src="{{ featured_media | image_url: width: 1400 }}" alt="{{ featured_media.alt | default: product.title | escape }}">
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} INFO + FORM {%- endcomment -%}
+    <div class="pdp-info">
+      {%- if product.vendor != blank -%}<div class="brandline">{{ product.vendor }}{% if product.type != blank %} · {{ product.type }}{% endif %}</div>{%- endif -%}
+      <h1>{{ product.title }}</h1>
+
+      {%- if product.metafields.reviews.rating.value != blank -%}
+        {%- assign rating = product.metafields.reviews.rating.value.rating | round: 1 -%}
+        <div class="pdp-rate"><span class="stars">★★★★★</span> {{ rating }} · <a href="#tabs" style="border-bottom:1px solid currentColor">{{ product.metafields.reviews.rating_count.value }} avaliações</a></div>
+      {%- endif -%}
+
+      <div class="pdp-price">
+        <span class="now" data-price>{{ current_variant.price | money }}</span>
+        {%- if on_sale -%}
+          <span class="was" data-compare>{{ current_variant.compare_at_price | money }}</span>
+          {%- assign pct = current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round -%}
+          <span class="save">−{{ pct }}%</span>
+        {%- endif -%}
+      </div>
+
+      {%- if product.description != blank -%}<div class="pdp-desc">{{ product.description | strip_html | truncatewords: 40 }}</div>{%- endif -%}
+
+      {%- comment -%} ===== PRODUCT FORM ===== {%- endcomment -%}
+      <product-form>
+      {%- form 'product', product, id: 'huko-product-form', novalidate: 'novalidate' -%}
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            {%- assign oname = option.name | downcase -%}
+            <div class="opt-block">
+              <div class="opt-label">{{ option.name }} <span class="sel" data-opt-display="{{ forloop.index0 }}">{{ option.selected_value }}</span></div>
+              {%- if oname == 'cor' or oname == 'color' or oname == 'cores' -%}
+                <div class="color-opts" data-select data-option-index="{{ forloop.index0 }}" data-sel-label="[data-opt-display='{{ forloop.index0 }}']">
+                  {%- for value in option.values -%}
+                    {%- assign vimg = value.variant.image -%}
+                    <button type="button" class="{% if value == option.selected_value %}active{% endif %}" data-val="{{ value | escape }}"
+                      title="{{ value | escape }}"
+                      style="{% if vimg %}background-image:url({{ vimg | image_url: width: 60 }});background-size:cover{% endif %}"></button>
+                  {%- endfor -%}
+                </div>
+              {%- else -%}
+                <div class="size-opts" data-select data-option-index="{{ forloop.index0 }}" data-sel-label="[data-opt-display='{{ forloop.index0 }}']">
+                  {%- for value in option.values -%}
+                    <button type="button" class="{% if value == option.selected_value %}active{% endif %}" data-val="{{ value | escape }}">{{ value }}</button>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        {%- endunless -%}
+
+        {%- comment -%} Variant selector (hidden) — synced by huko.js {%- endcomment -%}
+        <select name="id" id="huko-variant-select" hidden>
+          {%- for variant in product.variants -%}
+            <option value="{{ variant.id }}" {% if variant == current_variant %}selected{% endif %}
+              {% unless variant.available %}disabled{% endunless %}
+              data-options="{{ variant.options | join: ' / ' | escape }}"
+              data-price="{{ variant.price | money }}">{{ variant.title }}</option>
+          {%- endfor -%}
+        </select>
+
+        <div class="pdp-buy">
+          <div class="qty-add">
+            <div class="qty-stepper" data-stepper>
+              <button type="button" data-step="-" aria-label="Menos">−</button>
+              <input type="text" name="quantity" value="1" data-qty inputmode="numeric" style="width:30px;text-align:center;border:0;background:none;font-family:var(--font-ui);font-weight:600">
+              <button type="button" data-step="+" aria-label="Mais">+</button>
+            </div>
+            <button class="btn btn-primary btn-lg" style="flex:1" type="submit" {% unless product.available %}disabled{% endunless %}>
+              {%- if product.available -%}Adicionar ao carrinho{%- else -%}Esgotado{%- endif -%}
+            </button>
+          </div>
+          {%- if product.available -%}
+            {{ form | payment_button }}
+          {%- endif -%}
+        </div>
+      {%- endform -%}
+      </product-form>
+
+      {%- comment -%} PERKS {%- endcomment -%}
+      {%- if section.blocks.size > 0 -%}
+        <div class="pdp-perks">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'perk' -%}
+              <div class="pdp-perk" {{ block.shopify_attributes }}>{% render 'huko-icon', name: block.settings.icon %}<span><b>{{ block.settings.title }}</b>{{ block.settings.text }}</span></div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- comment -%} ===== TABS ===== {%- endcomment -%}
+  <div class="pdp-tabs" id="tabs" data-tabs>
+    <div class="tabnav">
+      <button class="active" data-tab="tab-desc" type="button">Descrição</button>
+      {%- if product.metafields.custom.materials != blank -%}<button data-tab="tab-mat" type="button">Materiais</button>{%- endif -%}
+      {%- if product.metafields.custom.sizing != blank -%}<button data-tab="tab-size" type="button">Tamanhos</button>{%- endif -%}
+      <button data-tab="tab-ship" type="button">Envios</button>
+    </div>
+    <div class="tabpane active" id="tab-desc">{{ product.description }}</div>
+    {%- if product.metafields.custom.materials != blank -%}
+      <div class="tabpane" id="tab-mat">{{ product.metafields.custom.materials }}</div>
+    {%- endif -%}
+    {%- if product.metafields.custom.sizing != blank -%}
+      <div class="tabpane" id="tab-size">{{ product.metafields.custom.sizing }}</div>
+    {%- endif -%}
+    <div class="tabpane" id="tab-ship">{{ section.settings.shipping_text }}</div>
+  </div>
+
+  {%- comment -%} ===== RELATED ===== {%- endcomment -%}
+  {%- if section.settings.show_related -%}
+    <section class="section" style="padding-bottom:0">
+      <div class="sec-head"><div><span class="eyebrow">Combina bem</span><h2>{{ section.settings.related_heading }}</h2></div></div>
+      <div class="prod-grid" data-card="overlay">
+        {%- assign rec_limit = 4 -%}
+        {% comment %} Shopify product recommendations {% endcomment %}
+        <div id="related-products" data-product-id="{{ product.id }}" data-limit="{{ rec_limit }}"></div>
+        {%- assign related_col = product.collections.first -%}
+        {%- if related_col -%}
+          {%- for rp in related_col.products limit: rec_limit -%}
+            {%- unless rp.id == product.id -%}{% render 'huko-product-card', card_product: rp %}{%- endunless -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+</main>
+
+{% schema %}
+{
+  "name": "Página de produto",
+  "settings": [
+    { "type": "header", "content": "Tab de envios" },
+    { "type": "richtext", "id": "shipping_text", "label": "Texto de envios", "default": "<ul><li>Expedição em 24–48h úteis</li><li>Envio grátis acima de 50 €</li><li>Devoluções gratuitas até 30 dias</li></ul>" },
+    { "type": "header", "content": "Produtos relacionados" },
+    { "type": "checkbox", "id": "show_related", "label": "Mostrar relacionados", "default": true },
+    { "type": "text", "id": "related_heading", "label": "Título", "default": "Completa o conjunto" }
+  ],
+  "blocks": [
+    {
+      "type": "perk",
+      "name": "Benefício rápido",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Ícone", "options": [
+          { "value": "truck", "label": "Envio" }, { "value": "paw-care", "label": "Devoluções" },
+          { "value": "shield", "label": "Garantia" }, { "value": "heart", "label": "Coração" }, { "value": "leaf", "label": "Folha" }
+        ], "default": "truck" },
+        { "type": "text", "id": "title", "label": "Título", "default": "Envio em 24–48h" },
+        { "type": "text", "id": "text", "label": "Texto", "default": "Grátis acima de 50 €" }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "perk", "settings": { "icon": "truck", "title": "Envio em 24–48h", "text": "Grátis acima de 50 €" } },
+      { "type": "perk", "settings": { "icon": "paw-care", "title": "Devoluções 30 dias", "text": "Trocas sem custos" } },
+      { "type": "perk", "settings": { "icon": "shield", "title": "2 anos de garantia", "text": "Ferragens em latão" } },
+      { "type": "perk", "settings": { "icon": "heart", "title": "Materiais conscientes", "text": "Algodão reciclado" } }
+    ]
+  }
+}
+{% endschema %}

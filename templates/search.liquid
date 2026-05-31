@@ -1,0 +1,18 @@
+<section class="section" data-screen-label="Pesquisa">
+  <div class="wrap">
+    <div class="sec-head"><div><span class="eyebrow">Pesquisa</span><h2>Resultados para “{{ search.terms | escape }}”</h2></div></div>
+    <form action="{{ routes.search_url }}" method="get" role="search" class="news-form" style="max-width:520px;margin:0 0 40px">
+      <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Pesquisar produtos" aria-label="Pesquisar">
+      <button class="btn btn-dark" type="submit">Pesquisar</button>
+    </form>
+    {%- if search.results.size > 0 -%}
+      <div class="prod-grid" data-card="overlay">
+        {%- for item in search.results -%}
+          {%- if item.object_type == 'product' -%}{% render 'huko-product-card', card_product: item %}{%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <p style="font-family:var(--font-ui);color:var(--muted)">Sem resultados. Tenta outra palavra.</p>
+    {%- endif -%}
+  </div>
+</section>

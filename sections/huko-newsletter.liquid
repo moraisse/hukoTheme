@@ -1,0 +1,35 @@
+{%- assign s = section.settings -%}
+<section class="news section" data-screen-label="Newsletter">
+  <div class="wrap news-inner">
+    {%- if s.eyebrow != blank -%}<span class="eyebrow">{{ s.eyebrow }}</span>{%- endif -%}
+    <h2 style="margin-top:14px">{{ s.heading }}</h2>
+    {%- if s.text != blank -%}<p>{{ s.text }}</p>{%- endif -%}
+
+    {%- form 'customer', class: 'news-form' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      {%- if form.posted_successfully? -%}
+        <p style="font-family:var(--font-ui);color:var(--green-700);font-weight:600;margin:0 auto">Obrigado! Estás subscrito. 🎉</p>
+      {%- else -%}
+        <input type="email" name="contact[email]" placeholder="{{ s.placeholder }}" aria-label="Email" required>
+        <button class="btn btn-dark" type="submit">{{ s.button_label }}</button>
+      {%- endif -%}
+    {%- endform -%}
+
+    {%- if s.disclaimer != blank -%}<small>{{ s.disclaimer }}</small>{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Sobre-título", "default": "Comunidade HUKO" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Recebe novidades da HUKO" },
+    { "type": "textarea", "id": "text", "label": "Texto", "default": "Novas coleções, dicas de bem-estar e ofertas exclusivas — diretamente no teu email." },
+    { "type": "text", "id": "placeholder", "label": "Placeholder do email", "default": "O teu email" },
+    { "type": "text", "id": "button_label", "label": "Botão", "default": "Subscrever" },
+    { "type": "text", "id": "disclaimer", "label": "Aviso", "default": "Sem spam. Cancelas quando quiseres." }
+  ],
+  "presets": [ { "name": "Newsletter" } ]
+}
+{% endschema %}
