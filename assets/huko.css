@@ -127,7 +127,7 @@ p{margin:0}
 .nav a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1.5px;background:var(--green-700);transition:right .3s var(--ease)}
 .nav a:hover{color:var(--green-700)}
 .nav a:hover::after{right:0}
-.header-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.header-actions{display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:auto}
 .iconbtn{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;
   color:var(--ink);transition:background .25s,color .25s;position:relative}
 .iconbtn:hover{background:var(--cream-2);color:var(--green-700)}
