@@ -146,44 +146,6 @@
         "link_url": "/collections/animais-2445"
       }
     },
-    "editorial": {
-      "type": "huko-editorial",
-      "blocks": {
-        "s1": {
-          "type": "stat",
-          "settings": {
-            "number": "100%",
-            "label": "Materiais testados"
-          }
-        },
-        "s2": {
-          "type": "stat",
-          "settings": {
-            "number": "24h",
-            "label": "Expedição rápida"
-          }
-        },
-        "s3": {
-          "type": "stat",
-          "settings": {
-            "number": "30 dias",
-            "label": "Trocas sem custos"
-          }
-        }
-      },
-      "block_order": [
-        "s1",
-        "s2",
-        "s3"
-      ],
-      "settings": {
-        "eyebrow": "A nossa filosofia",
-        "heading": "Design que respeita o teu espaço. Conforto que respeita o teu pet.",
-        "text": "A HUKO pets seleciona acessórios que unem estética, durabilidade e funcionalidade. Porque os produtos dos nossos animais também fazem parte da nossa casa.",
-        "button_label": "Conhecer a marca",
-        "button_link": ""
-      }
-    },
     "essentials": {
       "type": "huko-essentials",
       "blocks": {
@@ -281,7 +243,6 @@
     "categories",
     "value-props",
     "bestsellers",
-    "editorial",
     "essentials",
     "reviews",
     "newsletter"
