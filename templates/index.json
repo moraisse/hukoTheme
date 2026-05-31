@@ -146,42 +146,6 @@
         "link_url": "/collections/animais-2445"
       }
     },
-    "essentials": {
-      "type": "huko-essentials",
-      "blocks": {
-        "f1": {
-          "type": "feature",
-          "settings": {
-            "text": "Coleira, trela e taça em tons coordenados"
-          }
-        },
-        "f2": {
-          "type": "feature",
-          "settings": {
-            "text": "Materiais naturais e ferragens em latão"
-          }
-        },
-        "f3": {
-          "type": "feature",
-          "settings": {
-            "text": "Edição limitada · embalagem reutilizável"
-          }
-        }
-      },
-      "block_order": [
-        "f1",
-        "f2",
-        "f3"
-      ],
-      "settings": {
-        "eyebrow": "Coleção em destaque",
-        "heading": "Coleção",
-        "heading_accent": "Essentials",
-        "text": "Os indispensáveis para uma rotina mais bonita, prática e confortável.",
-        "button_label": "Explorar coleção",
-        "button_link": ""
-      }
-    },
     "reviews": {
       "type": "huko-reviews",
       "blocks": {
@@ -243,7 +207,6 @@
     "categories",
     "value-props",
     "bestsellers",
-    "essentials",
     "reviews",
     "newsletter"
   ]
