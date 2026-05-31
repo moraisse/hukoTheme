@@ -38,9 +38,12 @@
 
   {% section 'huko-header' %}
 
-  <main id="MainContent" role="main">
-    {{ content_for_layout }}
-  </main>
+  <div class="huko-page-layout">
+    {% render 'huko-sidebar' %}
+    <main id="MainContent" class="huko-main-content" role="main">
+      {{ content_for_layout }}
+    </main>
+  </div>
 
   {% section 'huko-footer' %}
   {% section 'huko-cart-drawer' %}
@@ -48,3 +51,4 @@
   {{ 'huko.js' | asset_url | script_tag }}
 </body>
 </html>
+
