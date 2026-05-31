@@ -20,12 +20,6 @@
       {%- endif -%}
     </a>
 
-    <nav class="nav" aria-label="Principal">
-      {%- for link in menu.links -%}
-        <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a>
-      {%- endfor -%}
-    </nav>
-
     <div class="header-actions">
       <a class="iconbtn" href="{{ routes.search_url }}" aria-label="Pesquisar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
