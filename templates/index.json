@@ -139,11 +139,11 @@
       "settings": {
         "eyebrow": "Favoritos da comunidade",
         "heading": "Mais vendidos",
-        "collection": "",
+        "collection": "animais-2445",
         "product_limit": 8,
         "card_style": "overlay",
         "link_label": "Ver todos os produtos",
-        "link_url": ""
+        "link_url": "/collections/animais-2445"
       }
     },
     "editorial": {
