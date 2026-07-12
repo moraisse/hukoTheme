@@ -1,7 +1,0 @@
-{
-  "settings_schema": {
-    "brand": { "name": "Marca" },
-    "colors": { "name": "Cores" },
-    "typography": { "name": "Tipografia" }
-  }
-}
