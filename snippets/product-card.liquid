@@ -1,0 +1,25 @@
+<div class="prod-card{% if white %} prod-card--white{% endif %}">
+  <a href="{{ card_product.url }}" class="prod-card__img">
+    {% if card_product.featured_image %}
+      <img src="{{ card_product.featured_image | image_url: width: 600 }}" alt="{{ card_product.featured_image.alt | escape }}" loading="lazy">
+    {% endif %}
+    {% if card_product.compare_at_price > card_product.price %}
+      <span class="badge badge--sale">Promoção</span>
+    {% elsif card_product.tags contains 'novo' %}
+      <span class="badge badge--new">Novo</span>
+    {% elsif card_product.tags contains 'mais-vendido' %}
+      <span class="badge badge--best">Mais vendido</span>
+    {% endif %}
+  </a>
+  <div class="prod-card__body">
+    <span class="stars">★★★★★</span>
+    <a href="{{ card_product.url }}" class="prod-card__title">{{ card_product.title }}</a>
+    <div class="prod-card__foot">
+      <span class="price">{{ card_product.price | money }}</span>
+      {% form 'product', card_product %}
+        <input type="hidden" name="id" value="{{ card_product.selected_or_first_available_variant.id }}">
+        <button type="submit" class="btn btn--primary btn--sm">Adicionar</button>
+      {% endform %}
+    </div>
+  </div>
+</div>

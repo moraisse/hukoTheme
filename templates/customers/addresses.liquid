@@ -1,0 +1,8 @@
+<div class="wrap" style="max-width:520px;padding-top:64px;padding-bottom:88px">
+  <h1 class="serif" style="font-size:38px;margin:0 0 28px">Moradas</h1>
+  {% paginate customer.addresses by 5 %}
+{% for address in customer.addresses %}
+  <div style="border-top:1px solid var(--line);padding:14px 0">{{ address | format_address }}</div>
+{% endfor %}
+{% endpaginate %}
+</div>

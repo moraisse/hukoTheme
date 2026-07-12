@@ -1,0 +1,32 @@
+<div class="wrap">
+  <nav class="breadcrumb"><a href="{{ routes.root_url }}">Início</a><em>/</em><span>{{ collection.title }}</span></nav>
+  <div class="coll-head">
+    <h1>{{ collection.title }}</h1>
+    {% if collection.description != blank %}<p>{{ collection.description | strip_html }}</p>{% endif %}
+  </div>
+  <div class="toolbar">
+    <div class="chips">
+      {% for collection_item in collections limit: 6 %}
+        <a href="{{ collection_item.url }}" class="chip{% if collection_item.handle == collection.handle %} is-active{% endif %}">{{ collection_item.title }}</a>
+      {% endfor %}
+    </div>
+    <form method="get">
+      <label style="color:var(--soft);font-size:14.5px">Ordenar:
+        <select class="sort" name="sort_by" onchange="this.form.submit()">
+          {% assign sort = collection.sort_by | default: collection.default_sort_by %}
+          <option value="best-selling" {% if sort == 'best-selling' %}selected{% endif %}>Mais vendidos</option>
+          <option value="price-ascending" {% if sort == 'price-ascending' %}selected{% endif %}>Preço: mais baixo</option>
+          <option value="price-descending" {% if sort == 'price-descending' %}selected{% endif %}>Preço: mais alto</option>
+          <option value="created-descending" {% if sort == 'created-descending' %}selected{% endif %}>Novidades</option>
+        </select>
+      </label>
+    </form>
+  </div>
+  {% paginate collection.products by 12 %}
+    <div class="prod-grid" style="padding-bottom:24px">
+      {% for product in collection.products %}{% render 'product-card', card_product: product, white: true %}{% endfor %}
+    </div>
+    {% if paginate.pages > 1 %}<div class="pagination">{{ paginate | default_pagination }}</div>{% endif %}
+  {% endpaginate %}
+  <div style="padding-bottom:72px"></div>
+</div>

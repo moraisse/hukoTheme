@@ -1,0 +1,43 @@
+<div class="wrap">
+  <div class="cart-grid">
+    <div>
+      <h1 class="serif" style="font-size:42px;margin:0 0 8px">O teu carrinho</h1>
+      <p style="margin:0 0 32px;font-size:15.5px;color:var(--muted);font-weight:300">{{ cart.item_count }} artigos</p>
+      {% if cart.item_count == 0 %}
+        <p class="rte">O teu carrinho está vazio.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary" style="margin-top:20px">Explorar a coleção</a>
+      {% else %}
+      <form action="{{ routes.cart_url }}" method="post" novalidate>
+        {% for item in cart.items %}
+          <div class="cart-item">
+            <a href="{{ item.url }}">{% if item.image %}<img src="{{ item.image | image_url: width: 300 }}" alt="{{ item.title | escape }}">{% endif %}</a>
+            <div class="cart-item__info">
+              <a href="{{ item.url }}" style="font-size:17px;font-weight:500">{{ item.product.title }}</a>
+              {% unless item.product.has_only_default_variant %}<div class="variant">{{ item.variant.title }}</div>{% endunless %}
+              <a href="{{ item.url_to_remove }}" class="remove">Remover</a>
+            </div>
+            <div class="qty">
+              <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}" style="padding:9px 15px">−</a>
+              <span style="min-width:20px;text-align:center;font-weight:500">{{ item.quantity }}</span>
+              <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}" style="padding:9px 15px">+</a>
+            </div>
+            <span class="price" style="min-width:84px;text-align:right">{{ item.final_line_price | money }}</span>
+          </div>
+        {% endfor %}
+      </form>
+      {% endif %}
+    </div>
+    <aside class="summary">
+      <h2 class="serif">Resumo</h2>
+      <div class="row"><span class="label">Subtotal</span><span>{{ cart.total_price | money }}</span></div>
+      <div class="row"><span class="label">Envio</span><span style="color:var(--green);font-weight:500">calculado no checkout</span></div>
+      <hr>
+      <div class="total"><span style="font-weight:500">Total</span><span class="price">{{ cart.total_price | money }}</span></div>
+      <form action="{{ routes.cart_url }}" method="post">
+        <button type="submit" name="checkout" class="btn btn--primary" style="width:100%">Finalizar compra</button>
+      </form>
+      <a href="{{ routes.all_products_collection_url }}" style="text-align:center;font-size:14.5px;color:var(--muted);text-decoration:underline">Continuar a comprar</a>
+      <p class="fineprint">Pagamento encriptado · Devoluções gratuitas em 30 dias</p>
+    </aside>
+  </div>
+</div>

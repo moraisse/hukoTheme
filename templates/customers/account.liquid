@@ -1,0 +1,14 @@
+<div class="wrap" style="max-width:520px;padding-top:64px;padding-bottom:88px">
+  <h1 class="serif" style="font-size:38px;margin:0 0 28px">A minha conta</h1>
+  <p class="rte">Olá, {{ customer.first_name }}.</p>
+<h2 class="serif" style="font-size:24px;margin:28px 0 16px">Encomendas</h2>
+{% for order in customer.orders %}
+  <div style="border-top:1px solid var(--line);padding:14px 0;display:flex;justify-content:space-between">
+    <a href="{{ order.customer_url }}" style="font-weight:500">{{ order.name }}</a>
+    <span>{{ order.total_price | money }}</span>
+  </div>
+{% else %}
+  <p class="rte">Ainda não tens encomendas.</p>
+{% endfor %}
+<p style="margin-top:24px"><a href="{{ routes.account_logout_url }}" style="text-decoration:underline;font-size:14.5px">Terminar sessão</a></p>
+</div>

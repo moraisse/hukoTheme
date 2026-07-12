@@ -1,0 +1,9 @@
+<div class="wrap" style="max-width:520px;padding-top:64px;padding-bottom:88px">
+  <h1 class="serif" style="font-size:38px;margin:0 0 28px">Iniciar sessão</h1>
+  {% form 'customer_login' %}
+  <label style="display:block;margin-bottom:16px"><span class="opt-label">Email</span><input type="email" name="customer[email]" style="width:100%;border:1.5px solid #E0DACB;border-radius:12px;padding:13px 18px;font-family:var(--sans);font-size:15px;background:#fff;outline:none"></label>
+  <label style="display:block;margin-bottom:16px"><span class="opt-label">Palavra-passe</span><input type="password" name="customer[password]" style="width:100%;border:1.5px solid #E0DACB;border-radius:12px;padding:13px 18px;font-family:var(--sans);font-size:15px;background:#fff;outline:none"></label>
+  <button type="submit" class="btn btn--primary" style="width:100%">Entrar</button>
+{% endform %}
+<p style="margin-top:20px;font-size:14.5px">Novo por aqui? <a href="{{ routes.account_register_url }}" style="text-decoration:underline">Criar conta</a></p>
+</div>

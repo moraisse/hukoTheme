@@ -1,0 +1,80 @@
+<div class="wrap">
+  <nav class="breadcrumb"><a href="{{ routes.root_url }}">Início</a><em>/</em>{% if collection %}<a href="{{ collection.url }}">{{ collection.title }}</a><em>/</em>{% endif %}<span>{{ product.title }}</span></nav>
+  <div class="pdp">
+    <div>
+      <div class="pdp__main">{% if product.featured_image %}<img src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.featured_image.alt | escape }}" id="MainImage">{% endif %}</div>
+      {% if product.images.size > 1 %}
+        <div class="pdp__thumbs">
+          {% for image in product.images limit: 4 %}
+            <img src="{{ image | image_url: width: 300 }}" alt="{{ image.alt | escape }}" loading="lazy" onclick="document.getElementById('MainImage').src='{{ image | image_url: width: 1200 }}'">
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+    <div class="pdp__buy">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        {% if product.tags contains 'mais-vendido' %}<span class="badge badge--best" style="position:static">Mais vendido</span>{% endif %}
+        {% if product.tags contains 'novo' %}<span class="badge badge--new" style="position:static">Novo</span>{% endif %}
+        <span class="stars" style="font-size:14px">★★★★★ <span>4,9</span></span>
+      </div>
+      <h1>{{ product.title }}</h1>
+      <p class="lead">{{ product.description | strip_html | truncate: 180 }}</p>
+      <div style="display:flex;align-items:baseline;gap:14px">
+        <span class="price price--big" id="ProductPrice">{{ product.selected_or_first_available_variant.price | money }}</span>
+        {% if product.available %}<span class="stock">Em stock · envio em 24h</span>{% endif %}
+      </div>
+      {% form 'product', product %}
+        {% unless product.has_only_default_variant %}
+          {% for option in product.options_with_values %}
+            <div style="margin-bottom:18px">
+              <span class="opt-label">{{ option.name }}</span>
+              <div class="variant-btns">
+                {% for value in option.values %}
+                  {% assign oid = 'opt-' | append: option.position | append: '-' | append: forloop.index %}
+                  <input type="radio" id="{{ oid }}" name="options[{{ option.name | escape }}]" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %}>
+                  <label for="{{ oid }}">{{ value }}</label>
+                {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
+        {% endunless %}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        <div class="qty-cart">
+          <div class="qty">
+            <button type="button" onclick="var q=document.getElementById('Qty');q.value=Math.max(1,+q.value-1)">−</button>
+            <input id="Qty" type="text" name="quantity" value="1">
+            <button type="button" onclick="var q=document.getElementById('Qty');q.value=+q.value+1">+</button>
+          </div>
+          <button type="submit" class="btn btn--primary" style="flex:1" {% unless product.available %}disabled{% endunless %}>
+            {% if product.available %}Adicionar ao carrinho — {{ product.selected_or_first_available_variant.price | money }}{% else %}Esgotado{% endif %}
+          </button>
+        </div>
+      {% endform %}
+      <div class="trust">
+        <div><svg width="24" height="24" viewBox="0 0 34 34" fill="none" stroke="#2ECC71" stroke-width="1.8"><rect x="4" y="10" width="17" height="12" rx="1.5"/><path d="M21 14h5l4 4v4h-9"/><circle cx="10" cy="25" r="2.6"/><circle cx="25" cy="25" r="2.6"/></svg>Envio 24–48h</div>
+        <div><svg width="24" height="24" viewBox="0 0 34 34" fill="none" stroke="#2ECC71" stroke-width="1.8"><path d="M17 5 6 9v8c0 7 4.8 11 11 13 6.2-2 11-6 11-13V9l-11-4z"/></svg>Pagamento seguro</div>
+        <div><svg width="24" height="24" viewBox="0 0 34 34" fill="none" stroke="#2ECC71" stroke-width="1.8"><path d="M9 13 5 17l4 4"/><path d="M5 17h16a8 8 0 1 0-1.5-8"/></svg>Devolução 30 dias</div>
+      </div>
+      <div class="acc"><strong>Descrição</strong><div class="rte" style="font-size:15px">{{ product.description }}</div></div>
+    </div>
+  </div>
+</div>
+
+{% assign rel = collections.all %}
+{% if collection %}{% assign rel = collection %}{% endif %}
+{% if rel.products.size > 1 %}
+<section class="section section--card">
+  <div class="wrap">
+    <h2 class="serif" style="font-size:32px;margin:0 0 36px">Combina bem com</h2>
+    <div class="prod-grid">
+      {% assign shown = 0 %}
+      {% for p in rel.products %}
+        {% if p.id != product.id and shown < 4 %}
+          {% render 'product-card', card_product: p %}
+          {% assign shown = shown | plus: 1 %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}

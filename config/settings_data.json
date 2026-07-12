@@ -1,1 +1,7 @@
-{"current":{"logo_height":38,"color_green":"#2ECC71","color_ink":"#1A1A1A","color_cream":"#FAF8F3","color_forest":"#1E3D2F","color_gold":"#C9B27A","heading_style":"sans","sections":{"huko-header":{"type":"huko-header","settings":{"show_announcement":true,"announcement":"<p>Envio grátis em encomendas acima de 50 € · Entregas em toda a Europa<\/p>","menu":"main-menu"}},"huko-footer":{"type":"huko-footer","blocks":{"huko-footer-0":{"type":"menu","settings":{"title":"Loja","menu":"footer"}},"huko-footer-1":{"type":"menu","settings":{"title":"Apoio ao cliente","menu":"footer"}},"huko-footer-2":{"type":"menu","settings":{"title":"A HUKO","menu":"footer"}}},"block_order":["huko-footer-0","huko-footer-1","huko-footer-2"],"settings":{"tagline":"Acessórios premium para cães e gatos — design europeu, materiais selecionados e bem-estar em primeiro lugar.","credit":"Feito com cuidado na Europa","show_payment":true,"instagram":"","tiktok":""}},"huko-cart-drawer":{"type":"huko-cart-drawer","settings":{"show_free_shipping":true,"free_shipping_threshold":50,"upsell_product":""}}},"content_for_index":[]},"presets":{"HUKO pets":{"logo_height":38,"color_green":"#2ECC71","color_ink":"#1A1A1A","color_cream":"#FAF8F3","color_forest":"#1E3D2F","color_gold":"#C9B27A","heading_style":"editorial"}}}
+{
+  "current": {
+    "announcement_text": "Envio rápido em Portugal e Espanha · Devoluções gratuitas em 30 dias",
+    "hero_title": "Premium essentials for happier pets",
+    "hero_subtitle": "Acessórios selecionados para conforto, estilo e bem-estar do teu animal."
+  }
+}

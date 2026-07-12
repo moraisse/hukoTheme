@@ -1,0 +1,12 @@
+<div class="wrap" style="max-width:520px;padding-top:64px;padding-bottom:88px">
+  <h1 class="serif" style="font-size:38px;margin:0 0 28px">Encomenda {{ order.name }}</h1>
+  {% for line_item in order.line_items %}
+  <div style="border-top:1px solid var(--line);padding:14px 0;display:flex;justify-content:space-between">
+    <span>{{ line_item.title }} × {{ line_item.quantity }}</span>
+    <span>{{ line_item.final_line_price | money }}</span>
+  </div>
+{% endfor %}
+<div style="border-top:1px solid var(--line);padding:14px 0;display:flex;justify-content:space-between;font-weight:500">
+  <span>Total</span><span>{{ order.total_price | money }}</span>
+</div>
+</div>

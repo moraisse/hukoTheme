@@ -1,54 +1,87 @@
 <!doctype html>
-<html lang="{{ request.locale.iso_code }}" data-type="{{ settings.heading_style | default: 'editorial' }}">
+<html lang="{{ request.locale.iso_code }}">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="{{ settings.color_cream | default: '#FAF8F3' }}">
-  <link rel="canonical" href="{{ canonical_url }}">
-  {%- if settings.favicon != blank -%}
-    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
-  {%- endif -%}
-
-  <title>{{ page_title }}{% if current_tags %} &ndash; {{ current_tags | join: ', ' }}{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.page' | t }} {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}</title>
-
-  {%- if page_description -%}<meta name="description" content="{{ page_description | escape }}">{%- endif -%}
-
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{ page_title }}{% unless page_title contains shop.name %} — {{ shop.name }}{% endunless %}</title>
+  {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
   {{ content_for_header }}
-
-  {{ 'huko.css' | asset_url | stylesheet_tag }}
-
-  {%- comment -%} Theme colour overrides from settings {%- endcomment -%}
-  <style>
-    :root{
-      --green:{{ settings.color_green | default: '#2ECC71' }};
-      --ink:{{ settings.color_ink | default: '#1A1A1A' }};
-      --cream:{{ settings.color_cream | default: '#FAF8F3' }};
-      --forest:{{ settings.color_forest | default: '#1E3D2F' }};
-      --gold:{{ settings.color_gold | default: '#C9B27A' }};
-    }
-  </style>
-
-  <script>
-    window.Shopify = window.Shopify || {};
-    window.Shopify.routes = window.Shopify.routes || {};
-    window.Shopify.routes.root = "{{ routes.root_url }}";
-  </script>
 </head>
-<body class="template-{{ request.page_type | handle }}">
+<body>
 
-  {% section 'huko-header' %}
+  <div class="announce">{{ settings.announcement_text }}</div>
 
-  <div class="huko-page-layout">
-    {% render 'huko-sidebar' %}
-    <main id="MainContent" class="huko-main-content" role="main">
-      {{ content_for_layout }}
-    </main>
-  </div>
+  <header class="site-header">
+    <div class="wrap site-header__inner">
+      <a href="{{ routes.root_url }}" class="site-header__logo">
+        {% if settings.logo != blank %}
+          <img src="{{ settings.logo | image_url: width: 300 }}" alt="{{ shop.name }}">
+        {% else %}
+          <img src="{{ 'huko-logo.svg' | asset_url }}" alt="{{ shop.name }}">
+        {% endif %}
+      </a>
+      <nav class="site-nav">
+        {% for link in linklists.main-menu.links %}
+          <a href="{{ link.url }}">{{ link.title }}</a>
+        {% endfor %}
+      </nav>
+      <div class="header-icons">
+        <a href="{{ routes.search_url }}" aria-label="Pesquisar"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></a>
+        <a href="{{ routes.account_url }}" aria-label="Conta"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg></a>
+        <a href="{{ routes.cart_url }}" class="cart-link" aria-label="Carrinho">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M5 8h14l-1.2 12H6.2L5 8z"/><path d="M8.5 8V6.5a3.5 3.5 0 0 1 7 0V8"/></svg>
+          {% if cart.item_count > 0 %}<span class="cart-count">{{ cart.item_count }}</span>{% endif %}
+        </a>
+      </div>
+    </div>
+  </header>
 
-  {% section 'huko-footer' %}
-  {% section 'huko-cart-drawer' %}
+  <main>{{ content_for_layout }}</main>
 
-  {{ 'huko.js' | asset_url | script_tag }}
+  <section class="newsletter">
+    <div class="newsletter__inner">
+      <div class="eyebrow">Junta-te à matilha</div>
+      <h2 class="serif">Novidades, lançamentos e <em>10% de desconto</em> na primeira compra</h2>
+      <p>Sem spam. Apenas o essencial, uma vez por mês.</p>
+      {% form 'customer' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <input type="email" name="contact[email]" placeholder="O teu email" required>
+        <button type="submit">Receber novidades</button>
+      {% endform %}
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="site-footer__cols">
+        <div class="site-footer__brand">
+          <img src="{{ 'huko-logo-light.svg' | asset_url }}" alt="{{ shop.name }}">
+          <p>Acessórios premium para cães e gatos. Selecionados com carinho, enviados com rapidez.</p>
+        </div>
+        <div>
+          <h4>Loja</h4>
+          {% for link in linklists.main-menu.links limit: 4 %}<a href="{{ link.url }}">{{ link.title }}</a>{% endfor %}
+        </div>
+        <div>
+          <h4>Apoio ao cliente</h4>
+          {% for link in linklists.footer.links %}<a href="{{ link.url }}">{{ link.title }}</a>{% endfor %}
+        </div>
+        <div>
+          <h4>HUKO</h4>
+          <a href="/pages/sobre-nos">Sobre nós</a>
+          <a href="/policies/privacy-policy">Política de privacidade</a>
+          <a href="/policies/terms-of-service">Termos e condições</a>
+        </div>
+      </div>
+      <div class="site-footer__base">
+        <small>© {{ 'now' | date: '%Y' }} {{ shop.name }}. Todos os direitos reservados.</small>
+        <div class="pay"><span>Visa</span><span>Mastercard</span><span>PayPal</span><span>MB Way</span><span>Apple Pay</span></div>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
-

@@ -4,8 +4,8 @@
     "theme_name": "HUKO pets",
     "theme_version": "1.0.0",
     "theme_author": "HUKO pets",
-    "theme_documentation_url": "https://shopify.dev",
-    "theme_support_url": "https://shopify.dev"
+    "theme_documentation_url": "https://example.com",
+    "theme_support_url": "https://example.com"
   },
   {
     "name": "Marca",
@@ -13,55 +13,45 @@
       {
         "type": "image_picker",
         "id": "logo",
-        "label": "Logo (escuro — para fundo creme)",
-        "info": "Carrega logo-huko.png. Se vazio, usa o ficheiro incluído nos assets."
+        "label": "Logo"
       },
       {
-        "type": "image_picker",
-        "id": "logo_light",
-        "label": "Logo claro (para fundos escuros)",
-        "info": "Carrega logo-huko-cream.png para o footer."
-      },
-      {
-        "type": "range",
-        "id": "logo_height",
-        "min": 24,
-        "max": 60,
-        "step": 2,
-        "unit": "px",
-        "label": "Altura do logo",
-        "default": 38
-      },
-      {
-        "type": "image_picker",
-        "id": "favicon",
-        "label": "Favicon"
+        "type": "text",
+        "id": "announcement_text",
+        "label": "Barra de anúncio",
+        "default": "Envio rápido em Portugal e Espanha · Devoluções gratuitas em 30 dias"
       }
     ]
   },
   {
-    "name": "Cores",
-    "settings": [
-      { "type": "color", "id": "color_green", "label": "Verde principal", "default": "#2ECC71" },
-      { "type": "color", "id": "color_ink", "label": "Preto premium", "default": "#1A1A1A" },
-      { "type": "color", "id": "color_cream", "label": "Creme / fundo quente", "default": "#FAF8F3" },
-      { "type": "color", "id": "color_forest", "label": "Verde escuro institucional", "default": "#1E3D2F" },
-      { "type": "color", "id": "color_gold", "label": "Dourado suave", "default": "#C9B27A" }
-    ]
-  },
-  {
-    "name": "Tipografia",
+    "name": "Homepage",
     "settings": [
       {
-        "type": "select",
-        "id": "heading_style",
-        "label": "Estilo dos títulos",
-        "options": [
-          { "value": "editorial", "label": "Editorial (serif Bodoni)" },
-          { "value": "serif", "label": "Sereno (Spectral)" },
-          { "value": "sans", "label": "Moderno (sans-serif)" }
-        ],
-        "default": "editorial"
+        "type": "text",
+        "id": "hero_title",
+        "label": "Título do hero",
+        "default": "Premium essentials for happier pets"
+      },
+      {
+        "type": "text",
+        "id": "hero_subtitle",
+        "label": "Subtítulo do hero",
+        "default": "Acessórios selecionados para conforto, estilo e bem-estar do teu animal."
+      },
+      {
+        "type": "image_picker",
+        "id": "hero_image",
+        "label": "Imagem do hero"
+      },
+      {
+        "type": "image_picker",
+        "id": "editorial_image",
+        "label": "Imagem editorial"
+      },
+      {
+        "type": "collection",
+        "id": "featured_collection",
+        "label": "Coleção em destaque"
       }
     ]
   }

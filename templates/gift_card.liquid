@@ -1,0 +1,5 @@
+<div class="wrap" style="max-width:700px;text-align:center;padding-top:64px;padding-bottom:88px">
+  <h1 class="serif" style="font-size:38px">Cartão presente</h1>
+  <p class="price price--big">{{ gift_card.initial_value | money }}</p>
+  <p class="rte" style="margin:0 auto">Código: <strong>{{ gift_card.code | format_code }}</strong></p>
+</div>

@@ -1,0 +1,22 @@
+<section class="about-hero wrap">
+  <div class="eyebrow" style="margin-bottom:22px">A nossa história</div>
+  <h1>Menos coisas. <em>Melhores</em> coisas.</h1>
+  <p>A HUKO pets nasceu de uma frustração simples: adorávamos os nossos animais, mas não os produtos que existiam para eles. Ou eram bonitos e frágeis, ou robustos e feios. Decidimos escolher melhor.</p>
+</section>
+{% if page.content != blank %}
+<section class="wrap" style="padding-bottom:88px;display:flex;justify-content:center"><div class="rte">{{ page.content }}</div></section>
+{% endif %}
+<section class="values">
+  <div class="wrap">
+    <h2 class="serif">Aquilo em que acreditamos</h2>
+    <div class="values__grid">
+      <div><span class="num">01</span><h3 class="serif">Animais felizes primeiro</h3><p>Conforto e bem-estar não são extras — são o critério número um de cada escolha.</p></div>
+      <div><span class="num">02</span><h3 class="serif">Donos exigentes</h3><p>Trabalhamos para quem lê etiquetas, compara materiais e não aceita "serve".</p></div>
+      <div><span class="num">03</span><h3 class="serif">Feito para durar</h3><p>Preferimos um produto que dura cinco anos a cinco produtos que duram um.</p></div>
+    </div>
+  </div>
+</section>
+<section class="wrap" style="padding:96px 40px;text-align:center">
+  <h2 class="serif" style="font-size:38px;margin:0 0 26px">Pronto para melhorar o dia do teu animal?</h2>
+  <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">Explorar a coleção</a>
+</section>
