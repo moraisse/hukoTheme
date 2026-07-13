@@ -1,0 +1,54 @@
+<section class="wrap hero">
+  <div>
+    <div class="eyebrow" style="margin-bottom:22px">{{ section.settings.eyebrow }}</div>
+    {% assign hero_title = section.settings.hero_title %}
+    {% assign hero_title = hero_title | replace: section.settings.hero_title_highlight, '<em style="font-style:italic;color:var(--forest)">' | append: section.settings.hero_title_highlight | append: '</em>' %}
+    <h1>{{ hero_title }}</h1>
+    <p>{{ section.settings.hero_subtitle }}</p>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:26px">
+      {% if section.settings.button_1_label != blank %}<a href="{{ section.settings.button_1_url }}" class="btn btn--primary">{{ section.settings.button_1_label }}</a>{% endif %}
+      {% if section.settings.button_2_label != blank %}<a href="{{ section.settings.button_2_url }}" class="btn btn--ghost">{{ section.settings.button_2_label }}</a>{% endif %}
+    </div>
+  </div>
+  <div class="hero__img">
+    {% if section.settings.hero_image != blank %}
+      <img
+        src="{{ section.settings.hero_image | image_url: width: 1200 }}"
+        srcset="{{ section.settings.hero_image | image_url: width: 600 }} 600w, {{ section.settings.hero_image | image_url: width: 1200 }} 1200w, {{ section.settings.hero_image | image_url: width: 1800 }} 1800w"
+        sizes="(min-width: 990px) 50vw, 100vw"
+        width="{{ section.settings.hero_image.width }}"
+        height="{{ section.settings.hero_image.height }}"
+        alt="{{ section.settings.hero_title | escape }}"
+        loading="eager"
+        fetchpriority="high"
+      >
+    {% else %}
+      <img
+        src="{{ 'happy_pets.jpg' | asset_url }}"
+        width="1200"
+        height="801"
+        alt="{{ section.settings.hero_title | escape }}"
+        loading="eager"
+        fetchpriority="high"
+      >
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Texto pequeno (eyebrow)", "default": "Coleção 2026" },
+    { "type": "text", "id": "hero_title", "label": "Título", "default": "Produtos premium para pets mais felizes" },
+    { "type": "text", "id": "hero_title_highlight", "label": "Palavra a destacar no título", "info": "Tem de corresponder exatamente a uma palavra do título acima.", "default": "felizes" },
+    { "type": "textarea", "id": "hero_subtitle", "label": "Subtítulo", "default": "Acessórios selecionados para conforto, estilo e bem-estar do seu animal." },
+    { "type": "image_picker", "id": "hero_image", "label": "Imagem" },
+    { "type": "text", "id": "button_1_label", "label": "Texto do botão 1", "default": "Comprar agora" },
+    { "type": "url", "id": "button_1_url", "label": "Link do botão 1", "default": "/collections/all" },
+    { "type": "text", "id": "button_2_label", "label": "Texto do botão 2", "default": "Ver coleções" },
+    { "type": "url", "id": "button_2_url", "label": "Link do botão 2", "default": "/collections" }
+  ],
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

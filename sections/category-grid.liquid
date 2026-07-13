@@ -1,0 +1,26 @@
+<section class="wrap" style="padding-bottom:96px">
+  <div class="section-head" style="text-align:left;display:flex;justify-content:space-between;align-items:flex-end">
+    <div><div class="eyebrow" style="margin-bottom:12px">{{ section.settings.eyebrow }}</div><h2 class="serif" style="font-size:38px;margin:0">{{ section.settings.heading }}</h2></div>
+    <a href="{{ routes.collections_url }}">Ver tudo →</a>
+  </div>
+  <div class="cat-grid">
+    {% for collection in collections limit: section.settings.collections_count %}
+      <a href="{{ collection.url }}" class="cat-card">
+        <div class="cat-card__img">{% if collection.featured_image %}<img src="{{ collection.featured_image | image_url: width: 500 }}" alt="{{ collection.title | escape }}" loading="lazy">{% endif %}</div>
+        <div class="cat-card__row"><span>{{ collection.title }}</span><span class="arrow">→</span></div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Grelha de categorias",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Texto pequeno (eyebrow)", "default": "Explorar" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Comprar por categoria" },
+    { "type": "range", "id": "collections_count", "label": "Número de coleções a mostrar", "min": 2, "max": 12, "step": 1, "default": 6 }
+  ],
+  "presets": [{ "name": "Grelha de categorias" }]
+}
+{% endschema %}

@@ -22,37 +22,5 @@
         "default": "Envio rápido em Portugal e Espanha · Devoluções gratuitas em 30 dias"
       }
     ]
-  },
-  {
-    "name": "Homepage",
-    "settings": [
-      {
-        "type": "text",
-        "id": "hero_title",
-        "label": "Título do hero",
-        "default": "Premium essentials for happier pets"
-      },
-      {
-        "type": "text",
-        "id": "hero_subtitle",
-        "label": "Subtítulo do hero",
-        "default": "Acessórios selecionados para conforto, estilo e bem-estar do teu animal."
-      },
-      {
-        "type": "image_picker",
-        "id": "hero_image",
-        "label": "Imagem do hero"
-      },
-      {
-        "type": "image_picker",
-        "id": "editorial_image",
-        "label": "Imagem editorial"
-      },
-      {
-        "type": "collection",
-        "id": "featured_collection",
-        "label": "Coleção em destaque"
-      }
-    ]
   }
 ]

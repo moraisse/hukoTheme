@@ -1,0 +1,53 @@
+<section class="section wrap">
+  <div class="props">
+    {% for block in section.blocks %}
+      <div {{ block.shopify_attributes }}>
+        {% case block.settings.icon %}
+          {% when 'quality' %}
+            <svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke-width="1.6"><polygon points="17,4 30,17 17,30 4,17"/></svg>
+          {% when 'curated' %}
+            <svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke-width="1.6"><circle cx="17" cy="17" r="13"/><polyline points="11,17.5 15.5,22 23,12.5"/></svg>
+          {% when 'comfort' %}
+            <svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke-width="1.6"><circle cx="17" cy="17" r="13"/><path d="M11 19c1.8 2.6 4 4 6 4s4.2-1.4 6-4"/></svg>
+          {% when 'shipping' %}
+            <svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke-width="1.6"><rect x="4" y="10" width="17" height="12" rx="1.5"/><path d="M21 14h5l4 4v4h-9"/><circle cx="10" cy="25" r="2.6"/><circle cx="25" cy="25" r="2.6"/></svg>
+        {% endcase %}
+        <h3>{{ block.settings.title }}</h3>
+        <p>{{ block.settings.text }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Vantagens",
+  "blocks": [
+    {
+      "type": "prop",
+      "name": "Vantagem",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Ícone", "options": [
+          { "value": "quality", "label": "Diamante (qualidade)" },
+          { "value": "curated", "label": "Visto (seleção)" },
+          { "value": "comfort", "label": "Sorriso (conforto)" },
+          { "value": "shipping", "label": "Caixa (envio)" }
+        ], "default": "quality" },
+        { "type": "text", "id": "title", "label": "Título", "default": "Vantagem" },
+        { "type": "textarea", "id": "text", "label": "Texto", "default": "Descreve a vantagem aqui." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Vantagens",
+      "blocks": [
+        { "type": "prop", "settings": { "icon": "quality", "title": "Qualidade premium", "text": "Materiais duradouros, testados no dia a dia de cães e gatos exigentes." } },
+        { "type": "prop", "settings": { "icon": "curated", "title": "Produtos selecionados", "text": "Cada peça é escolhida à mão. Mil \"nãos\" por cada \"sim\" no catálogo." } },
+        { "type": "prop", "settings": { "icon": "comfort", "title": "Conforto e bem-estar", "text": "Design pensado para o animal — não apenas para a fotografia." } },
+        { "type": "prop", "settings": { "icon": "shipping", "title": "Envio rápido", "text": "Entrega em 24–48h em Portugal e Espanha. Devoluções sem complicações." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

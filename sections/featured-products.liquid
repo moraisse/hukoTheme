@@ -1,0 +1,26 @@
+<section class="section section--card">
+  <div class="wrap">
+    <div class="section-head"><div class="eyebrow" style="margin-bottom:12px">{{ section.settings.eyebrow }}</div><h2>{{ section.settings.heading }}</h2></div>
+    <div class="prod-grid">
+      {% assign featured = section.settings.collection | default: collections.frontpage %}
+      {% if featured.products.size > 0 %}
+        {% for product in featured.products limit: section.settings.products_count %}{% render 'product-card', card_product: product %}{% endfor %}
+      {% else %}
+        {% for product in collections.all.products limit: section.settings.products_count %}{% render 'product-card', card_product: product %}{% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Produtos em destaque",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Texto pequeno (eyebrow)", "default": "Seleção HUKO" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Produtos em destaque" },
+    { "type": "collection", "id": "collection", "label": "Coleção em destaque", "info": "Se ficar em branco, usa a coleção da página inicial ou todos os produtos." },
+    { "type": "range", "id": "products_count", "label": "Número de produtos", "min": 2, "max": 12, "step": 1, "default": 8 }
+  ],
+  "presets": [{ "name": "Produtos em destaque" }]
+}
+{% endschema %}
