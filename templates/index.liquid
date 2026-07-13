@@ -9,7 +9,27 @@
     </div>
   </div>
   <div class="hero__img">
-    {% if settings.hero_image != blank %}<img src="{{ settings.hero_image | image_url: width: 1200 }}" alt="">{% endif %}
+    {% if settings.hero_image != blank %}
+      <img
+        src="{{ settings.hero_image | image_url: width: 1200 }}"
+        srcset="{{ settings.hero_image | image_url: width: 600 }} 600w, {{ settings.hero_image | image_url: width: 1200 }} 1200w, {{ settings.hero_image | image_url: width: 1800 }} 1800w"
+        sizes="(min-width: 990px) 50vw, 100vw"
+        width="{{ settings.hero_image.width }}"
+        height="{{ settings.hero_image.height }}"
+        alt="{{ settings.hero_title | default: 'Premium essentials for happier pets' | escape }}"
+        loading="eager"
+        fetchpriority="high"
+      >
+    {% else %}
+      <img
+        src="{{ 'happy_pets.jpg' | asset_url }}"
+        width="1200"
+        height="801"
+        alt="{{ settings.hero_title | default: 'Premium essentials for happier pets' | escape }}"
+        loading="eager"
+        fetchpriority="high"
+      >
+    {% endif %}
   </div>
 </section>
 
