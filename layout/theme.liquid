@@ -17,6 +17,9 @@
 
   <header class="site-header">
     <div class="wrap site-header__inner">
+      <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-drawer">
+        <span class="nav-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
       <a href="{{ routes.root_url }}" class="site-header__logo">
         {% if settings.logo != blank %}
           <img src="{{ settings.logo | image_url: width: 300 }}" alt="{{ shop.name }}">
@@ -55,6 +58,41 @@
       </div>
     </div>
   </header>
+
+  <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+    <div class="mobile-drawer__overlay" data-drawer-close></div>
+    <aside class="mobile-drawer__panel" role="dialog" aria-modal="true" aria-label="Menu de navegação">
+      <div class="mobile-drawer__head">
+        <span class="mobile-drawer__title">Menu</span>
+        <button class="mobile-drawer__close" aria-label="Fechar menu" data-drawer-close>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+        </button>
+      </div>
+      <nav class="mobile-nav">
+        {% for link in linklists.main-menu.links %}
+          {%- if link.links.size > 0 -%}
+            <div class="mobile-nav__group">
+              <div class="mobile-nav__row">
+                <a href="{{ link.url }}" class="mobile-nav__link">{{ link.title }}</a>
+                <button class="mobile-nav__expand" aria-label="Mostrar subcategorias de {{ link.title }}" aria-expanded="false">
+                  <svg width="14" height="14" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5 5 6.5 8 3.5"/></svg>
+                </button>
+              </div>
+              <div class="mobile-nav__sub">
+                <div class="mobile-nav__sub-inner">
+                  {%- for child in link.links -%}
+                    <a href="{{ child.url }}" class="mobile-nav__sublink">{{ child.title }}</a>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          {%- else -%}
+            <a href="{{ link.url }}" class="mobile-nav__link mobile-nav__link--solo">{{ link.title }}</a>
+          {%- endif -%}
+        {% endfor %}
+      </nav>
+    </aside>
+  </div>
 
   <main>{{ content_for_layout }}</main>
 
@@ -99,5 +137,43 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    (function () {
+      var drawer = document.getElementById('mobile-drawer');
+      if (!drawer) return;
+      var toggle = document.querySelector('.nav-toggle');
+      var body = document.body;
+
+      function openDrawer() {
+        drawer.classList.add('is-open');
+        drawer.setAttribute('aria-hidden', 'false');
+        if (toggle) toggle.setAttribute('aria-expanded', 'true');
+        body.classList.add('drawer-open');
+      }
+      function closeDrawer() {
+        drawer.classList.remove('is-open');
+        drawer.setAttribute('aria-hidden', 'true');
+        if (toggle) toggle.setAttribute('aria-expanded', 'false');
+        body.classList.remove('drawer-open');
+      }
+
+      if (toggle) toggle.addEventListener('click', openDrawer);
+      drawer.querySelectorAll('[data-drawer-close]').forEach(function (el) {
+        el.addEventListener('click', closeDrawer);
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && drawer.classList.contains('is-open')) closeDrawer();
+      });
+
+      drawer.querySelectorAll('.mobile-nav__expand').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var group = btn.closest('.mobile-nav__group');
+          var isOpen = group.classList.toggle('is-expanded');
+          btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
