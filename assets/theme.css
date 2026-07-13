@@ -2,7 +2,7 @@
 :root{
   --green:#2ECC71; --ink:#1A1A1A; --bg:#FAF8F3; --forest:#1E3D2F; --gold:#C9B27A;
   --line:#E9E4D8; --muted:#6B6B62; --soft:#8A8A80;
-  --serif:'Marcellus',serif; --sans:'Jost',sans-serif;
+  --serif:'Jost',sans-serif; --sans:'Jost',sans-serif;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
