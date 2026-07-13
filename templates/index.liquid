@@ -1,0 +1,96 @@
+<section class="wrap hero">
+  <div>
+    <div class="eyebrow" style="margin-bottom:22px">Coleção {{ 'now' | date: '%Y' }}</div>
+    {% assign hero_title = settings.hero_title | default: 'Produtos premium para pets mais felizes' %}
+    {% assign hero_title = hero_title | replace: 'felizes', '<em style="font-style:italic;color:var(--forest)">felizes</em>' %}
+    <h1>{{ hero_title }}</h1>
+    <p>{{ settings.hero_subtitle }}</p>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:26px">
+      <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">Comprar agora</a>
+      <a href="{{ routes.collections_url }}" class="btn btn--ghost">Ver coleções</a>
+    </div>
+  </div>
+  <div class="hero__img">
+    {% if settings.hero_image != blank %}
+      <img
+        src="{{ settings.hero_image | image_url: width: 1200 }}"
+        srcset="{{ settings.hero_image | image_url: width: 600 }} 600w, {{ settings.hero_image | image_url: width: 1200 }} 1200w, {{ settings.hero_image | image_url: width: 1800 }} 1800w"
+        sizes="(min-width: 990px) 50vw, 100vw"
+        width="{{ settings.hero_image.width }}"
+        height="{{ settings.hero_image.height }}"
+        alt="{{ settings.hero_title | default: 'Premium essentials for happier pets' | escape }}"
+        loading="eager"
+        fetchpriority="high"
+      >
+    {% else %}
+      <img
+        src="{{ 'happy_pets.jpg' | asset_url }}"
+        width="1200"
+        height="801"
+        alt="{{ settings.hero_title | default: 'Premium essentials for happier pets' | escape }}"
+        loading="eager"
+        fetchpriority="high"
+      >
+    {% endif %}
+  </div>
+</section>
+
+<section class="wrap" style="padding-bottom:96px">
+  <div class="section-head" style="text-align:left;display:flex;justify-content:space-between;align-items:flex-end">
+    <div><div class="eyebrow" style="margin-bottom:12px">Explorar</div><h2 class="serif" style="font-size:38px;margin:0">Comprar por categoria</h2></div>
+    <a href="{{ routes.collections_url }}">Ver tudo →</a>
+  </div>
+  <div class="cat-grid">
+    {% for collection in collections limit: 6 %}
+      <a href="{{ collection.url }}" class="cat-card">
+        <div class="cat-card__img">{% if collection.featured_image %}<img src="{{ collection.featured_image | image_url: width: 500 }}" alt="{{ collection.title | escape }}" loading="lazy">{% endif %}</div>
+        <div class="cat-card__row"><span>{{ collection.title }}</span><span class="arrow">→</span></div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section section--card">
+  <div class="wrap">
+    <div class="section-head"><div class="eyebrow" style="margin-bottom:12px">Seleção HUKO</div><h2>Produtos em destaque</h2></div>
+    <div class="prod-grid">
+      {% assign featured = collections[settings.featured_collection] | default: collections.frontpage %}
+      {% if featured.products.size > 0 %}
+        {% for product in featured.products limit: 8 %}{% render 'product-card', card_product: product %}{% endfor %}
+      {% else %}
+        {% for product in collections.all.products limit: 8 %}{% render 'product-card', card_product: product %}{% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="section wrap">
+  <div class="props">
+    <div><svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke-width="1.6"><polygon points="17,4 30,17 17,30 4,17"/></svg><h3>Qualidade premium</h3><p>Materiais duradouros, testados no dia a dia de cães e gatos exigentes.</p></div>
+    <div><svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke-width="1.6"><circle cx="17" cy="17" r="13"/><polyline points="11,17.5 15.5,22 23,12.5"/></svg><h3>Produtos selecionados</h3><p>Cada peça é escolhida à mão. Mil "nãos" por cada "sim" no catálogo.</p></div>
+    <div><svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke-width="1.6"><circle cx="17" cy="17" r="13"/><path d="M11 19c1.8 2.6 4 4 6 4s4.2-1.4 6-4"/></svg><h3>Conforto e bem-estar</h3><p>Design pensado para o animal — não apenas para a fotografia.</p></div>
+    <div><svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke-width="1.6"><rect x="4" y="10" width="17" height="12" rx="1.5"/><path d="M21 14h5l4 4v4h-9"/><circle cx="10" cy="25" r="2.6"/><circle cx="25" cy="25" r="2.6"/></svg><h3>Envio rápido</h3><p>Entrega em 24–48h em Portugal e Espanha. Devoluções sem complicações.</p></div>
+  </div>
+</section>
+
+<section class="wrap editorial" style="padding-bottom:96px">
+  <div class="editorial__img">{% if settings.editorial_image != blank %}<img src="{{ settings.editorial_image | image_url: width: 1200 }}" alt="">{% endif %}</div>
+  <div>
+    <div class="eyebrow" style="margin-bottom:20px">A nossa filosofia</div>
+    <h2>Designed for pets. Chosen by people who care.</h2>
+    <p style="margin-top:20px">Na HUKO pets acreditamos que os acessórios do teu animal fazem parte da tua casa — e da vossa vida em conjunto. Por isso selecionamos apenas produtos funcionais, bonitos e feitos para durar.</p>
+    <p style="margin-top:14px">Menos coisas, melhores coisas. Para animais felizes e donos tranquilos.</p>
+    <a href="/pages/sobre-nos" class="btn btn--ghost" style="margin-top:26px">Conhecer a HUKO</a>
+  </div>
+</section>
+
+<section class="section section--card" style="border-bottom:none">
+  <div class="wrap">
+    <div class="section-head"><div class="eyebrow" style="margin-bottom:12px">Testemunhos</div><h2>Quem vive com HUKO, recomenda</h2></div>
+    <div class="reviews">
+      <figure class="review"><span class="stars" style="font-size:16px">★★★★★</span><blockquote>“A cama Oslo mudou as noites do nosso labrador. Qualidade que se vê e se sente.”</blockquote><figcaption><strong>Mariana S.</strong> · Lisboa</figcaption></figure>
+      <figure class="review"><span class="stars" style="font-size:16px">★★★★★</span><blockquote>“Finalmente uma loja pet que não parece um bazar. Entrega em 24h.”</blockquote><figcaption><strong>Ricardo P.</strong> · Porto</figcaption></figure>
+      <figure class="review"><span class="stars" style="font-size:16px">★★★★★</span><blockquote>“O arranhador Alta é o novo trono da nossa gata. Materiais excelentes.”</blockquote><figcaption><strong>Inês M.</strong> · Madrid</figcaption></figure>
+    </div>
+  </div>
+</section>
