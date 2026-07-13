@@ -26,7 +26,23 @@
       </a>
       <nav class="site-nav">
         {% for link in linklists.main-menu.links %}
-          <a href="{{ link.url }}">{{ link.title }}</a>
+          {%- if link.links.size > 0 -%}
+            <div class="nav-item nav-item--parent">
+              <a href="{{ link.url }}" class="nav-item__link" aria-haspopup="true" aria-expanded="false">
+                {{ link.title }}
+                <svg class="nav-item__caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 3.5 5 6.5 8 3.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <div class="nav-dropdown" role="menu">
+                {%- for child in link.links -%}
+                  <a href="{{ child.url }}" class="nav-dropdown__link" role="menuitem">{{ child.title }}</a>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- else -%}
+            <div class="nav-item">
+              <a href="{{ link.url }}" class="nav-item__link">{{ link.title }}</a>
+            </div>
+          {%- endif -%}
         {% endfor %}
       </nav>
       <div class="header-icons">
