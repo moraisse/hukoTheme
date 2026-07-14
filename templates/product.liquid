@@ -6,27 +6,56 @@
   <div class="pdp">
     <div>
       {%- assign featured = current_variant.featured_image | default: product.featured_image -%}
-      <div class="pdp__main">{% if featured %}<img src="{{ featured | image_url: width: 1200 }}" alt="{{ featured.alt | split: '#variant:' | first | strip | escape }}" id="MainImage">{% endif %}</div>
-      {% if product.images.size > 1 %}
+      <div class="pdp__gallery">
+        <div class="pdp__main" id="MainImageWrap" role="button" tabindex="0" aria-label="Ampliar imagem">
+          {% if featured %}<img src="{{ featured | image_url: width: 1200 }}" alt="{{ featured.alt | split: '#variant:' | first | strip | escape }}" id="MainImage">{% endif %}
+        </div>
+        {% if product.images.size > 1 %}
+          <button type="button" class="pdp__arrow pdp__arrow--prev" id="GalleryPrev" aria-label="Foto anterior">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button type="button" class="pdp__arrow pdp__arrow--next" id="GalleryNext" aria-label="Foto seguinte">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+          <div class="pdp__counter" id="GalleryCounter"></div>
+        {% endif %}
+      </div>
+      {% if product.images.size > 0 %}
         {%- comment -%}
           Imagens com tag "#variant:<valor>" no alt pertencem a essa variante
           (option1/cor) e só aparecem quando ela está selecionada; imagens sem
-          tag são comuns a todas. A tag é retirada do alt renderizado.
+          tag são comuns a todas. A tag é retirada do alt renderizado. Os dados
+          alimentam o carrossel/lightbox em JS — não há miniaturas visíveis.
         {%- endcomment -%}
-        <div class="pdp__thumbs" id="Thumbs">
-          {% for image in product.images %}
+        <script type="application/json" id="GalleryData">
+        [
+          {%- for image in product.images -%}
             {%- assign alt_parts = image.alt | split: '#variant:' -%}
             {%- assign vtag = '' -%}
             {%- if alt_parts.size > 1 -%}{%- assign vtag = alt_parts[1] | strip -%}{%- endif -%}
             {%- assign clean_alt = alt_parts[0] | strip | default: product.title -%}
-            {%- assign visible = true -%}
-            {%- if vtag != '' and vtag != current_variant.option1 -%}{%- assign visible = false -%}{%- endif -%}
-            <img src="{{ image | image_url: width: 300 }}" alt="{{ clean_alt | escape }}" loading="lazy"
-                 {% if vtag != '' %}data-variant-tag="{{ vtag | escape }}"{% endif %}
-                 data-full="{{ image | image_url: width: 1200 }}"
-                 {% unless visible %}style="display:none"{% endunless %}
-                 onclick="document.getElementById('MainImage').src=this.dataset.full">
-          {% endfor %}
+            {
+              "src": {{ image | image_url: width: 1200 | json }},
+              "zoom": {{ image | image_url: width: 2200 | json }},
+              "alt": {{ clean_alt | json }},
+              "variantTag": {{ vtag | json }}
+            }{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        ]
+        </script>
+        <div class="pdp__lightbox" id="Lightbox">
+          <button type="button" class="pdp__lightbox-close" id="LightboxClose" aria-label="Fechar">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+          </button>
+          {% if product.images.size > 1 %}
+            <button type="button" class="pdp__arrow pdp__arrow--prev" id="LightboxPrev" aria-label="Foto anterior">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <button type="button" class="pdp__arrow pdp__arrow--next" id="LightboxNext" aria-label="Foto seguinte">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+          {% endif %}
+          <img src="" alt="" id="LightboxImage">
         </div>
       {% endif %}
     </div>
@@ -119,19 +148,6 @@
     return values.join(' / ');
   }
 
-  function filterGallery(option1){
-    var thumbs = document.querySelectorAll('#Thumbs img');
-    var first = null;
-    thumbs.forEach(function(t){
-      var tag = t.getAttribute('data-variant-tag');
-      var show = !tag || !option1 || tag === option1;
-      t.style.display = show ? '' : 'none';
-      if (show && !first) first = t;
-    });
-    var main = document.getElementById('MainImage');
-    if (main && first) main.src = first.dataset.full;
-  }
-
   function apply(){
     var key = selectedKey();
     var v = key !== null ? data.variants[key] : null;
@@ -158,12 +174,111 @@
         lead.textContent = text.length > 180 ? text.slice(0, 177) + '…' : text;
       }
     }
-    filterGallery(v.option1);
+    if (window.HukoGallery) window.HukoGallery.computeVisible(v.option1);
   }
 
   document.querySelectorAll('.variant-btns input[type="radio"]').forEach(function(radio){
     radio.addEventListener('change', apply);
   });
+})();
+</script>
+
+{%- comment -%}
+  Carrossel da imagem principal (setas, uma imagem de cada vez) + lightbox
+  ao clicar. Lê a lista de imagens de "GalleryData" e filtra pela variante
+  selecionada (ver bloco de seleção de variante acima).
+{%- endcomment -%}
+<script>
+(function(){
+  var galleryEl = document.getElementById('GalleryData');
+  if (!galleryEl) return;
+  var images;
+  try { images = JSON.parse(galleryEl.textContent); } catch(e){ return; }
+
+  var mainImg = document.getElementById('MainImage');
+  var mainWrap = document.getElementById('MainImageWrap');
+  var prevBtn = document.getElementById('GalleryPrev');
+  var nextBtn = document.getElementById('GalleryNext');
+  var counterEl = document.getElementById('GalleryCounter');
+  var lightbox = document.getElementById('Lightbox');
+  var lightboxImg = document.getElementById('LightboxImage');
+  var lightboxClose = document.getElementById('LightboxClose');
+  var lightboxPrev = document.getElementById('LightboxPrev');
+  var lightboxNext = document.getElementById('LightboxNext');
+
+  var visible = images.slice();
+  var index = 0;
+
+  function computeVisible(variantTag){
+    visible = images.filter(function(img){
+      return !img.variantTag || !variantTag || img.variantTag === variantTag;
+    });
+    if (!visible.length) visible = images.slice(0, 1);
+    index = 0;
+    render();
+  }
+
+  function render(){
+    var img = visible[index];
+    if (!img) return;
+    if (mainImg) { mainImg.src = img.src; mainImg.alt = img.alt; }
+    var multi = visible.length > 1;
+    if (prevBtn) prevBtn.style.display = multi ? '' : 'none';
+    if (nextBtn) nextBtn.style.display = multi ? '' : 'none';
+    if (counterEl) {
+      counterEl.style.display = multi ? '' : 'none';
+      counterEl.textContent = (index + 1) + ' / ' + visible.length;
+    }
+    if (lightbox && lightbox.classList.contains('is-open')) renderLightbox();
+  }
+
+  function step(dir){
+    if (!visible.length) return;
+    index = (index + dir + visible.length) % visible.length;
+    render();
+  }
+
+  function renderLightbox(){
+    var img = visible[index];
+    if (!img || !lightboxImg) return;
+    lightboxImg.src = img.zoom;
+    lightboxImg.alt = img.alt;
+  }
+
+  function openLightbox(){
+    if (!lightbox || !visible.length) return;
+    renderLightbox();
+    lightbox.classList.add('is-open');
+    document.body.classList.add('drawer-open');
+  }
+
+  function closeLightbox(){
+    if (!lightbox) return;
+    lightbox.classList.remove('is-open');
+    document.body.classList.remove('drawer-open');
+  }
+
+  if (prevBtn) prevBtn.addEventListener('click', function(){ step(-1); });
+  if (nextBtn) nextBtn.addEventListener('click', function(){ step(1); });
+  if (mainWrap) {
+    mainWrap.addEventListener('click', openLightbox);
+    mainWrap.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(); }
+    });
+  }
+  if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+  if (lightbox) lightbox.addEventListener('click', function(e){ if (e.target === lightbox) closeLightbox(); });
+  if (lightboxPrev) lightboxPrev.addEventListener('click', function(){ step(-1); });
+  if (lightboxNext) lightboxNext.addEventListener('click', function(){ step(1); });
+  document.addEventListener('keydown', function(e){
+    if (!lightbox || !lightbox.classList.contains('is-open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') step(-1);
+    if (e.key === 'ArrowRight') step(1);
+  });
+
+  window.HukoGallery = { computeVisible: computeVisible };
+  computeVisible({{ current_variant.option1 | json }});
 })();
 </script>
 
