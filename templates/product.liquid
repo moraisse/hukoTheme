@@ -148,6 +148,21 @@
     return values.join(' / ');
   }
 
+  function refreshAvailability(){
+    var selected = data.optionNames.map(function(name){
+      var checked = document.querySelector('input[name="options[' + name + ']"]:checked');
+      return checked ? checked.value : null;
+    });
+    data.optionNames.forEach(function(name, i){
+      document.querySelectorAll('input[name="options[' + name + ']"]').forEach(function(radio){
+        var testValues = selected.slice();
+        testValues[i] = radio.value;
+        var v = data.variants[testValues.join(' / ')];
+        radio.disabled = !v || !v.available;
+      });
+    });
+  }
+
   function apply(){
     var key = selectedKey();
     var v = key !== null ? data.variants[key] : null;
@@ -175,11 +190,14 @@
       }
     }
     if (window.HukoGallery) window.HukoGallery.computeVisible(v.option1);
+    refreshAvailability();
   }
 
   document.querySelectorAll('.variant-btns input[type="radio"]').forEach(function(radio){
     radio.addEventListener('change', apply);
   });
+
+  refreshAvailability();
 })();
 </script>
 
