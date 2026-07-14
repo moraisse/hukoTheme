@@ -222,10 +222,14 @@ select.sort{background:transparent;border:none;font-family:var(--sans);font-size
 .trust{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;background:#fff;border:1px solid #EEE9DD;border-radius:16px;padding:18px 20px;text-align:center;font-size:13px;color:#4A4A44}
 .trust div{display:flex;flex-direction:column;gap:4px;align-items:center}
 .trust div+div{border-left:1px solid #EEE9DD}
-.acc{border-top:1px solid var(--line);padding:16px 4px}
-.acc strong{font-weight:500;font-size:15px}
-.acc ul,.acc p{margin:8px 0 0;font-size:15px;line-height:1.75;color:#4A4A44;font-weight:300}
-.acc ul{padding-left:18px}
+.pdp__desc{grid-column:1/-1;margin-top:12px;padding-top:44px;border-top:1px solid var(--line)}
+.pdp__desc h2{font-size:27px;margin:0 0 20px}
+.pdp__desc .rte{font-size:16.5px;line-height:1.85;color:#33332E;font-weight:400;max-width:74ch}
+.pdp__desc .rte p{margin:0}
+.pdp__desc .rte p+p{margin-top:16px}
+.pdp__desc .rte ul{margin:16px 0 0;padding-left:20px}
+.pdp__desc .rte li{margin-top:8px}
+.pdp__desc .rte strong{color:var(--ink);font-weight:600}
 /* cart */
 .cart-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:48px;align-items:start;padding:48px 0 88px}
 @media(max-width:900px){.cart-grid{grid-template-columns:1fr}}
