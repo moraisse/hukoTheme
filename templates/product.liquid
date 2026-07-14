@@ -8,6 +8,8 @@
       {%- assign featured = current_variant.featured_image | default: product.featured_image -%}
       <div class="pdp__gallery">
         <div class="pdp__main" id="MainImageWrap" role="button" tabindex="0" aria-label="Ampliar imagem">
+          {% if product.tags contains 'mais-vendido' %}<span class="badge badge--best">Mais vendido</span>{% endif %}
+          {% if product.tags contains 'novo' %}<span class="badge badge--new" style="top:{% if product.tags contains 'mais-vendido' %}50{% else %}14{% endif %}px">Novo</span>{% endif %}
           {% if featured %}<img src="{{ featured | image_url: width: 1200 }}" alt="{{ featured.alt | split: '#variant:' | first | strip | escape }}" id="MainImage">{% endif %}
         </div>
         {% if product.images.size > 1 %}
@@ -60,11 +62,6 @@
       {% endif %}
     </div>
     <div class="pdp__buy">
-      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-        {% if product.tags contains 'mais-vendido' %}<span class="badge badge--best" style="position:static">Mais vendido</span>{% endif %}
-        {% if product.tags contains 'novo' %}<span class="badge badge--new" style="position:static">Novo</span>{% endif %}
-        <span class="stars" style="font-size:14px">★★★★★ <span>4,9</span></span>
-      </div>
       <h1 id="ProductTitle">{{ initial_title }}</h1>
       <p class="lead" id="ProductLead">{{ initial_desc | strip_html | truncate: 180 }}</p>
       <div style="display:flex;align-items:baseline;gap:14px">
