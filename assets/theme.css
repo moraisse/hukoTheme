@@ -83,9 +83,10 @@ body.drawer-open{overflow:hidden}
 .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:64px;align-items:center;padding:56px 0 88px}
 .hero h1{font-size:clamp(38px,5vw,62px);line-height:1.08;margin:0}
 .hero h1 em{font-style:italic;color:var(--forest)}
+.hero-highlight{color:var(--green)}
 .hero p{font-size:19px;line-height:1.6;color:#4A4A44;font-weight:300;max-width:44ch}
-.hero__img{border-radius:24px;overflow:hidden;background:#EDE8DC;min-height:420px}
-.hero__img img{width:100%;height:100%;object-fit:cover}
+.hero__img{border-radius:24px;overflow:hidden;background:#EDE8DC;aspect-ratio:3/2}
+.hero__img img{width:100%;height:100%;object-fit:cover;display:block}
 @media(max-width:900px){.hero{grid-template-columns:1fr;padding:40px 0 56px}}
 /* hero: coupon chip (segundo slide) */
 .hero-coupon{display:inline-flex;align-items:center;gap:12px;margin-top:24px;padding:11px 20px;
