@@ -224,7 +224,7 @@ select.sort{background:transparent;border:none;font-family:var(--sans);font-size
 .trust div+div{border-left:1px solid #EEE9DD}
 .pdp__desc{padding:36px 0 72px;border-top:1px solid var(--line)}
 .pdp__desc h2{font-size:27px;margin:0 0 20px}
-.pdp__desc .rte{font-size:16.5px;line-height:1.85;color:#33332E;font-weight:400}
+.pdp__desc .rte{font-size:16.5px;line-height:1.85;color:#33332E;font-weight:400;max-width:none}
 .pdp__desc .rte p{margin:0}
 .pdp__desc .rte p+p{margin-top:16px}
 .pdp__desc .rte ul{margin:16px 0 0;padding-left:20px}
