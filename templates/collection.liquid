@@ -26,7 +26,7 @@
     <div class="prod-grid" style="padding-bottom:24px">
       {% for product in collection.products %}{% render 'product-card', card_product: product, white: true %}{% endfor %}
     </div>
-    {% if paginate.pages > 1 %}<div class="pagination">{{ paginate | default_pagination }}</div>{% endif %}
+    {% render 'pagination', paginate: paginate %}
   {% endpaginate %}
   <div style="padding-bottom:72px"></div>
 </div>

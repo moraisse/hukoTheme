@@ -11,7 +11,7 @@
           {% if item.object_type == 'product' %}{% render 'product-card', card_product: item, white: true %}{% endif %}
         {% endfor %}
       </div>
-      {% if paginate.pages > 1 %}<div class="pagination">{{ paginate | default_pagination }}</div>{% endif %}
+      {% render 'pagination', paginate: paginate %}
     {% endpaginate %}
   {% endif %}
 </div>

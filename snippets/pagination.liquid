@@ -1,0 +1,24 @@
+{%- comment -%}
+  Paginação própria (em vez do filtro default_pagination, que envolve cada
+  link num <span class="page"> extra e duplicava a caixa/borda no layout).
+  Uso: {% render 'pagination', paginate: paginate %}
+{%- endcomment -%}
+{%- if paginate.pages > 1 -%}
+  <nav class="pagination" role="navigation" aria-label="Paginação">
+    {%- if paginate.previous -%}
+      <a href="{{ paginate.previous.url }}" class="pagination__link pagination__link--prev">« Anterior</a>
+    {%- endif -%}
+    {%- for part in paginate.parts -%}
+      {%- if part.is_link -%}
+        <a href="{{ part.url }}" class="pagination__link">{{ part.title }}</a>
+      {%- elsif part.title == paginate.current_page -%}
+        <span class="pagination__link" aria-current="page">{{ part.title }}</span>
+      {%- else -%}
+        <span class="pagination__gap">{{ part.title }}</span>
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if paginate.next -%}
+      <a href="{{ paginate.next.url }}" class="pagination__link pagination__link--next">Próximo »</a>
+    {%- endif -%}
+  </nav>
+{%- endif -%}
