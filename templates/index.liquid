@@ -74,7 +74,27 @@
 </section>
 
 <section class="wrap editorial" style="padding-bottom:96px">
-  <div class="editorial__img">{% if settings.editorial_image != blank %}<img src="{{ settings.editorial_image | image_url: width: 1200 }}" alt="">{% endif %}</div>
+  <div class="editorial__img">
+    {% if settings.editorial_image != blank %}
+      <img
+        src="{{ settings.editorial_image | image_url: width: 1200 }}"
+        srcset="{{ settings.editorial_image | image_url: width: 600 }} 600w, {{ settings.editorial_image | image_url: width: 1200 }} 1200w, {{ settings.editorial_image | image_url: width: 1800 }} 1800w"
+        sizes="(min-width: 990px) 50vw, 100vw"
+        width="{{ settings.editorial_image.width }}"
+        height="{{ settings.editorial_image.height }}"
+        alt=""
+        loading="lazy"
+      >
+    {% else %}
+      <img
+        src="{{ 'editorial.png' | asset_url }}"
+        width="1535"
+        height="1024"
+        alt=""
+        loading="lazy"
+      >
+    {% endif %}
+  </div>
   <div>
     <div class="eyebrow" style="margin-bottom:20px">A nossa filosofia</div>
     <h2>Designed for pets. Chosen by people who care.</h2>
