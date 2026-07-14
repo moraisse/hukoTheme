@@ -77,6 +77,9 @@ body.drawer-open{overflow:hidden}
 .mobile-nav__sublink:last-child{padding-bottom:14px}
 .mobile-nav__sublink:hover{color:var(--forest)}
 /* hero */
+.hero-carousel{position:relative;display:grid}
+.hero-slide{grid-area:1/1;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .7s ease}
+.hero-slide.is-active{opacity:1;visibility:visible;pointer-events:auto}
 .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:64px;align-items:center;padding:56px 0 88px}
 .hero h1{font-size:clamp(38px,5vw,62px);line-height:1.08;margin:0}
 .hero h1 em{font-style:italic;color:var(--forest)}
@@ -84,6 +87,22 @@ body.drawer-open{overflow:hidden}
 .hero__img{border-radius:24px;overflow:hidden;background:#EDE8DC;min-height:420px}
 .hero__img img{width:100%;height:100%;object-fit:cover}
 @media(max-width:900px){.hero{grid-template-columns:1fr;padding:40px 0 56px}}
+/* hero: coupon chip (segundo slide) */
+.hero-coupon{display:inline-flex;align-items:center;gap:12px;margin-top:24px;padding:11px 20px;
+  border:1.5px dashed var(--gold);border-radius:999px;background:rgba(201,178,122,.08);
+  cursor:pointer;transition:background .2s,border-color .2s;user-select:none}
+.hero-coupon:hover{background:rgba(201,178,122,.18)}
+.hero-coupon__label{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.hero-coupon__code{font-family:var(--serif);font-weight:700;font-size:16px;letter-spacing:.03em;color:var(--forest)}
+.hero-coupon__action{font-size:12.5px;font-weight:600;color:var(--forest);border-left:1px solid rgba(201,178,122,.5);padding-left:12px}
+.hero-coupon.is-copied{border-color:var(--forest);background:rgba(30,61,47,.08)}
+.hero-coupon.is-copied .hero-coupon__action{color:var(--green)}
+/* hero: dots */
+.hero-dots{position:absolute;left:0;right:0;bottom:22px;display:flex;justify-content:center;gap:10px;z-index:2}
+.hero-dot{width:9px;height:9px;border-radius:50%;background:rgba(26,26,26,.18);border:none;padding:0;cursor:pointer;transition:all .3s ease}
+.hero-dot:hover{background:rgba(26,26,26,.34)}
+.hero-dot.is-active{background:var(--forest);width:26px;border-radius:5px}
+@media(max-width:900px){.hero-dots{bottom:10px}}
 /* sections */
 .section{padding:88px 0}
 .section--card{background:#fff;border-top:1px solid #EEE9DD;border-bottom:1px solid #EEE9DD}

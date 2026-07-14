@@ -1,39 +1,139 @@
-<section class="wrap hero">
-  <div>
-    <div class="eyebrow" style="margin-bottom:22px">Coleção {{ 'now' | date: '%Y' }}</div>
-    {% assign hero_title = settings.hero_title | default: 'Produtos premium para pets mais felizes' %}
-    {% assign hero_title = hero_title | replace: 'felizes', '<em style="font-style:italic;color:var(--forest)">felizes</em>' %}
-    <h1>{{ hero_title }}</h1>
-    <p>{{ settings.hero_subtitle }}</p>
-    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:26px">
-      <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">Comprar agora</a>
-      <a href="{{ routes.collections_url }}" class="btn btn--ghost">Ver coleções</a>
+<section class="hero-carousel" id="HeroCarousel" aria-roledescription="carrossel" aria-label="Destaques">
+
+  <div class="hero wrap hero-slide is-active" data-hero-slide>
+    <div>
+      <div class="eyebrow" style="margin-bottom:22px">Coleção {{ 'now' | date: '%Y' }}</div>
+      {% assign hero_title = settings.hero_title | default: 'Produtos premium para pets mais felizes' %}
+      {% assign hero_title = hero_title | replace: 'felizes', '<em style="font-style:italic;color:var(--forest)">felizes</em>' %}
+      <h1>{{ hero_title }}</h1>
+      <p>{{ settings.hero_subtitle }}</p>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:26px">
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">Comprar agora</a>
+        <a href="{{ routes.collections_url }}" class="btn btn--ghost">Ver coleções</a>
+      </div>
+    </div>
+    <div class="hero__img">
+      {% if settings.hero_image != blank %}
+        <img
+          src="{{ settings.hero_image | image_url: width: 1200 }}"
+          srcset="{{ settings.hero_image | image_url: width: 600 }} 600w, {{ settings.hero_image | image_url: width: 1200 }} 1200w, {{ settings.hero_image | image_url: width: 1800 }} 1800w"
+          sizes="(min-width: 990px) 50vw, 100vw"
+          width="{{ settings.hero_image.width }}"
+          height="{{ settings.hero_image.height }}"
+          alt="{{ settings.hero_title | default: 'Premium essentials for happier pets' | escape }}"
+          loading="eager"
+          fetchpriority="high"
+        >
+      {% else %}
+        <img
+          src="{{ 'happy_pets.jpg' | asset_url }}"
+          width="1200"
+          height="801"
+          alt="{{ settings.hero_title | default: 'Premium essentials for happier pets' | escape }}"
+          loading="eager"
+          fetchpriority="high"
+        >
+      {% endif %}
     </div>
   </div>
-  <div class="hero__img">
-    {% if settings.hero_image != blank %}
+
+  <div class="hero wrap hero-slide" data-hero-slide>
+    <div>
+      <div class="eyebrow" style="margin-bottom:22px">Oferta por tempo limitado</div>
+      <h1>-15% em <em>casotas de cão</em></h1>
+      <p>Resistentes à chuva e ao sol, pensadas para o conforto do teu cão o ano inteiro. Válido enquanto durar o stock.</p>
+      <div class="hero-coupon" data-coupon-copy data-code="CASOTA15">
+        <span class="hero-coupon__label">Código</span>
+        <span class="hero-coupon__code">CASOTA15</span>
+        <span class="hero-coupon__action" data-coupon-feedback>Copiar</span>
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:26px">
+        <a href="/collections/casotas-para-caes" class="btn btn--primary">Ver casotas</a>
+      </div>
+    </div>
+    <div class="hero__img">
       <img
-        src="{{ settings.hero_image | image_url: width: 1200 }}"
-        srcset="{{ settings.hero_image | image_url: width: 600 }} 600w, {{ settings.hero_image | image_url: width: 1200 }} 1200w, {{ settings.hero_image | image_url: width: 1800 }} 1800w"
+        src="https://hukopets.com/cdn/shop/files/8718475721215_a_en_hd_1.jpg?v=1783963569&width=1200"
+        srcset="https://hukopets.com/cdn/shop/files/8718475721215_a_en_hd_1.jpg?v=1783963569&width=600 600w, https://hukopets.com/cdn/shop/files/8718475721215_a_en_hd_1.jpg?v=1783963569&width=1200 1200w, https://hukopets.com/cdn/shop/files/8718475721215_a_en_hd_1.jpg?v=1783963569&width=1800 1800w"
         sizes="(min-width: 990px) 50vw, 100vw"
-        width="{{ settings.hero_image.width }}"
-        height="{{ settings.hero_image.height }}"
-        alt="{{ settings.hero_title | default: 'Premium essentials for happier pets' | escape }}"
-        loading="eager"
-        fetchpriority="high"
+        width="1024"
+        height="1024"
+        alt="Casota de cão em promoção — 15% de desconto com o código CASOTA15"
+        loading="lazy"
       >
-    {% else %}
-      <img
-        src="{{ 'happy_pets.jpg' | asset_url }}"
-        width="1200"
-        height="801"
-        alt="{{ settings.hero_title | default: 'Premium essentials for happier pets' | escape }}"
-        loading="eager"
-        fetchpriority="high"
-      >
-    {% endif %}
+    </div>
+  </div>
+
+  <div class="hero-dots" role="tablist" aria-label="Escolher destaque">
+    <button type="button" class="hero-dot is-active" data-hero-dot="0" role="tab" aria-selected="true" aria-label="Destaque 1"></button>
+    <button type="button" class="hero-dot" data-hero-dot="1" role="tab" aria-selected="false" aria-label="Destaque 2"></button>
   </div>
 </section>
+
+<script>
+(function () {
+  var root = document.getElementById('HeroCarousel');
+  if (!root) return;
+  var slides = Array.prototype.slice.call(root.querySelectorAll('[data-hero-slide]'));
+  var dots = Array.prototype.slice.call(root.querySelectorAll('[data-hero-dot]'));
+  if (slides.length < 2) return;
+
+  var index = 0;
+  var intervalMs = 5000;
+  var timer = null;
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function show(next) {
+    index = (next + slides.length) % slides.length;
+    slides.forEach(function (slide, i) {
+      slide.classList.toggle('is-active', i === index);
+    });
+    dots.forEach(function (dot, i) {
+      dot.classList.toggle('is-active', i === index);
+      dot.setAttribute('aria-selected', i === index ? 'true' : 'false');
+    });
+  }
+
+  function start() {
+    if (reduceMotion) return;
+    stop();
+    timer = setInterval(function () { show(index + 1); }, intervalMs);
+  }
+  function stop() {
+    if (timer) { clearInterval(timer); timer = null; }
+  }
+
+  dots.forEach(function (dot, i) {
+    dot.addEventListener('click', function () { show(i); start(); });
+  });
+
+  root.addEventListener('mouseenter', stop);
+  root.addEventListener('mouseleave', start);
+  root.addEventListener('focusin', stop);
+  root.addEventListener('focusout', start);
+
+  start();
+
+  var coupon = root.querySelector('[data-coupon-copy]');
+  if (coupon) {
+    coupon.addEventListener('click', function () {
+      var code = coupon.getAttribute('data-code');
+      var feedback = coupon.querySelector('[data-coupon-feedback]');
+      var reset = function () { if (feedback) feedback.textContent = 'Copiar'; coupon.classList.remove('is-copied'); };
+      var done = function () {
+        if (feedback) feedback.textContent = 'Copiado!';
+        coupon.classList.add('is-copied');
+        setTimeout(reset, 2000);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(done).catch(done);
+      } else {
+        done();
+      }
+    });
+  }
+})();
+</script>
 
 <section class="wrap" style="padding-bottom:96px">
   <div class="section-head" style="text-align:left;display:flex;justify-content:space-between;align-items:flex-end">
