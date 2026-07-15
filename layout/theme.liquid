@@ -127,8 +127,13 @@
         <div>
           <h4>HUKO</h4>
           <a href="/pages/sobre-nos">Sobre nós</a>
-          <a href="/policies/privacy-policy">Política de privacidade</a>
-          <a href="/policies/terms-of-service">Termos e condições</a>
+          {% assign policy_labels = 'refund_policy:Política de devolução e reembolso|privacy_policy:Política de privacidade|terms_of_service:Termos de serviço|shipping_policy:Política de envio|contact_information:Informações de contacto|legal_notice:Aviso legal' | split: '|' %}
+          {% for entry in policy_labels %}
+            {% assign entry_parts = entry | split: ':' %}
+            {% for policy in shop.policies %}
+              {% if policy.type == entry_parts[0] %}<a href="{{ policy.url }}">{{ entry_parts[1] }}</a>{% endif %}
+            {% endfor %}
+          {% endfor %}
         </div>
       </div>
       <div class="site-footer__base">
