@@ -1,5 +1,5 @@
 <div class="prod-card{% if white %} prod-card--white{% endif %}">
-  <a href="{{ card_product.url }}" class="prod-card__img">
+  <a href="{{ card_product.url }}?variant={{ card_product.selected_or_first_available_variant.id }}" class="prod-card__img">
     {% if card_product.featured_image %}
       <img src="{{ card_product.featured_image | image_url: width: 600 }}" alt="{{ card_product.featured_image.alt | escape }}" loading="lazy">
     {% endif %}
@@ -12,7 +12,7 @@
     {% endif %}
   </a>
   <div class="prod-card__body">
-    <a href="{{ card_product.url }}" class="prod-card__title">{{ card_product.title }}</a>
+    <a href="{{ card_product.url }}?variant={{ card_product.selected_or_first_available_variant.id }}" class="prod-card__title">{{ card_product.title }}</a>
     <div class="prod-card__foot">
       <span class="price">{{ card_product.price | money }}</span>
       {% form 'product', card_product %}
