@@ -139,7 +139,12 @@
       </div>
       <div class="site-footer__base">
         <small>© {{ 'now' | date: '%Y' }} {{ shop.name }}. Todos os direitos reservados.</small>
-        <div class="pay"><span>Visa</span><span>Mastercard</span><span>PayPal</span><span>MB Way</span><span>Apple Pay</span></div>
+        <div class="pay">
+          {%- assign payment_types = 'visa,master,maestro,union_pay,apple_pay,google_pay,klarna,multibanco' | split: ',' -%}
+          {%- for type in payment_types -%}
+            {{ type | payment_type_svg_tag: class: 'pay__icon' }}
+          {%- endfor -%}
+        </div>
       </div>
     </div>
   </footer>
