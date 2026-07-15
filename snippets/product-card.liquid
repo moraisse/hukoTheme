@@ -1,5 +1,15 @@
+{%- comment -%}
+  card_product.price é sempre o preço mínimo entre variantes (price_min), que pode
+  não ser o de selected_or_first_available_variant — por isso o link tem de apontar
+  explicitamente para a variante mais barata, senão a página de produto abre noutra
+  variante com preço diferente do mostrado no cartão.
+{%- endcomment -%}
+{%- assign cheapest_variant = card_product.variants.first -%}
+{%- for variant in card_product.variants -%}
+  {%- if variant.price < cheapest_variant.price -%}{%- assign cheapest_variant = variant -%}{%- endif -%}
+{%- endfor -%}
 <div class="prod-card{% if white %} prod-card--white{% endif %}">
-  <a href="{{ card_product.url }}?variant={{ card_product.selected_or_first_available_variant.id }}" class="prod-card__img">
+  <a href="{{ card_product.url }}?variant={{ cheapest_variant.id }}" class="prod-card__img">
     {% if card_product.featured_image %}
       <img src="{{ card_product.featured_image | image_url: width: 600 }}" alt="{{ card_product.featured_image.alt | escape }}" loading="lazy">
     {% endif %}
@@ -12,11 +22,11 @@
     {% endif %}
   </a>
   <div class="prod-card__body">
-    <a href="{{ card_product.url }}?variant={{ card_product.selected_or_first_available_variant.id }}" class="prod-card__title">{{ card_product.title }}</a>
+    <a href="{{ card_product.url }}?variant={{ cheapest_variant.id }}" class="prod-card__title">{{ card_product.title }}</a>
     <div class="prod-card__foot">
       <span class="price">{{ card_product.price | money }}</span>
       {% form 'product', card_product %}
-        <input type="hidden" name="id" value="{{ card_product.selected_or_first_available_variant.id }}">
+        <input type="hidden" name="id" value="{{ cheapest_variant.id }}">
         <button type="submit" class="btn btn--primary btn--sm">Adicionar</button>
       {% endform %}
     </div>
