@@ -1,19 +1,17 @@
 {%- comment -%}
-  card_product.price é sempre o preço mínimo entre variantes (price_min), que pode
-  não ser o de selected_or_first_available_variant — por isso o link tem de apontar
-  explicitamente para a variante mais barata, senão a página de produto abre noutra
-  variante com preço diferente do mostrado no cartão.
+  O título do produto é muitas vezes herdado de uma variante específica (ex.: "8 x
+  55 cm"), por isso o preço e o link têm de corresponder a essa MESMA variante —
+  selected_or_first_available_variant — e não a card_product.price, que é sempre o
+  preço mínimo entre todas as variantes e pode pertencer a um tamanho diferente do
+  que está no título.
 {%- endcomment -%}
-{%- assign cheapest_variant = card_product.variants.first -%}
-{%- for variant in card_product.variants -%}
-  {%- if variant.price < cheapest_variant.price -%}{%- assign cheapest_variant = variant -%}{%- endif -%}
-{%- endfor -%}
+{%- assign card_variant = card_product.selected_or_first_available_variant -%}
 <div class="prod-card{% if white %} prod-card--white{% endif %}">
-  <a href="{{ card_product.url }}?variant={{ cheapest_variant.id }}" class="prod-card__img">
+  <a href="{{ card_product.url }}?variant={{ card_variant.id }}" class="prod-card__img">
     {% if card_product.featured_image %}
       <img src="{{ card_product.featured_image | image_url: width: 600 }}" alt="{{ card_product.featured_image.alt | escape }}" loading="lazy">
     {% endif %}
-    {% if card_product.compare_at_price > card_product.price %}
+    {% if card_variant.compare_at_price > card_variant.price %}
       <span class="badge badge--sale">Promoção</span>
     {% elsif card_product.tags contains 'novo' %}
       <span class="badge badge--new">Novo</span>
@@ -22,11 +20,11 @@
     {% endif %}
   </a>
   <div class="prod-card__body">
-    <a href="{{ card_product.url }}?variant={{ cheapest_variant.id }}" class="prod-card__title">{{ card_product.title }}</a>
+    <a href="{{ card_product.url }}?variant={{ card_variant.id }}" class="prod-card__title">{{ card_product.title }}</a>
     <div class="prod-card__foot">
-      <span class="price">{{ card_product.price | money }}</span>
+      <span class="price">{{ card_variant.price | money }}</span>
       {% form 'product', card_product %}
-        <input type="hidden" name="id" value="{{ cheapest_variant.id }}">
+        <input type="hidden" name="id" value="{{ card_variant.id }}">
         <button type="submit" class="btn btn--primary btn--sm">Adicionar</button>
       {% endform %}
     </div>
