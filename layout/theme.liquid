@@ -11,7 +11,7 @@
   {{ 'theme.css' | asset_url | stylesheet_tag }}
   {{ content_for_header }}
 </head>
-<body>
+<body class="template-{{ request.page_type }}">
 
   <div class="announce">
     <div class="announce__inner wrap">

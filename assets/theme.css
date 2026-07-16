@@ -12,6 +12,10 @@ img{max-width:100%;display:block}
 .wrap{max-width:1360px;margin:0 auto;padding:0 40px}
 @media(max-width:768px){.wrap{padding:0 20px}}
 h1,h2,h3,.serif{font-family:var(--serif);font-weight:700;letter-spacing:-.02em}
+/* Shopify gera as páginas de política (/policies/...) com um layout fixo, sem
+   template editável — o título é escondido por CSS por não haver outra forma
+   de o remover do markup automático. */
+body.template-policy main h1{display:none}
 .eyebrow{color:var(--gold);font-size:13px;letter-spacing:.22em;text-transform:uppercase;font-weight:500}
 .btn{display:inline-block;border-radius:999px;padding:16px 36px;font-size:16px;font-weight:500;letter-spacing:.03em;cursor:pointer;border:none;font-family:var(--sans);transition:all .2s;text-align:center}
 .btn--primary{background:var(--forest);color:var(--bg)}
