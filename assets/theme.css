@@ -16,11 +16,11 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:700;letter-spacing:-.02em}
    política (/policies/...) — o título real fica dentro do corpo da política,
    escrito pelo lojista, por isso este é escondido para não duplicar. */
 body.template-policy .shopify-policy__title{display:none}
-/* Por defeito a Shopify limita estas páginas a uma coluna estreita e centrada,
-   com CSS próprio que carrega depois do theme.css — por isso as regras abaixo
-   têm de ser mais específicas (prefixo body.template-policy) para vencerem. */
-body.template-policy .shopify-policy__container{max-width:1360px!important;margin:0 auto!important;padding:56px 40px 96px!important}
-body.template-policy .shopify-policy__body{font-size:16.5px;line-height:1.8;color:#33332E;max-width:none!important;width:auto!important}
+/* O corpo da política também tem a classe .rte (definida mais abaixo), por
+   isso este bloco precisa de especificidade extra (body.template-policy) para
+   as suas regras vencerem as de .rte quando as propriedades coincidem. */
+body.template-policy .shopify-policy__container{max-width:1360px;margin:0 auto;padding:56px 40px 96px}
+body.template-policy .shopify-policy__body{font-size:16.5px;line-height:1.8;color:#33332E}
 body.template-policy .shopify-policy__body h1{margin:0 0 22px}
 body.template-policy .shopify-policy__body h2{margin:40px 0 14px;font-size:24px}
 body.template-policy .shopify-policy__body p{margin:0 0 16px}
@@ -315,4 +315,4 @@ a.pagination__link:hover{border-color:var(--forest);color:var(--forest)}
 .values__grid h3{color:var(--bg);font-size:21px;margin:10px 0}
 .values__grid p{color:rgba(250,248,243,.7);font-weight:300;font-size:15.5px;line-height:1.65;max-width:34ch;margin:0 auto}
 @media(max-width:900px){.values__grid{grid-template-columns:1fr}}
-.rte{font-size:17px;line-height:1.7;color:#4A4A44;font-weight:300;max-width:70ch}
+.rte{font-size:17px;line-height:1.7;color:#4A4A44;font-weight:300}
