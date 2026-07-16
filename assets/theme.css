@@ -16,6 +16,16 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:700;letter-spacing:-.02em}
    política (/policies/...) — o título real fica dentro do corpo da política,
    escrito pelo lojista, por isso este é escondido para não duplicar. */
 .shopify-policy__title{display:none}
+/* Por defeito a Shopify limita estas páginas a uma coluna estreita e centrada;
+   alarga para a largura do site (como .wrap) e dá uma largura de leitura
+   confortável ao texto, em vez de esticar linhas legais até 1360px. */
+.shopify-policy__container{max-width:1360px;margin:0 auto;padding:56px 40px 96px}
+.shopify-policy__body{font-size:16.5px;line-height:1.8;color:#33332E;max-width:78ch}
+.shopify-policy__body h1{margin:0 0 22px}
+.shopify-policy__body h2{margin:40px 0 14px;font-size:24px}
+.shopify-policy__body p{margin:0 0 16px}
+.shopify-policy__body ul,.shopify-policy__body ol{margin:0 0 16px;padding-left:22px}
+@media(max-width:768px){.shopify-policy__container{padding:40px 20px 64px}}
 .eyebrow{color:var(--gold);font-size:13px;letter-spacing:.22em;text-transform:uppercase;font-weight:500}
 .btn{display:inline-block;border-radius:999px;padding:16px 36px;font-size:16px;font-weight:500;letter-spacing:.03em;cursor:pointer;border:none;font-family:var(--sans);transition:all .2s;text-align:center}
 .btn--primary{background:var(--forest);color:var(--bg)}
