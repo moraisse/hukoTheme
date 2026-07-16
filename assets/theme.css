@@ -184,8 +184,7 @@ body .prod-card--white{background:#fff}
 .site-footer h4{margin:0 0 12px;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:500;font-family:var(--sans)}
 .site-footer a{color:rgba(250,248,243,.75);font-size:15px;font-weight:300;display:block;margin-bottom:12px}
 .site-footer a:hover{color:var(--green)}
-.footer-phone__note{display:block;margin-top:10px;font-size:13px;color:rgba(250,248,243,.5);font-weight:300}
-.site-footer .footer-phone{display:block;margin-top:4px;margin-bottom:0;font-family:var(--serif);font-size:30px;font-weight:700;letter-spacing:-.01em;color:var(--bg)}
+.site-footer .footer-phone{display:block;margin-top:4px;margin-bottom:8px;font-family:var(--serif);font-size:19px;font-weight:700;letter-spacing:-.01em;color:var(--bg)}
 .site-footer .footer-phone:hover{color:var(--green)}
 .site-footer__brand img{height:44px;margin-bottom:18px}
 .site-footer__brand p{color:rgba(250,248,243,.6);font-weight:300;font-size:15px;line-height:1.65;max-width:34ch}

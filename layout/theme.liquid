@@ -130,9 +130,9 @@
         </div>
         <div>
           <h4>Apoio ao cliente</h4>
-          {% for link in linklists.footer.links %}<a href="{{ link.url }}">{{ link.title }}</a>{% endfor %}
-          <span class="footer-phone__note">Dúvidas? Contacte-nos!</span>
+          {% for link in linklists.footer.links %}{% unless link.title == 'Busca' %}<a href="{{ link.url }}">{{ link.title }}</a>{% endunless %}{% endfor %}
           <a href="tel:+351931198604" class="footer-phone">931 198 604</a>
+          <a href="mailto:geral@hukopets.com" class="footer-phone">geral@hukopets.com</a>
         </div>
         <div>
           <h4>HUKO</h4>
