@@ -20,8 +20,14 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:700;letter-spacing:-.02em}
 .btn--ghost:hover{border-color:var(--green);color:var(--forest)}
 .btn--sm{padding:9px 18px;font-size:13.5px}
 /* announcement */
-.announce{background:var(--forest);color:var(--bg);text-align:center;padding:9px 20px;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+.announce{background:var(--forest);color:var(--bg);padding:9px 20px;font-size:13px;letter-spacing:.1em;text-transform:uppercase}
 .announce em{color:var(--gold);font-style:normal;margin:0 10px}
+.announce__inner{display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap}
+.announce__msg{flex:1;min-width:0;text-align:center}
+.announce__phone{display:inline-flex;align-items:center;gap:7px;flex-shrink:0;color:var(--gold);white-space:nowrap;transition:color .2s}
+.announce__phone:hover{color:var(--bg)}
+.announce__phone strong{font-weight:700;letter-spacing:.03em}
+@media(max-width:680px){.announce__inner{justify-content:center;text-align:center}.announce__msg{flex:auto;width:100%}}
 /* header */
 .site-header{position:sticky;top:0;z-index:100;background:rgba(250,248,243,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 .site-header__inner{height:76px;display:flex;align-items:center;justify-content:space-between;gap:32px}
