@@ -20,7 +20,7 @@ h1,h2,h3,.serif{font-family:var(--serif);font-weight:700;letter-spacing:-.02em}
    alarga para a largura do site (como .wrap) e dá uma largura de leitura
    confortável ao texto, em vez de esticar linhas legais até 1360px. */
 .shopify-policy__container{max-width:1360px;margin:0 auto;padding:56px 40px 96px}
-.shopify-policy__body{font-size:16.5px;line-height:1.8;color:#33332E;max-width:78ch}
+.shopify-policy__body{font-size:16.5px;line-height:1.8;color:#33332E}
 .shopify-policy__body h1{margin:0 0 22px}
 .shopify-policy__body h2{margin:40px 0 14px;font-size:24px}
 .shopify-policy__body p{margin:0 0 16px}
