@@ -20,7 +20,7 @@ body.template-policy .shopify-policy__title{display:none}
    com CSS próprio que carrega depois do theme.css — por isso as regras abaixo
    têm de ser mais específicas (prefixo body.template-policy) para vencerem. */
 body.template-policy .shopify-policy__container{max-width:1360px!important;margin:0 auto!important;padding:56px 40px 96px!important}
-body.template-policy .shopify-policy__body{font-size:16.5px;line-height:1.8;color:#33332E}
+body.template-policy .shopify-policy__body{font-size:16.5px;line-height:1.8;color:#33332E;max-width:none!important;width:auto!important}
 body.template-policy .shopify-policy__body h1{margin:0 0 22px}
 body.template-policy .shopify-policy__body h2{margin:40px 0 14px;font-size:24px}
 body.template-policy .shopify-policy__body p{margin:0 0 16px}
