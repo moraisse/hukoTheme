@@ -185,6 +185,8 @@ body .prod-card--white{background:#fff}
 .site-footer a{color:rgba(250,248,243,.75);font-size:15px;font-weight:300;display:block;margin-bottom:12px}
 .site-footer a:hover{color:var(--green)}
 .site-footer .footer-phone{font-weight:700}
+.footer-whatsapp{display:inline-flex;align-items:center;gap:9px;margin-top:6px}
+.footer-whatsapp svg{flex-shrink:0;width:28px;height:28px;padding:4px;border-radius:50%;background:#25D366}
 .site-footer__brand img{height:44px;margin-bottom:18px}
 .site-footer__brand p{color:rgba(250,248,243,.6);font-weight:300;font-size:15px;line-height:1.65;max-width:34ch}
 .site-footer__base{display:flex;align-items:center;justify-content:space-between;padding-top:28px;flex-wrap:wrap;gap:16px}
