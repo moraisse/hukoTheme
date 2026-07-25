@@ -10,34 +10,34 @@
   <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   {{ 'theme.css' | asset_url | stylesheet_tag }}
   <style>
-    /* ===== Mega-menu de 3 níveis (desktop) ===== */
-    .nav-mega{position:absolute;top:100%;left:0;margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:16px;
-      box-shadow:0 18px 44px rgba(30,61,47,.16);display:flex;overflow:hidden;
+    /* ===== Mega-menu multi-coluna (desktop) ===== */
+    /* A categoria pai preenche toda a altura do header e o painel encosta ao fundo do header
+       (sem espaço), por isso o hover nunca se perde ao descer do texto para o painel. */
+    .site-header__inner{position:relative}
+    .site-nav{align-self:stretch}
+    .nav-item--parent{position:static;align-self:stretch;display:flex;align-items:center}
+    .nav-mega{position:absolute;top:100%;left:0;right:0;background:#fff;
+      border:1px solid var(--line);border-top:none;border-radius:0 0 20px 20px;
+      box-shadow:0 26px 50px rgba(30,61,47,.15);display:flex;overflow:hidden;
       opacity:0;visibility:hidden;pointer-events:none;transform:translateY(6px);
-      transition:opacity .18s ease,transform .18s ease;z-index:120}
-    /* ponte invisível sobre o espaço de 12px, para o hover não se perder ao descer do texto para o painel.
-       Fica no nav-item--parent porque o .nav-mega tem overflow:hidden e cortaria um pseudo-elemento próprio. */
-    .nav-item--parent::after{content:"";position:absolute;top:100%;left:0;right:0;height:16px}
-    .nav-mega--split{min-width:580px}
+      transition:opacity .16s ease,transform .16s ease;z-index:120}
     .nav-item--parent:hover .nav-mega,.nav-item--parent:focus-within .nav-mega{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}
-    /* itens mais à direita abrem alinhados à direita para não sair do ecrã */
-    .nav-item--parent:last-child .nav-mega,.nav-item--parent:nth-last-child(2) .nav-mega{left:auto;right:0}
-    /* coluna nível 2 */
-    .nav-mega__l2{width:290px;flex-shrink:0;padding:14px;display:flex;flex-direction:column;gap:2px}
-    .nav-mega:not(.nav-mega--split) .nav-mega__l2{width:230px}
-    .nav-mega__l2link{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 15px;border-radius:10px;
-      font-size:14.5px;font-weight:500;color:var(--ink);border-bottom:none;transition:background .15s,color .15s}
-    .nav-mega__l2link:hover,.nav-mega__l2link.is-active{background:var(--bg);color:var(--forest)}
-    .nav-mega__l2caret{stroke:currentColor;flex-shrink:0;opacity:.45;transition:opacity .15s,color .15s}
-    .nav-mega__l2link:hover .nav-mega__l2caret,.nav-mega__l2link.is-active .nav-mega__l2caret{opacity:1;color:var(--green)}
-    /* painel nível 3 (coluna direita) */
-    .nav-mega__panel{flex:1;min-width:270px;background:#F6F3EC;border-left:1px solid var(--line);padding:20px 22px}
-    .nav-mega__sub{display:none;flex-direction:column;gap:2px}
-    .nav-mega__sub.is-active{display:flex}
-    .nav-mega__sub-title{font-family:var(--serif);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
-      color:var(--gold);font-weight:600;margin:0 0 10px;padding:0 12px}
-    .nav-mega__sublink{padding:9px 12px;border-radius:8px;font-size:14px;font-weight:400;color:#4A4A44;border-bottom:none;transition:background .15s,color .15s}
-    .nav-mega__sublink:hover{background:#fff;color:var(--forest)}
+    /* colunas das categorias de 2º nível (fluem em 4 colunas, como o modelo de referência) */
+    .nav-mega__cols{flex:1;padding:36px 44px 40px;columns:4;column-gap:36px}
+    .nav-mega__group{break-inside:avoid;-webkit-column-break-inside:avoid;margin-bottom:26px}
+    .nav-mega__group:last-child{margin-bottom:0}
+    .nav-mega__grouptitle{display:block;font-family:var(--serif);font-weight:700;font-size:15px;
+      color:var(--forest);letter-spacing:-.01em;margin-bottom:11px;border-bottom:none;transition:color .15s}
+    .nav-mega__grouptitle:hover{color:var(--green)}
+    .nav-mega__links{display:flex;flex-direction:column;border-left:1px solid var(--line);padding-left:15px}
+    .nav-mega__link{padding:6px 0;font-size:14px;font-weight:400;color:var(--muted);line-height:1.35;border-bottom:none;transition:color .15s,padding-left .15s}
+    .nav-mega__link:hover{color:var(--forest)}
+    /* imagem promocional à direita (usa a imagem da coleção da categoria pai, se existir) */
+    .nav-mega__media{position:relative;width:290px;flex-shrink:0;align-self:stretch;display:block;border-bottom:none;overflow:hidden}
+    .nav-mega__media img{width:100%;height:100%;min-height:100%;object-fit:cover}
+    .nav-mega__media-label{position:absolute;left:0;right:0;bottom:0;padding:20px 22px 16px;font-size:14px;font-weight:600;color:#fff;
+      background:linear-gradient(transparent,rgba(26,26,26,.78))}
+    @media(max-width:1150px){.nav-mega__cols{columns:3}.nav-mega__media{display:none}}
     @media(max-width:900px){.nav-mega{display:none}}
     /* ===== Mobile: 3º nível (acordeão aninhado) ===== */
     .mobile-nav__group--2{border-bottom:none;border-top:1px solid var(--line)}
@@ -83,33 +83,27 @@
                 {{ link.title }}
                 <svg class="nav-item__caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 3.5 5 6.5 8 3.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </a>
-              {%- assign has_any_sub = false -%}
-              {%- for child in link.links -%}{%- if child.links.size > 0 -%}{%- assign has_any_sub = true -%}{%- endif -%}{%- endfor -%}
-              <div class="nav-mega{% if has_any_sub %} nav-mega--split{% endif %}" role="menu">
-                <div class="nav-mega__l2">
+              {%- assign mega_img = link.object.image -%}
+              <div class="nav-mega" role="menu">
+                <div class="nav-mega__cols">
                   {%- for child in link.links -%}
-                    <a href="{{ child.url }}" class="nav-mega__l2link{% if child.links.size > 0 %} has-sub{% endif %}"
-                       {% if child.links.size > 0 %}data-mega-index="{{ forloop.index0 }}"{% endif %} role="menuitem">
-                      <span>{{ child.title }}</span>
+                    <div class="nav-mega__group">
+                      <a href="{{ child.url }}" class="nav-mega__grouptitle" role="menuitem">{{ child.title }}</a>
                       {%- if child.links.size > 0 -%}
-                        <svg class="nav-mega__l2caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M3.5 2 6.5 5 3.5 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                      {%- endif -%}
-                    </a>
-                  {%- endfor -%}
-                </div>
-                {%- if has_any_sub -%}
-                  <div class="nav-mega__panel">
-                    {%- for child in link.links -%}
-                      {%- if child.links.size > 0 -%}
-                        <div class="nav-mega__sub" data-mega-panel="{{ forloop.index0 }}">
-                          <span class="nav-mega__sub-title">{{ child.title }}</span>
+                        <div class="nav-mega__links">
                           {%- for grandchild in child.links -%}
-                            <a href="{{ grandchild.url }}" class="nav-mega__sublink" role="menuitem">{{ grandchild.title }}</a>
+                            <a href="{{ grandchild.url }}" class="nav-mega__link" role="menuitem">{{ grandchild.title }}</a>
                           {%- endfor -%}
                         </div>
                       {%- endif -%}
-                    {%- endfor -%}
-                  </div>
+                    </div>
+                  {%- endfor -%}
+                </div>
+                {%- if mega_img != blank -%}
+                  <a href="{{ link.url }}" class="nav-mega__media">
+                    <img src="{{ mega_img | image_url: width: 600 }}" alt="{{ link.title }}" loading="lazy" width="290" height="440">
+                    <span class="nav-mega__media-label">Ver tudo em {{ link.title }} →</span>
+                  </a>
                 {%- endif -%}
               </div>
             </div>
@@ -287,24 +281,6 @@
           var isOpen = group.classList.toggle('is-expanded');
           btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         });
-      });
-    })();
-
-    // Mega-menu desktop: o painel do 3º nível segue a categoria de 2º nível sob o rato
-    (function () {
-      document.querySelectorAll('.nav-mega--split').forEach(function (mega) {
-        var links = mega.querySelectorAll('.nav-mega__l2link.has-sub');
-        var panels = mega.querySelectorAll('.nav-mega__sub');
-        if (!links.length || !panels.length) return;
-        function activate(index) {
-          panels.forEach(function (p) { p.classList.toggle('is-active', p.dataset.megaPanel === index); });
-          links.forEach(function (l) { l.classList.toggle('is-active', l.dataset.megaIndex === index); });
-        }
-        links.forEach(function (l) {
-          l.addEventListener('mouseenter', function () { activate(l.dataset.megaIndex); });
-          l.addEventListener('focus', function () { activate(l.dataset.megaIndex); });
-        });
-        activate(links[0].dataset.megaIndex);
       });
     })();
   </script>
