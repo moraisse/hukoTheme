@@ -21,7 +21,7 @@
       {%- for file in brand_files -%}
         {%- assign brand_name = file | split: '.' | first | replace: '_', ' ' -%}
         <div class="brand-card">
-          <img src="{{ file | prepend: 'marcas/' | asset_url }}" alt="{{ brand_name | escape }}" loading="lazy" width="150" height="72">
+          <img src="{{ file | asset_url }}" alt="{{ brand_name | escape }}" loading="lazy" width="150" height="72">
         </div>
       {%- endfor -%}
     </div>
