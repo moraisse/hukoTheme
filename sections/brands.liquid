@@ -1,0 +1,108 @@
+{%- assign brand_files = '3_claveles.png,agui.png,andis.png,antos.png,barry_king.png,burbur_aura.png,burbur_basics.png,burbur_friend.png,burbur_pro.png,ca.png,classic.png,dingo_natura.jpg,flexy.png,freedog.png,groom_professional.png,groomtek.png,haquoss.png,hau_miau.png,lolo_pets.png,lolo_pets_classic.png,max_biocide.png,oudor_lock.jpg,panama_pet.png,pawppin.png,red_dingo.png,transgroom.png' | split: ',' -%}
+
+<section class="wrap brands" style="padding-top:8px;padding-bottom:96px" data-brands>
+  <div class="section-head brands__head">
+    <div>
+      <div class="eyebrow" style="margin-bottom:12px">{{ section.settings.eyebrow }}</div>
+      <h2 class="serif brands__title">{{ section.settings.heading }}</h2>
+    </div>
+    <div class="brands__nav">
+      <button class="brands__btn" type="button" aria-label="Marcas anteriores" data-brands-prev>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <button class="brands__btn" type="button" aria-label="Marcas seguintes" data-brands-next>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="brands__viewport">
+    <div class="brands__track" data-brands-track>
+      {%- for file in brand_files -%}
+        {%- assign brand_name = file | split: '.' | first | replace: '_', ' ' -%}
+        <div class="brand-card">
+          <img src="{{ file | prepend: 'marcas/' | asset_url }}" alt="{{ brand_name | escape }}" loading="lazy" width="150" height="72">
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .brands__head{text-align:left;display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
+  .brands__title{font-size:38px;margin:0}
+  .brands__nav{display:flex;gap:10px;flex-shrink:0}
+  .brands__btn{width:44px;height:44px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--forest);
+    display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all .18s ease}
+  .brands__btn:hover{border-color:var(--green);background:var(--forest);color:#fff}
+  .brands__btn:active{transform:scale(.94)}
+  .brands__viewport{position:relative;margin-top:28px}
+  /* esbatimentos nas pontas para dar sensação de faixa contínua */
+  .brands__viewport::before,.brands__viewport::after{content:"";position:absolute;top:0;bottom:0;width:64px;z-index:2;pointer-events:none}
+  .brands__viewport::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
+  .brands__viewport::after{right:0;background:linear-gradient(270deg,var(--bg),transparent)}
+  .brands__track{display:flex;gap:24px;overflow-x:auto;scroll-behavior:smooth;scroll-snap-type:x proximity;
+    padding:4px;-ms-overflow-style:none;scrollbar-width:none}
+  .brands__track::-webkit-scrollbar{display:none}
+  .brand-card{flex:0 0 auto;width:200px;height:132px;background:#fff;border:1px solid var(--line);border-radius:16px;
+    display:flex;align-items:center;justify-content:center;padding:26px;scroll-snap-align:start;
+    box-shadow:0 6px 18px rgba(30,61,47,.05);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+  .brand-card:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(30,61,47,.12);border-color:var(--gold)}
+  .brand-card img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;
+    filter:grayscale(.4);opacity:.85;transition:filter .2s ease,opacity .2s ease}
+  .brand-card:hover img{filter:grayscale(0);opacity:1}
+  @media(max-width:768px){
+    .brands__title{font-size:28px}
+    .brand-card{width:158px;height:110px;padding:20px}
+    .brands__viewport::before,.brands__viewport::after{width:32px}
+  }
+</style>
+
+<script>
+  (function () {
+    document.querySelectorAll('[data-brands]').forEach(function (root) {
+      var track = root.querySelector('[data-brands-track]');
+      if (!track) return;
+      var prev = root.querySelector('[data-brands-prev]');
+      var next = root.querySelector('[data-brands-next]');
+      var GAP = 24;
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function stepAmount() {
+        var card = track.querySelector('.brand-card');
+        return card ? card.offsetWidth + GAP : 224;
+      }
+      function atEnd() { return track.scrollLeft + track.clientWidth >= track.scrollWidth - 4; }
+      function atStart() { return track.scrollLeft <= 4; }
+      function go(dir) {
+        if (dir > 0 && atEnd()) { track.scrollTo({ left: 0, behavior: 'smooth' }); return; }
+        if (dir < 0 && atStart()) { track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' }); return; }
+        track.scrollBy({ left: dir * stepAmount(), behavior: 'smooth' });
+      }
+
+      if (next) next.addEventListener('click', function () { go(1); restart(); });
+      if (prev) prev.addEventListener('click', function () { go(-1); restart(); });
+
+      var timer = null;
+      function start() { if (!reduce) timer = setInterval(function () { go(1); }, 3200); }
+      function stop() { if (timer) { clearInterval(timer); timer = null; } }
+      function restart() { stop(); start(); }
+
+      track.addEventListener('mouseenter', stop);
+      track.addEventListener('mouseleave', start);
+      track.addEventListener('touchstart', stop, { passive: true });
+      start();
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Marcas",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Texto pequeno (eyebrow)", "default": "Parceiros de confiança" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "As marcas com que trabalhamos" }
+  ],
+  "presets": [{ "name": "Marcas" }]
+}
+{% endschema %}
