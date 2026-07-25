@@ -9,6 +9,44 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   {{ 'theme.css' | asset_url | stylesheet_tag }}
+  <style>
+    /* ===== Mega-menu de 3 níveis (desktop) ===== */
+    .nav-mega{position:absolute;top:100%;left:0;margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:16px;
+      box-shadow:0 18px 44px rgba(30,61,47,.16);display:flex;overflow:hidden;
+      opacity:0;visibility:hidden;pointer-events:none;transform:translateY(6px);
+      transition:opacity .18s ease,transform .18s ease;z-index:120}
+    .nav-mega::before{content:"";position:absolute;top:-14px;left:0;right:0;height:14px}
+    .nav-mega--split{min-width:580px}
+    .nav-item--parent:hover .nav-mega,.nav-item--parent:focus-within .nav-mega{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}
+    /* itens mais à direita abrem alinhados à direita para não sair do ecrã */
+    .nav-item--parent:last-child .nav-mega,.nav-item--parent:nth-last-child(2) .nav-mega{left:auto;right:0}
+    /* coluna nível 2 */
+    .nav-mega__l2{width:290px;flex-shrink:0;padding:14px;display:flex;flex-direction:column;gap:2px}
+    .nav-mega:not(.nav-mega--split) .nav-mega__l2{width:230px}
+    .nav-mega__l2link{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 15px;border-radius:10px;
+      font-size:14.5px;font-weight:500;color:var(--ink);border-bottom:none;transition:background .15s,color .15s}
+    .nav-mega__l2link:hover,.nav-mega__l2link.is-active{background:var(--bg);color:var(--forest)}
+    .nav-mega__l2caret{stroke:currentColor;flex-shrink:0;opacity:.45;transition:opacity .15s,color .15s}
+    .nav-mega__l2link:hover .nav-mega__l2caret,.nav-mega__l2link.is-active .nav-mega__l2caret{opacity:1;color:var(--green)}
+    /* painel nível 3 (coluna direita) */
+    .nav-mega__panel{flex:1;min-width:270px;background:#F6F3EC;border-left:1px solid var(--line);padding:20px 22px}
+    .nav-mega__sub{display:none;flex-direction:column;gap:2px}
+    .nav-mega__sub.is-active{display:flex}
+    .nav-mega__sub-title{font-family:var(--serif);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--gold);font-weight:600;margin:0 0 10px;padding:0 12px}
+    .nav-mega__sublink{padding:9px 12px;border-radius:8px;font-size:14px;font-weight:400;color:#4A4A44;border-bottom:none;transition:background .15s,color .15s}
+    .nav-mega__sublink:hover{background:#fff;color:var(--forest)}
+    @media(max-width:900px){.nav-mega{display:none}}
+    /* ===== Mobile: 3º nível (acordeão aninhado) ===== */
+    .mobile-nav__group--2{border-bottom:none;border-top:1px solid var(--line)}
+    .mobile-nav__group--2:first-child{border-top:none}
+    .mobile-nav__sublink--parent{flex:1}
+    .mobile-nav__group--2 .mobile-nav__row .mobile-nav__expand{padding:12px 10px;color:var(--soft)}
+    .mobile-nav__sublink--3{padding:11px 10px 11px 40px;font-size:14.5px;color:var(--soft)}
+    .mobile-nav__sublink--3:hover{color:var(--forest)}
+    .mobile-nav__group--2 .mobile-nav__sub-inner .mobile-nav__sublink--3:first-child{padding-top:4px}
+    .mobile-nav__group--2 .mobile-nav__sub-inner .mobile-nav__sublink--3:last-child{padding-bottom:12px}
+  </style>
   {{ content_for_header }}
 </head>
 <body class="template-{{ request.page_type }}">
@@ -43,10 +81,34 @@
                 {{ link.title }}
                 <svg class="nav-item__caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 3.5 5 6.5 8 3.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </a>
-              <div class="nav-dropdown" role="menu">
-                {%- for child in link.links -%}
-                  <a href="{{ child.url }}" class="nav-dropdown__link" role="menuitem">{{ child.title }}</a>
-                {%- endfor -%}
+              {%- assign has_any_sub = false -%}
+              {%- for child in link.links -%}{%- if child.links.size > 0 -%}{%- assign has_any_sub = true -%}{%- endif -%}{%- endfor -%}
+              <div class="nav-mega{% if has_any_sub %} nav-mega--split{% endif %}" role="menu">
+                <div class="nav-mega__l2">
+                  {%- for child in link.links -%}
+                    <a href="{{ child.url }}" class="nav-mega__l2link{% if child.links.size > 0 %} has-sub{% endif %}"
+                       {% if child.links.size > 0 %}data-mega-index="{{ forloop.index0 }}"{% endif %} role="menuitem">
+                      <span>{{ child.title }}</span>
+                      {%- if child.links.size > 0 -%}
+                        <svg class="nav-mega__l2caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M3.5 2 6.5 5 3.5 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      {%- endif -%}
+                    </a>
+                  {%- endfor -%}
+                </div>
+                {%- if has_any_sub -%}
+                  <div class="nav-mega__panel">
+                    {%- for child in link.links -%}
+                      {%- if child.links.size > 0 -%}
+                        <div class="nav-mega__sub" data-mega-panel="{{ forloop.index0 }}">
+                          <span class="nav-mega__sub-title">{{ child.title }}</span>
+                          {%- for grandchild in child.links -%}
+                            <a href="{{ grandchild.url }}" class="nav-mega__sublink" role="menuitem">{{ grandchild.title }}</a>
+                          {%- endfor -%}
+                        </div>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
               </div>
             </div>
           {%- else -%}
@@ -89,7 +151,25 @@
               <div class="mobile-nav__sub">
                 <div class="mobile-nav__sub-inner">
                   {%- for child in link.links -%}
-                    <a href="{{ child.url }}" class="mobile-nav__sublink">{{ child.title }}</a>
+                    {%- if child.links.size > 0 -%}
+                      <div class="mobile-nav__group mobile-nav__group--2">
+                        <div class="mobile-nav__row">
+                          <a href="{{ child.url }}" class="mobile-nav__sublink mobile-nav__sublink--parent">{{ child.title }}</a>
+                          <button class="mobile-nav__expand" aria-label="Mostrar subcategorias de {{ child.title }}" aria-expanded="false">
+                            <svg width="13" height="13" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5 5 6.5 8 3.5"/></svg>
+                          </button>
+                        </div>
+                        <div class="mobile-nav__sub">
+                          <div class="mobile-nav__sub-inner">
+                            {%- for grandchild in child.links -%}
+                              <a href="{{ grandchild.url }}" class="mobile-nav__sublink mobile-nav__sublink--3">{{ grandchild.title }}</a>
+                            {%- endfor -%}
+                          </div>
+                        </div>
+                      </div>
+                    {%- else -%}
+                      <a href="{{ child.url }}" class="mobile-nav__sublink">{{ child.title }}</a>
+                    {%- endif -%}
                   {%- endfor -%}
                 </div>
               </div>
@@ -198,11 +278,31 @@
       });
 
       drawer.querySelectorAll('.mobile-nav__expand').forEach(function (btn) {
-        btn.addEventListener('click', function () {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
           var group = btn.closest('.mobile-nav__group');
           var isOpen = group.classList.toggle('is-expanded');
           btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         });
+      });
+    })();
+
+    // Mega-menu desktop: o painel do 3º nível segue a categoria de 2º nível sob o rato
+    (function () {
+      document.querySelectorAll('.nav-mega--split').forEach(function (mega) {
+        var links = mega.querySelectorAll('.nav-mega__l2link.has-sub');
+        var panels = mega.querySelectorAll('.nav-mega__sub');
+        if (!links.length || !panels.length) return;
+        function activate(index) {
+          panels.forEach(function (p) { p.classList.toggle('is-active', p.dataset.megaPanel === index); });
+          links.forEach(function (l) { l.classList.toggle('is-active', l.dataset.megaIndex === index); });
+        }
+        links.forEach(function (l) {
+          l.addEventListener('mouseenter', function () { activate(l.dataset.megaIndex); });
+          l.addEventListener('focus', function () { activate(l.dataset.megaIndex); });
+        });
+        activate(links[0].dataset.megaIndex);
       });
     })();
   </script>
