@@ -15,7 +15,9 @@
       box-shadow:0 18px 44px rgba(30,61,47,.16);display:flex;overflow:hidden;
       opacity:0;visibility:hidden;pointer-events:none;transform:translateY(6px);
       transition:opacity .18s ease,transform .18s ease;z-index:120}
-    .nav-mega::before{content:"";position:absolute;top:-14px;left:0;right:0;height:14px}
+    /* ponte invisível sobre o espaço de 12px, para o hover não se perder ao descer do texto para o painel.
+       Fica no nav-item--parent porque o .nav-mega tem overflow:hidden e cortaria um pseudo-elemento próprio. */
+    .nav-item--parent::after{content:"";position:absolute;top:100%;left:0;right:0;height:16px}
     .nav-mega--split{min-width:580px}
     .nav-item--parent:hover .nav-mega,.nav-item--parent:focus-within .nav-mega{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}
     /* itens mais à direita abrem alinhados à direita para não sair do ecrã */
