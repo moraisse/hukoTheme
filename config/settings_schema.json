@@ -22,5 +22,37 @@
         "default": "Envio rápido em Portugal e Espanha · Devoluções gratuitas em 30 dias"
       }
     ]
+  },
+  {
+    "name": "Google Customer Reviews",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Mostra o selo (badge) de avaliações do Google na loja. O inquérito de opt-in na página de agradecimento adiciona-se em separado, através do bloco da app Google & YouTube."
+      },
+      {
+        "type": "checkbox",
+        "id": "gcr_enabled",
+        "label": "Ativar selo do Google Customer Reviews",
+        "default": true
+      },
+      {
+        "type": "number",
+        "id": "gcr_merchant_id",
+        "label": "Merchant ID (Google Merchant Center)",
+        "default": 5825864351
+      },
+      {
+        "type": "select",
+        "id": "gcr_badge_position",
+        "label": "Posição do selo",
+        "info": "O chat da app Inbox ocupa o canto inferior direito.",
+        "options": [
+          { "value": "BOTTOM_LEFT", "label": "Inferior esquerdo" },
+          { "value": "BOTTOM_RIGHT", "label": "Inferior direito" }
+        ],
+        "default": "BOTTOM_LEFT"
+      }
+    ]
   }
 ]

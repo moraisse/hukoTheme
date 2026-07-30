@@ -1,0 +1,33 @@
+{% comment %}
+  Google Customer Reviews — distintivo (badge) de avaliações.
+
+  Mostra o selo flutuante do Google com a classificação do vendedor.
+  O selo só aparece publicamente depois de a loja ter avaliações suficientes
+  no programa Google Customer Reviews (Merchant Center > Add-ons).
+
+  Nota: o módulo de opt-in (inquérito na página de agradecimento) NÃO pode viver
+  aqui — as "Additional scripts" da Order status page foram descontinuadas pela
+  Shopify. Esse módulo adiciona-se como bloco da app "Google & YouTube" no editor
+  de tema, em "Checkout and Customer Account view" > Thank you.
+
+  Configuração: Definições do tema > Google Customer Reviews.
+{% endcomment %}
+
+{%- if settings.gcr_enabled and settings.gcr_merchant_id > 0 -%}
+  <!-- BEGIN Google Customer Reviews badge -->
+  <script src="https://apis.google.com/js/platform.js?onload=renderBadge" async defer></script>
+  <script>
+    window.renderBadge = function () {
+      var container = document.createElement('div');
+      document.body.appendChild(container);
+      window.gapi.load('ratingbadge', function () {
+        window.gapi.ratingbadge.render(container, {
+          merchant_id: {{ settings.gcr_merchant_id | plus: 0 }},
+          position: {{ settings.gcr_badge_position | default: 'BOTTOM_LEFT' | json }}
+        });
+      });
+    };
+    window.___gcfg = { lang: {{ request.locale.iso_code | json }} };
+  </script>
+  <!-- END Google Customer Reviews badge -->
+{%- endif -%}
