@@ -70,10 +70,15 @@
         <span class="nav-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
       </button>
       <a href="{{ routes.root_url }}" class="site-header__logo">
+        {%- comment -%}
+          O header é verde-escuro, por isso a versão por omissão é a clara — a
+          mesma que o rodapé usa. Um logo carregado nas definições tem de ser
+          igualmente claro para se ver.
+        {%- endcomment -%}
         {% if settings.logo != blank %}
           <img src="{{ settings.logo | image_url: width: 300 }}" alt="{{ shop.name }}">
         {% else %}
-          <img src="{{ 'huko-logo.svg' | asset_url }}" alt="{{ shop.name }}">
+          <img src="{{ 'huko-logo-light.svg' | asset_url }}" alt="{{ shop.name }}">
         {% endif %}
       </a>
       {% render 'header-search' %}
