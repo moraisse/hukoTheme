@@ -1,0 +1,219 @@
+{%- comment -%}
+  Trilho de navegação global — renderizado no layout, por isso serve todas as
+  páginas. Em coleções e produtos o caminho não é inventado: procura-se a
+  coleção no menu principal (até 3 níveis) e usam-se as categorias-pai reais,
+  para o trilho coincidir com o mega-menu. Nas restantes páginas usa-se o
+  contexto do template (blog do artigo, conta do cliente, etc.).
+{%- endcomment -%}
+
+{%- assign show_breadcrumb = true -%}
+{%- if request.page_type == 'index' or request.page_type == 'password' -%}
+  {%- assign show_breadcrumb = false -%}
+{%- endif -%}
+
+{%- if show_breadcrumb -%}
+  {%- assign sep = '~|~' -%}
+  {%- assign anc_titles = '' -%}
+  {%- assign anc_urls = '' -%}
+  {%- assign current_title = page_title -%}
+
+  {%- comment -%}
+    Âncora do trilho. Numa coleção é a própria coleção. Num produto é a coleção
+    de onde se veio; quando o produto é aberto diretamente (ex.: resultado do
+    Google) não há contexto de coleção, por isso guardam-se os handles de todas
+    as coleções do produto e procura-se a primeira que exista no menu.
+  {%- endcomment -%}
+  {%- assign lookup_url = '' -%}
+  {%- assign handle_pool = '' -%}
+  {%- if request.page_type == 'collection' -%}
+    {%- assign lookup_url = collection.url -%}
+  {%- elsif request.page_type == 'product' -%}
+    {%- if collection != blank -%}
+      {%- assign parent_collection = collection -%}
+      {%- assign lookup_url = collection.url -%}
+    {%- elsif product.collections.size > 0 -%}
+      {%- assign parent_collection = product.collections.first -%}
+      {%- capture handle_pool -%}|{%- for c in product.collections -%}{{ c.handle }}|{%- endfor -%}{%- endcapture -%}
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- comment -%}
+    Categorias-pai a partir do menu principal, das mais específicas para as mais
+    gerais: uma correspondência no 3.º nível dá um trilho mais útil do que uma
+    no 1.º, por isso os níveis são percorridos em passagens separadas.
+  {%- endcomment -%}
+  {%- assign found = false -%}
+  {%- if lookup_url != blank or handle_pool != blank -%}
+
+    {%- for l1 in linklists.main-menu.links -%}
+      {%- for l2 in l1.links -%}
+        {%- for l3 in l2.links -%}
+          {%- assign hit = false -%}
+          {%- if lookup_url != blank -%}
+            {%- if l3.url == lookup_url -%}{%- assign hit = true -%}{%- endif -%}
+          {%- elsif l3.type == 'collection_link' -%}
+            {%- assign needle = '|' | append: l3.object.handle | append: '|' -%}
+            {%- if handle_pool contains needle -%}{%- assign hit = true -%}{%- endif -%}
+          {%- endif -%}
+          {%- if hit -%}
+            {%- assign anc_titles = l1.title | append: sep | append: l2.title -%}
+            {%- assign anc_urls = l1.url | append: sep | append: l2.url -%}
+            {%- if lookup_url == blank -%}{%- assign parent_collection = l3.object -%}{%- endif -%}
+            {%- assign found = true -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if found -%}{%- break -%}{%- endif -%}
+      {%- endfor -%}
+      {%- if found -%}{%- break -%}{%- endif -%}
+    {%- endfor -%}
+
+    {%- unless found -%}
+      {%- for l1 in linklists.main-menu.links -%}
+        {%- for l2 in l1.links -%}
+          {%- assign hit = false -%}
+          {%- if lookup_url != blank -%}
+            {%- if l2.url == lookup_url -%}{%- assign hit = true -%}{%- endif -%}
+          {%- elsif l2.type == 'collection_link' -%}
+            {%- assign needle = '|' | append: l2.object.handle | append: '|' -%}
+            {%- if handle_pool contains needle -%}{%- assign hit = true -%}{%- endif -%}
+          {%- endif -%}
+          {%- if hit -%}
+            {%- assign anc_titles = l1.title -%}
+            {%- assign anc_urls = l1.url -%}
+            {%- if lookup_url == blank -%}{%- assign parent_collection = l2.object -%}{%- endif -%}
+            {%- assign found = true -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if found -%}{%- break -%}{%- endif -%}
+      {%- endfor -%}
+    {%- endunless -%}
+
+    {%- unless found -%}
+      {%- for l1 in linklists.main-menu.links -%}
+        {%- if lookup_url != blank -%}
+          {%- if l1.url == lookup_url -%}{%- assign found = true -%}{%- break -%}{%- endif -%}
+        {%- elsif l1.type == 'collection_link' -%}
+          {%- assign needle = '|' | append: l1.object.handle | append: '|' -%}
+          {%- if handle_pool contains needle -%}
+            {%- assign parent_collection = l1.object -%}
+            {%- assign found = true -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endunless -%}
+
+  {%- endif -%}
+
+  {%- comment -%} Último nível (e os pais que dependem do template). {%- endcomment -%}
+  {%- case request.page_type -%}
+    {%- when 'collection' -%}
+      {%- assign current_title = collection.title -%}
+
+    {%- when 'product' -%}
+      {%- if parent_collection != blank -%}
+        {%- if anc_titles == blank -%}
+          {%- assign anc_titles = parent_collection.title -%}
+          {%- assign anc_urls = parent_collection.url -%}
+        {%- else -%}
+          {%- assign anc_titles = anc_titles | append: sep | append: parent_collection.title -%}
+          {%- assign anc_urls = anc_urls | append: sep | append: parent_collection.url -%}
+        {%- endif -%}
+      {%- endif -%}
+      {%- assign current_title = product.title -%}
+
+    {%- when 'list-collections' -%}
+      {%- assign current_title = 'Coleções' -%}
+
+    {%- when 'page' -%}
+      {%- assign current_title = page.title -%}
+
+    {%- when 'blog' -%}
+      {%- assign current_title = blog.title -%}
+
+    {%- when 'article' -%}
+      {%- assign anc_titles = blog.title -%}
+      {%- assign anc_urls = blog.url -%}
+      {%- assign current_title = article.title -%}
+
+    {%- when 'search' -%}
+      {%- if search.performed and search.terms != blank -%}
+        {%- assign current_title = 'Resultados para “' | append: search.terms | append: '”' -%}
+      {%- else -%}
+        {%- assign current_title = 'Pesquisar' -%}
+      {%- endif -%}
+
+    {%- when 'cart' -%}
+      {%- assign current_title = 'Carrinho' -%}
+
+    {%- when '404' -%}
+      {%- assign current_title = 'Página não encontrada' -%}
+
+    {%- when 'gift_card' -%}
+      {%- assign current_title = 'Cartão presente' -%}
+
+    {%- when 'customers/account' -%}
+      {%- assign current_title = 'A minha conta' -%}
+
+    {%- when 'customers/order' -%}
+      {%- assign anc_titles = 'A minha conta' -%}
+      {%- assign anc_urls = routes.account_url -%}
+      {%- assign current_title = 'Encomenda ' | append: order.name -%}
+
+    {%- when 'customers/addresses' -%}
+      {%- assign anc_titles = 'A minha conta' -%}
+      {%- assign anc_urls = routes.account_url -%}
+      {%- assign current_title = 'Moradas' -%}
+
+    {%- when 'customers/login' -%}
+      {%- assign current_title = 'Iniciar sessão' -%}
+
+    {%- when 'customers/register' -%}
+      {%- assign current_title = 'Criar conta' -%}
+
+    {%- when 'customers/reset_password' -%}
+      {%- assign current_title = 'Repor palavra-passe' -%}
+
+    {%- when 'customers/activate_account' -%}
+      {%- assign current_title = 'Ativar conta' -%}
+  {%- endcase -%}
+
+  {%- assign crumb_titles = anc_titles | split: sep -%}
+  {%- assign crumb_urls = anc_urls | split: sep -%}
+
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Trilho de navegação">
+      <ol class="breadcrumb__list">
+        <li class="breadcrumb__item"><a href="{{ routes.root_url }}">Início</a></li>
+        {%- for crumb in crumb_titles -%}
+          {%- assign crumb_url = crumb_urls[forloop.index0] -%}
+          <li class="breadcrumb__item">
+            <em aria-hidden="true">/</em>
+            <a href="{{ crumb_url }}">{{ crumb | escape }}</a>
+          </li>
+        {%- endfor -%}
+        <li class="breadcrumb__item breadcrumb__item--current">
+          <em aria-hidden="true">/</em>
+          <span aria-current="page">{{ current_title | escape }}</span>
+        </li>
+      </ol>
+    </nav>
+  </div>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Início", "item": {{ shop.url | append: routes.root_url | json }} },
+        {%- for crumb in crumb_titles -%}
+          {%- assign crumb_url = crumb_urls[forloop.index0] -%}
+          { "@type": "ListItem", "position": {{ forloop.index | plus: 1 }}, "name": {{ crumb | json }}, "item": {{ shop.url | append: crumb_url | json }} },
+        {%- endfor -%}
+        { "@type": "ListItem", "position": {{ crumb_titles.size | plus: 2 }}, "name": {{ current_title | json }} }
+      ]
+    }
+  </script>
+{%- endif -%}

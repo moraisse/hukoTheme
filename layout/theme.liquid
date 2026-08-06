@@ -181,7 +181,10 @@
     </aside>
   </div>
 
-  <main>{{ content_for_layout }}</main>
+  <main>
+    {% render 'breadcrumb' %}
+    {{ content_for_layout }}
+  </main>
 
   <section class="newsletter">
     <div class="newsletter__inner">

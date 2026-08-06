@@ -2,7 +2,6 @@
 {%- assign initial_title = current_variant.metafields.huko.variant_title.value | default: product.title -%}
 {%- assign initial_desc = current_variant.metafields.huko.variant_description.value | default: product.description -%}
 <div class="wrap">
-  <nav class="breadcrumb"><a href="{{ routes.root_url }}">Início</a><em>/</em>{% if collection %}<a href="{{ collection.url }}">{{ collection.title }}</a><em>/</em>{% endif %}<span>{{ product.title }}</span></nav>
   <div class="pdp">
     <div>
       {%- assign featured = current_variant.featured_image | default: product.featured_image -%}

@@ -19,13 +19,13 @@ body.template-policy .shopify-policy__title{display:none}
 /* O corpo da política também tem a classe .rte (definida mais abaixo), por
    isso este bloco precisa de especificidade extra (body.template-policy) para
    as suas regras vencerem as de .rte quando as propriedades coincidem. */
-body.template-policy .shopify-policy__container{max-width:1360px;margin:0 auto;padding:56px 40px 96px}
+body.template-policy .shopify-policy__container{max-width:1360px;margin:0 auto;padding:32px 40px 96px}
 body.template-policy .shopify-policy__body{font-size:16.5px;line-height:1.8;color:#33332E}
 body.template-policy .shopify-policy__body h1{margin:0 0 22px}
 body.template-policy .shopify-policy__body h2{margin:40px 0 14px;font-size:24px}
 body.template-policy .shopify-policy__body p{margin:0 0 16px}
 body.template-policy .shopify-policy__body ul,body.template-policy .shopify-policy__body ol{margin:0 0 16px;padding-left:22px}
-@media(max-width:768px){body.template-policy .shopify-policy__container{padding:40px 20px 64px}}
+@media(max-width:768px){body.template-policy .shopify-policy__container{padding:24px 20px 64px}}
 .eyebrow{color:var(--gold);font-size:13px;letter-spacing:.22em;text-transform:uppercase;font-weight:500}
 .btn{display:inline-block;border-radius:999px;padding:16px 36px;font-size:16px;font-weight:500;letter-spacing:.03em;cursor:pointer;border:none;font-family:var(--sans);transition:all .2s;text-align:center}
 .btn--primary{background:var(--forest);color:var(--bg)}
@@ -213,8 +213,20 @@ body .prod-card--white{background:#fff}
 .coll-head h1{font-size:46px;margin:0 0 14px}
 .coll-head p{margin:0;font-size:17px;line-height:1.65;color:var(--muted);font-weight:300;max-width:620px}
 .breadcrumb{font-size:13.5px;color:var(--soft);padding:24px 0 0}
-.breadcrumb a{color:var(--soft)}
+.breadcrumb__list{display:flex;flex-wrap:wrap;align-items:center;list-style:none;margin:0;padding:0}
+.breadcrumb__item{display:flex;align-items:center;min-width:0}
+.breadcrumb a{color:var(--soft);border-bottom:1px solid transparent;transition:color .15s,border-color .15s}
+.breadcrumb a:hover{color:var(--forest);border-bottom-color:var(--green)}
 .breadcrumb em{color:var(--gold);font-style:normal;margin:0 8px}
+/* A página atual não é um link e pode ser um título longo (produto/artigo),
+   por isso corta-se com reticências em vez de partir o trilho em duas linhas. */
+.breadcrumb [aria-current]{display:block;color:var(--forest);font-weight:500;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:min(52ch,58vw)}
+@media(max-width:600px){
+  .breadcrumb{font-size:12.5px;padding-top:18px}
+  .breadcrumb em{margin:0 6px}
+  .breadcrumb [aria-current]{max-width:52vw}
+}
 .toolbar{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding-bottom:28px}
 .chips{display:flex;gap:10px;flex-wrap:wrap}
 .chip{background:#fff;border:1px solid #E0DACB;border-radius:999px;font-family:var(--sans);font-size:14px;font-weight:500;padding:9px 18px;cursor:pointer}
@@ -294,7 +306,7 @@ a.pagination__link:hover{border-color:var(--forest);color:var(--forest)}
 .summary .total .price{font-size:26px}
 .fineprint{text-align:center;font-size:12.5px;color:#A8A498;font-weight:300;margin:0}
 /* about */
-.about-hero{max-width:900px;margin:0 auto;padding:88px 0 64px;text-align:center}
+.about-hero{max-width:900px;margin:0 auto;padding:64px 0 64px;text-align:center}
 .about-hero h1{font-size:54px;line-height:1.12;margin:0 0 24px}
 .about-hero h1 em{font-style:italic;color:var(--forest)}
 .about-hero p{font-size:19px;line-height:1.7;color:#4A4A44;font-weight:300;max-width:58ch;margin:0 auto}
