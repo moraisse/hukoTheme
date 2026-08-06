@@ -2,7 +2,7 @@
   <h1 class="serif" style="font-size:38px;margin:0 0 28px">Encomenda {{ order.name }}</h1>
   {% for line_item in order.line_items %}
   <div style="border-top:1px solid var(--line);padding:14px 0;display:flex;justify-content:space-between">
-    <span>{{ line_item.title }} × {{ line_item.quantity }}</span>
+    <span><span class="product-name">{{ line_item.title }}</span> × {{ line_item.quantity }}</span>
     <span>{{ line_item.final_line_price | money }}</span>
   </div>
 {% endfor %}

@@ -413,6 +413,20 @@ a.pagination__link:hover{border-color:var(--forest);color:var(--forest)}
 @media(max-width:900px){.values__grid{grid-template-columns:1fr}}
 .rte{font-size:17px;line-height:1.7;color:#4A4A44;font-weight:300}
 
+/* ===== Nomes de produto em maiúsculas ===== */
+/* Feito em CSS e não com o filtro `upcase` de propósito: assim o texto real
+   mantém-se para o title da página, alt das imagens, dados estruturados e
+   leitores de ecrã — só a apresentação muda. As maiúsculas pedem um pouco de
+   espaçamento entre letras para continuarem legíveis. */
+.prod-card__title,
+.mini-cart__name,
+.cart-item__info > a:not(.remove),
+.product-name{text-transform:uppercase;letter-spacing:.02em}
+.pdp__buy h1{text-transform:uppercase;letter-spacing:0}
+/* No trilho de navegação só a página atual de um produto é um nome de produto —
+   as coleções acima mantêm a capitalização normal. */
+body.template-product .breadcrumb [aria-current]{text-transform:uppercase;letter-spacing:.02em}
+
 /* ===== Resultados com filtros laterais ===== */
 .results-layout{display:grid;grid-template-columns:252px minmax(0,1fr);gap:40px;align-items:start}
 .results-layout--full{grid-template-columns:minmax(0,1fr)}
