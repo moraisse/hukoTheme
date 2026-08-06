@@ -414,6 +414,76 @@ a.pagination__link:hover{border-color:var(--forest);color:var(--forest)}
 @media(max-width:900px){.values__grid{grid-template-columns:1fr}}
 .rte{font-size:17px;line-height:1.7;color:#4A4A44;font-weight:300}
 
+/* ===== Resultados com filtros laterais ===== */
+.results-layout{display:grid;grid-template-columns:252px minmax(0,1fr);gap:40px;align-items:start}
+.results-layout--full{grid-template-columns:minmax(0,1fr)}
+/* Com a coluna de filtros ao lado, três colunas de produtos respiram melhor. */
+.results-main .prod-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:1200px){.results-main .prod-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.results-main .prod-grid{grid-template-columns:1fr}}
+
+.facets-toggle{display:none;align-items:center;gap:9px;margin-bottom:20px;padding:11px 20px;
+  background:#fff;border:1.5px solid var(--line);border-radius:999px;cursor:pointer;
+  font-family:var(--sans);font-size:14.5px;font-weight:500;color:var(--forest);transition:border-color .18s}
+.facets-toggle:hover{border-color:var(--green)}
+
+.facets{background:#fff;border:1px solid var(--line);border-radius:18px;padding:4px 20px 20px;
+  box-shadow:0 1px 4px rgba(26,26,26,.04);position:sticky;top:136px}
+.facets__head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:18px 0 4px}
+.facets__title{font-family:var(--serif);font-size:17px;font-weight:700;letter-spacing:-.02em;color:var(--forest)}
+.facets__clear{font-size:13px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.facets__clear:hover{color:var(--forest)}
+.facets__active{display:flex;flex-wrap:wrap;gap:7px;padding:12px 0 4px}
+.facet-chip{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;
+  background:var(--bg);border:1px solid var(--line);font-size:12.5px;color:var(--forest);transition:border-color .15s,background .15s}
+.facet-chip:hover{border-color:var(--green);background:#fff}
+.facet-chip span{font-size:14px;line-height:1;color:var(--soft)}
+
+.facet{border-top:1px solid var(--line);padding:4px 0}
+.facet__head{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:15px 0;cursor:pointer;list-style:none;
+  font-family:var(--serif);font-size:14.5px;font-weight:700;letter-spacing:-.01em;color:var(--forest)}
+.facet__head::-webkit-details-marker{display:none}
+.facet__caret{flex-shrink:0;color:var(--soft);transition:transform .2s}
+.facet[open] .facet__caret{transform:rotate(180deg)}
+.facet__body{padding-bottom:16px}
+
+.facet-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.facet-list__item--extra{display:none}
+.facet__body.is-expanded .facet-list__item--extra{display:block}
+.facet-check{display:flex;align-items:center;gap:10px;padding:5px 0;cursor:pointer;font-size:14px;color:var(--ink)}
+.facet-check input{position:absolute;opacity:0;width:0;height:0}
+.facet-check__box{flex-shrink:0;width:18px;height:18px;border:1.5px solid var(--line);border-radius:5px;
+  background:#fff;display:flex;align-items:center;justify-content:center;color:transparent;transition:all .15s}
+.facet-check__box svg{width:11px;height:11px}
+.facet-check:hover .facet-check__box{border-color:var(--green)}
+.facet-check input:checked + .facet-check__box{background:var(--forest);border-color:var(--forest);color:var(--bg)}
+.facet-check input:focus-visible + .facet-check__box{outline:2px solid var(--green);outline-offset:2px}
+.facet-check__label{flex:1;min-width:0;line-height:1.35}
+.facet-check input:checked ~ .facet-check__label{font-weight:500;color:var(--forest)}
+.facet-check__count{flex-shrink:0;font-size:12.5px;color:var(--soft)}
+.facet-more{margin-top:8px;padding:0;border:none;background:none;cursor:pointer;
+  font-family:var(--sans);font-size:13px;font-weight:500;color:var(--forest);
+  text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--green)}
+
+.facet-price{display:flex;align-items:flex-end;gap:9px}
+.facet-price__field{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--soft)}
+.facet-price__field input{width:100%;padding:9px 11px;border:1.5px solid var(--line);border-radius:10px;
+  background:#fff;font-family:var(--sans);font-size:14px;color:var(--ink);outline:none;transition:border-color .15s}
+.facet-price__field input:focus{border-color:var(--green)}
+.facet-price__sep{padding-bottom:11px;color:var(--soft)}
+
+.facets__apply{width:100%;margin-top:16px}
+.facets.is-auto .facets__apply{display:none}
+
+@media(max-width:900px){
+  .results-layout{grid-template-columns:minmax(0,1fr);gap:0}
+  .facets-toggle{display:inline-flex}
+  .results-side{display:none;margin-bottom:28px}
+  .results-side.is-open{display:block}
+  .facets{position:static}
+}
+
 /* ===== Botão "Adicionar ao Carrinho" (cartão de produto) ===== */
 /* O botão troca de conteúdo (etiqueta → spinner → visto) sem mudar de largura:
    os três estados ficam empilhados e só a opacidade/posição muda. */

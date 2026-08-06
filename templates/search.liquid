@@ -1,3 +1,11 @@
+{%- comment -%}
+  Página de resultados. A pesquisa faz-se sempre pela barra do header, por isso
+  aqui não há formulário — só o que foi pesquisado, os filtros e os resultados.
+{%- endcomment -%}
+{%- capture clear_url -%}
+  {{ routes.search_url }}?q={{ search.terms | url_encode }}&type=product{% if search.sort_by != blank %}&sort_by={{ search.sort_by }}{% endif %}
+{%- endcapture -%}
+
 <div class="wrap" style="padding-top:28px;padding-bottom:88px">
   {% if search.performed %}
     <h1 class="serif" style="font-size:42px;margin:0 0 8px">Resultados para “{{ search.terms | escape }}”</h1>
@@ -5,28 +13,42 @@
       {{ search.results_count }} {% if search.results_count == 1 %}resultado{% else %}resultados{% endif %}
     </p>
   {% else %}
-    <h1 class="serif" style="font-size:42px;margin:0 0 24px">Pesquisar</h1>
+    <h1 class="serif" style="font-size:42px;margin:0 0 12px">Pesquisar</h1>
+    <p class="rte" style="margin:0 0 32px">Usa a barra de pesquisa no topo da página para encontrar produtos.</p>
   {% endif %}
-
-  <form action="{{ routes.search_url }}" method="get" role="search" style="display:flex;gap:12px;max-width:520px;margin-bottom:48px">
-    <input type="hidden" name="type" value="product">
-    <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Pesquisar produtos" aria-label="Pesquisar produtos" style="flex:1;border:1.5px solid #E0DACB;border-radius:999px;padding:14px 24px;font-family:var(--sans);font-size:15px;background:#fff;outline:none">
-    <button type="submit" class="btn btn--primary">Pesquisar</button>
-  </form>
 
   {% if search.performed %}
     {% if search.results_count == 0 %}
       <p class="rte">Não encontrámos nada para “{{ search.terms | escape }}”. Experimenta outra palavra ou explora as categorias do menu.</p>
       <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary" style="margin-top:24px">Ver todos os produtos</a>
     {% else %}
-      {% paginate search.results by 12 %}
-        <div class="prod-grid">
-          {% for item in search.results %}
-            {% if item.object_type == 'product' %}{% render 'product-card', card_product: item, white: true %}{% endif %}
-          {% endfor %}
+
+      {% if search.filters.size > 0 %}
+        <button type="button" class="facets-toggle" data-facets-toggle aria-expanded="false" aria-controls="FacetsSidebar">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+          Filtros
+        </button>
+      {% endif %}
+
+      <div class="results-layout{% if search.filters.size == 0 %} results-layout--full{% endif %}">
+        {% if search.filters.size > 0 %}
+          <aside class="results-side" id="FacetsSidebar">
+            {% render 'facets', filters: search.filters, sort_value: search.sort_by, clear_url: clear_url %}
+          </aside>
+        {% endif %}
+
+        <div class="results-main">
+          {% paginate search.results by 12 %}
+            <div class="prod-grid">
+              {% for item in search.results %}
+                {% if item.object_type == 'product' %}{% render 'product-card', card_product: item, white: true %}{% endif %}
+              {% endfor %}
+            </div>
+            {% render 'pagination', paginate: paginate %}
+          {% endpaginate %}
         </div>
-        {% render 'pagination', paginate: paginate %}
-      {% endpaginate %}
+      </div>
+
     {% endif %}
   {% endif %}
 </div>

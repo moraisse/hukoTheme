@@ -345,6 +345,9 @@
   </script>
   <script src="{{ 'mini-cart.js' | asset_url }}" defer></script>
   <script src="{{ 'search.js' | asset_url }}" defer></script>
+  {% if request.page_type == 'search' or request.page_type == 'collection' %}
+    <script src="{{ 'facets.js' | asset_url }}" defer></script>
+  {% endif %}
 
   {% render 'google-customer-reviews-badge' %}
 </body>

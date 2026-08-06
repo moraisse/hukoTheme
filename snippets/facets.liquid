@@ -1,0 +1,128 @@
+{%- comment -%}
+  Filtros laterais. Usa o objeto `filters` nativo da Shopify, por isso a lista de
+  marcas, categorias, preços e opções vem do que estiver ativo em Definições →
+  Pesquisa e navegação (app Search & Discovery) — não há listas fixas no tema.
+
+  Parâmetros:
+    filters    — search.filters ou collection.filters
+    sort_value — ordenação atual, para não se perder ao filtrar
+    clear_url  — URL da página sem filtros, para o "Limpar tudo"
+
+  O formulário é um GET normal: sem JS, o botão "Aplicar filtros" no fim submete
+  tudo. Com JS, facets.js submete assim que se mexe num campo e esconde o botão.
+{%- endcomment -%}
+
+{%- assign active_count = 0 -%}
+{%- for filter in filters -%}
+  {%- if filter.type == 'price_range' -%}
+    {%- if filter.min_value.value or filter.max_value.value -%}
+      {%- assign active_count = active_count | plus: 1 -%}
+    {%- endif -%}
+  {%- else -%}
+    {%- assign active_count = active_count | plus: filter.active_values.size -%}
+  {%- endif -%}
+{%- endfor -%}
+
+<form method="get" class="facets" data-facets>
+  {%- if request.page_type == 'search' -%}
+    <input type="hidden" name="q" value="{{ search.terms | escape }}">
+    <input type="hidden" name="type" value="product">
+  {%- endif -%}
+  {%- if sort_value != blank -%}
+    <input type="hidden" name="sort_by" value="{{ sort_value | escape }}">
+  {%- endif -%}
+
+  <div class="facets__head">
+    <span class="facets__title">Filtrar</span>
+    {%- if active_count > 0 -%}
+      <a href="{{ clear_url }}" class="facets__clear">Limpar tudo</a>
+    {%- endif -%}
+  </div>
+
+  {%- if active_count > 0 -%}
+    <div class="facets__active">
+      {%- for filter in filters -%}
+        {%- if filter.type == 'price_range' -%}
+          {%- if filter.min_value.value or filter.max_value.value -%}
+            <a href="{{ filter.url_to_remove }}" class="facet-chip">
+              {{ filter.min_value.value | default: 0 | money }} – {{ filter.max_value.value | default: filter.range_max | money }}
+              <span aria-hidden="true">&times;</span>
+            </a>
+          {%- endif -%}
+        {%- else -%}
+          {%- for value in filter.active_values -%}
+            <a href="{{ value.url_to_remove }}" class="facet-chip">
+              {{ value.label }}
+              <span aria-hidden="true">&times;</span>
+            </a>
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  {%- for filter in filters -%}
+    <details class="facet" open>
+      <summary class="facet__head">
+        <span>{{ filter.label }}</span>
+        <svg class="facet__caret" width="12" height="12" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5 5 6.5 8 3.5"/></svg>
+      </summary>
+
+      <div class="facet__body">
+        {%- case filter.type -%}
+          {%- when 'price_range' -%}
+            <div class="facet-price">
+              <label class="facet-price__field">
+                <span>Mín.</span>
+                <input type="number" inputmode="decimal" min="0" step="1"
+                  max="{{ filter.range_max | money_without_currency | replace: ',', '.' }}"
+                  name="{{ filter.min_value.param_name }}"
+                  placeholder="0"
+                  {% if filter.min_value.value %}value="{{ filter.min_value.value | money_without_currency | replace: ',', '.' }}"{% endif %}>
+              </label>
+              <span class="facet-price__sep" aria-hidden="true">–</span>
+              <label class="facet-price__field">
+                <span>Máx.</span>
+                <input type="number" inputmode="decimal" min="0" step="1"
+                  max="{{ filter.range_max | money_without_currency | replace: ',', '.' }}"
+                  name="{{ filter.max_value.param_name }}"
+                  placeholder="{{ filter.range_max | money_without_currency | replace: ',', '.' }}"
+                  {% if filter.max_value.value %}value="{{ filter.max_value.value | money_without_currency | replace: ',', '.' }}"{% endif %}>
+              </label>
+            </div>
+
+          {%- else -%}
+            {%- comment -%}
+              Valores sem resultados só aparecem se estiverem ativos — assim o
+              utilizador consegue sempre desmarcá-los, sem encher a lista de
+              opções que não levam a lado nenhum.
+            {%- endcomment -%}
+            <ul class="facet-list">
+              {%- for value in filter.values -%}
+                {%- if value.count > 0 or value.active -%}
+                  <li class="facet-list__item{% if forloop.index > 8 %} facet-list__item--extra{% endif %}">
+                    <label class="facet-check">
+                      <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value | escape }}" {% if value.active %}checked{% endif %}>
+                      <span class="facet-check__box" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.2 5.2L20 7"/></svg>
+                      </span>
+                      <span class="facet-check__label">{{ value.label }}</span>
+                      <span class="facet-check__count">{{ value.count }}</span>
+                    </label>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+            {%- if filter.values.size > 8 -%}
+              <button type="button" class="facet-more" data-facet-more
+                data-label-more="Ver mais ({{ filter.values.size | minus: 8 }})" data-label-less="Ver menos">
+                Ver mais ({{ filter.values.size | minus: 8 }})
+              </button>
+            {%- endif -%}
+        {%- endcase -%}
+      </div>
+    </details>
+  {%- endfor -%}
+
+  <button type="submit" class="btn btn--primary btn--sm facets__apply">Aplicar filtros</button>
+</form>
