@@ -24,6 +24,18 @@
     ]
   },
   {
+    "name": "Carrinho",
+    "settings": [
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Valor para portes grátis (€)",
+        "info": "Usado na barra de progresso do mini-carrinho.",
+        "default": 45
+      }
+    ]
+  },
+  {
     "name": "Google Customer Reviews",
     "settings": [
       {

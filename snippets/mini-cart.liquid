@@ -1,0 +1,47 @@
+{%- comment -%}
+  Mini-carrinho: painel que abre por baixo do ícone do carrinho depois de
+  adicionar um produto sem sair da página. A lista de artigos é desenhada por
+  mini-cart.js a partir do JSON do carrinho (o estado inicial vai em
+  window.HukoCart.cart), para que exista um único sítio a gerar o markup.
+{%- endcomment -%}
+{%- assign ship_threshold = settings.free_shipping_threshold | default: 45 -%}
+<div class="mini-cart-backdrop" data-mini-cart-close hidden></div>
+<div class="mini-cart" id="mini-cart" role="dialog" aria-label="Carrinho de compras" aria-hidden="true">
+  <div class="mini-cart__arrow" aria-hidden="true"></div>
+
+  <div class="mini-cart__head">
+    <span class="mini-cart__title">O teu carrinho</span>
+    <button type="button" class="mini-cart__close" aria-label="Fechar carrinho" data-mini-cart-close>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+    </button>
+  </div>
+
+  <div class="mini-cart__items" data-mini-cart-items></div>
+
+  <p class="mini-cart__empty" data-mini-cart-empty hidden>O teu carrinho ainda está vazio.</p>
+
+  <div class="mini-cart__foot" data-mini-cart-foot>
+    <div class="mini-cart__total">
+      <span>Total da encomenda</span>
+      <strong data-mini-cart-total>{{ cart.total_price | money }}</strong>
+    </div>
+
+    <div class="mini-cart__actions">
+      <a href="{{ routes.cart_url }}" class="btn btn--ghost btn--sm mini-cart__btn">Ver carrinho</a>
+      <form action="{{ routes.cart_url }}" method="post">
+        <button type="submit" name="checkout" class="btn btn--primary btn--sm mini-cart__btn">Pagar</button>
+      </form>
+    </div>
+
+    <div class="mini-cart__ship" data-mini-cart-ship>
+      <p class="mini-cart__ship-msg" data-mini-cart-ship-msg></p>
+      <div class="mini-cart__bar">
+        <span class="mini-cart__bar-fill" data-mini-cart-bar></span>
+      </div>
+      <div class="mini-cart__bar-labels">
+        <span>0€</span>
+        <span>{{ ship_threshold }}€</span>
+      </div>
+    </div>
+  </div>
+</div>

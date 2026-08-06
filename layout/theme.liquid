@@ -117,10 +117,13 @@
       <div class="header-icons">
         <a href="{{ routes.search_url }}" aria-label="Pesquisar"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></a>
         <a href="{{ routes.account_url }}" aria-label="Conta"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg></a>
-        <a href="{{ routes.cart_url }}" class="cart-link" aria-label="Carrinho">
-          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M5 8h14l-1.2 12H6.2L5 8z"/><path d="M8.5 8V6.5a3.5 3.5 0 0 1 7 0V8"/></svg>
-          {% if cart.item_count > 0 %}<span class="cart-count">{{ cart.item_count }}</span>{% endif %}
-        </a>
+        <div class="cart-wrap">
+          <a href="{{ routes.cart_url }}" class="cart-link" aria-label="Carrinho" aria-haspopup="dialog" aria-controls="mini-cart">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M5 8h14l-1.2 12H6.2L5 8z"/><path d="M8.5 8V6.5a3.5 3.5 0 0 1 7 0V8"/></svg>
+            <span class="cart-count{% if cart.item_count > 0 %} is-visible{% endif %}">{{ cart.item_count }}</span>
+          </a>
+          {% render 'mini-cart' %}
+        </div>
       </div>
     </div>
   </header>
@@ -284,6 +287,20 @@
       });
     })();
   </script>
+
+  <script>
+    window.HukoCart = {
+      cart: {{ cart | json }},
+      moneyFormat: {{ shop.money_format | json }},
+      freeShippingThreshold: {{ settings.free_shipping_threshold | default: 45 | json }},
+      routes: {
+        cart: {{ routes.cart_url | json }},
+        cartAdd: {{ routes.cart_add_url | append: '.js' | json }},
+        cartChange: {{ routes.cart_change_url | append: '.js' | json }}
+      }
+    };
+  </script>
+  <script src="{{ 'mini-cart.js' | asset_url }}" defer></script>
 
   {% render 'google-customer-reviews-badge' %}
 </body>

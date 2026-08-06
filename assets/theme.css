@@ -316,3 +316,112 @@ a.pagination__link:hover{border-color:var(--forest);color:var(--forest)}
 .values__grid p{color:rgba(250,248,243,.7);font-weight:300;font-size:15.5px;line-height:1.65;max-width:34ch;margin:0 auto}
 @media(max-width:900px){.values__grid{grid-template-columns:1fr}}
 .rte{font-size:17px;line-height:1.7;color:#4A4A44;font-weight:300}
+
+/* ===== Botão "Adicionar ao Carrinho" (cartão de produto) ===== */
+/* O botão troca de conteúdo (etiqueta → spinner → visto) sem mudar de largura:
+   os três estados ficam empilhados e só a opacidade/posição muda. */
+/* Com a etiqueta longa nas coleções, o rodapé do cartão pode partir em duas
+   linhas em cartões estreitos em vez de espremer o botão. */
+.prod-card__foot{flex-wrap:wrap;gap:8px 12px}
+.prod-card__foot form{margin:0}
+.btn--atc{position:relative;display:inline-flex;align-items:center;justify-content:center;min-height:36px;white-space:nowrap;overflow:hidden;transition:background .2s,color .2s,transform .18s}
+.btn--atc:active{transform:scale(.96)}
+.btn--atc__label{transition:opacity .18s ease,transform .18s ease}
+.btn--atc__spinner,.btn--atc__check{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.6);transition:opacity .18s ease,transform .18s ease}
+.btn--atc.is-loading .btn--atc__label{opacity:0;transform:translateY(-6px)}
+.btn--atc.is-loading .btn--atc__spinner{opacity:1;transform:scale(1)}
+.btn--atc.is-done{background:var(--green)}
+.btn--atc.is-done .btn--atc__label{opacity:0;transform:translateY(6px)}
+.btn--atc.is-done .btn--atc__check{opacity:1;transform:scale(1)}
+.btn--atc.is-error{background:var(--ink)}
+.btn--atc__spinner::before{content:"";width:15px;height:15px;border-radius:50%;border:2px solid rgba(250,248,243,.35);border-top-color:var(--bg);animation:huko-spin .6s linear infinite}
+@keyframes huko-spin{to{transform:rotate(360deg)}}
+.btn--soldout{background:transparent;border:1.5px solid var(--line);color:var(--soft);cursor:not-allowed}
+/* fantasma da imagem que voa do cartão até ao ícone do carrinho */
+.atc-ghost{position:fixed;z-index:400;border-radius:14px;object-fit:cover;pointer-events:none;
+  box-shadow:0 14px 30px rgba(30,61,47,.28);
+  transition:transform .7s cubic-bezier(.5,-.15,.3,1),opacity .7s ease}
+@media(prefers-reduced-motion:reduce){.btn--atc,.btn--atc__label,.btn--atc__spinner,.btn--atc__check{transition:none}.btn--atc__spinner::before{animation-duration:1.4s}}
+
+/* ===== Mini-carrinho ===== */
+.cart-wrap{position:relative;display:flex}
+.cart-count{display:none}
+.cart-count.is-visible{display:flex}
+.cart-link.is-bumping{animation:huko-bump .45s cubic-bezier(.34,1.56,.64,1)}
+@keyframes huko-bump{0%{transform:scale(1)}35%{transform:scale(1.22)}100%{transform:scale(1)}}
+.cart-link.is-bumping .cart-count{animation:huko-bump .45s .06s cubic-bezier(.34,1.56,.64,1)}
+
+/* Só existe em ecrãs pequenos: no desktop o clique fora é tratado em JS, para não
+   apanhar cliques nos botões "Adicionar" enquanto o painel está aberto. */
+.mini-cart-backdrop{display:none;position:fixed;inset:0;z-index:130;background:rgba(26,26,26,.35)}
+/* Os ícones do painel herdam a cor do contexto (o header força stroke:var(--ink)). */
+.mini-cart svg{stroke:currentColor}
+.mini-cart{position:absolute;top:calc(100% + 18px);right:-6px;z-index:140;width:404px;max-width:calc(100vw - 32px);
+  background:#fff;border:1px solid var(--line);border-radius:20px;
+  box-shadow:0 26px 60px rgba(30,61,47,.18);
+  opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale(.97);transform-origin:top right;
+  transition:opacity .18s ease,transform .22s cubic-bezier(.34,1.4,.64,1),visibility .22s}
+.mini-cart.is-open{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0) scale(1)}
+.mini-cart.is-busy{opacity:.6}
+/* bico que aponta ao ícone do carrinho */
+.mini-cart__arrow{position:absolute;top:-7px;right:22px;width:13px;height:13px;background:#fff;
+  border-left:1px solid var(--line);border-top:1px solid var(--line);transform:rotate(45deg);border-radius:3px 0 0 0}
+.mini-cart__head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px 12px}
+.mini-cart__title{font-family:var(--serif);font-size:17px;font-weight:700;letter-spacing:-.02em;color:var(--forest)}
+.mini-cart__close{background:none;border:none;padding:4px;cursor:pointer;color:var(--soft);display:flex;transition:color .15s}
+.mini-cart__close:hover{color:var(--forest)}
+
+.mini-cart__items{max-height:min(52vh,420px);overflow-y:auto;padding:0 22px;scrollbar-width:thin}
+.mini-cart__items::-webkit-scrollbar{width:5px}
+.mini-cart__items::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px}
+.mini-cart__item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line);animation:huko-item-in .28s ease both}
+.mini-cart__item:last-child{border-bottom:none}
+@keyframes huko-item-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.mini-cart__thumb{flex-shrink:0;width:60px;height:60px;border-radius:12px;overflow:hidden;background:#EDE8DC;border-bottom:none}
+.mini-cart__thumb img{width:100%;height:100%;object-fit:cover}
+.mini-cart__info{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.mini-cart__name{font-size:14.5px;font-weight:500;line-height:1.35;color:var(--ink);border-bottom:none}
+.mini-cart__name:hover{color:var(--forest)}
+.mini-cart__variant{font-size:12.5px;color:var(--soft)}
+.mini-cart__qty{display:inline-flex;align-items:center;gap:2px;align-self:flex-start;margin-top:2px;
+  border:1px solid var(--line);border-radius:999px;padding:2px;background:var(--bg)}
+.mini-cart__qty-btn{width:22px;height:22px;border:none;background:none;border-radius:50%;cursor:pointer;
+  color:var(--muted);font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s}
+.mini-cart__qty-btn:hover{background:#fff;color:var(--forest)}
+.mini-cart__qty-val{min-width:20px;text-align:center;font-size:13.5px;font-weight:600;color:var(--forest)}
+.mini-cart__side{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:8px}
+.mini-cart__remove{background:none;border:none;padding:0;cursor:pointer;color:var(--soft);display:flex;transition:color .15s,transform .15s}
+.mini-cart__remove:hover{color:var(--ink);transform:rotate(90deg)}
+.mini-cart__price{font-family:var(--serif);font-size:16px;font-weight:700;color:#2DAF61;white-space:nowrap}
+.mini-cart__empty{margin:0;padding:10px 22px 26px;font-size:14.5px;color:var(--muted)}
+
+.mini-cart__foot{padding:16px 22px 20px;border-top:1px solid var(--line)}
+.mini-cart__total{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
+.mini-cart__total span{font-size:14px;color:var(--muted)}
+.mini-cart__total strong{font-family:var(--serif);font-size:22px;font-weight:700;letter-spacing:-.02em;color:var(--forest)}
+.mini-cart__actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mini-cart__actions form{margin:0}
+.mini-cart__btn{width:100%;padding:12px 10px;font-size:14.5px}
+.mini-cart__ship{margin-top:16px;padding:14px 16px;background:var(--bg);border-radius:14px}
+.mini-cart__ship-msg{margin:0 0 10px;font-size:13.5px;color:var(--muted);text-align:center}
+.mini-cart__ship-msg strong{color:var(--forest);font-weight:600}
+.mini-cart.has-free-shipping .mini-cart__ship{background:rgba(46,204,113,.09)}
+.mini-cart.has-free-shipping .mini-cart__ship-msg strong{color:#2DAF61}
+.mini-cart__bar{position:relative;height:7px;border-radius:999px;background:var(--line);overflow:hidden}
+.mini-cart__bar-fill{display:block;height:100%;width:0;border-radius:999px;
+  background:linear-gradient(90deg,var(--gold),var(--green));transition:width .5s cubic-bezier(.4,0,.2,1)}
+.mini-cart.has-free-shipping .mini-cart__bar-fill{background:var(--green)}
+.mini-cart__bar-labels{display:flex;justify-content:space-between;margin-top:6px;font-size:11.5px;color:var(--soft);letter-spacing:.04em}
+
+@media(max-width:520px){
+  .mini-cart{right:-4px;max-width:calc(100vw - 26px)}
+  .mini-cart__head{padding:16px 18px 10px}
+  .mini-cart__items{max-height:44vh;padding:0 18px}
+  .mini-cart__foot{padding:14px 18px 18px}
+  .mini-cart-backdrop:not([hidden]){display:block}
+}
+@media(prefers-reduced-motion:reduce){
+  .mini-cart{transition:opacity .12s ease}
+  .mini-cart__item{animation:none}
+  .cart-link.is-bumping,.cart-link.is-bumping .cart-count{animation:none}
+}

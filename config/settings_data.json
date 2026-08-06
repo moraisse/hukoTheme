@@ -10,6 +10,7 @@
 {
   "current": {
     "announcement_text": "Envios em 24h · Envios grátis para compras superiores a 45€",
+    "free_shipping_threshold": 45,
     "content_for_index": [],
     "blocks": {
       "15683396631634586217": {

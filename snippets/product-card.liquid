@@ -6,6 +6,15 @@
   que está no título.
 {%- endcomment -%}
 {%- assign card_variant = card_product.selected_or_first_available_variant -%}
+{%- comment -%}
+  Nas listagens de coleção há espaço para a etiqueta completa; nos carrosséis da
+  homepage o cartão é mais estreito, por isso mantém-se a versão curta.
+{%- endcomment -%}
+{%- if request.page_type == 'collection' -%}
+  {%- assign atc_label = 'Adicionar ao Carrinho' -%}
+{%- else -%}
+  {%- assign atc_label = 'Adicionar' -%}
+{%- endif -%}
 <div class="prod-card{% if white %} prod-card--white{% endif %}">
   <a href="{{ card_product.url }}?variant={{ card_variant.id }}" class="prod-card__img">
     {% if card_product.featured_image %}
@@ -23,10 +32,25 @@
     <a href="{{ card_product.url }}?variant={{ card_variant.id }}" class="prod-card__title">{{ card_product.title }}</a>
     <div class="prod-card__foot">
       <span class="price">{{ card_variant.price | money }}</span>
-      {% form 'product', card_product %}
-        <input type="hidden" name="id" value="{{ card_variant.id }}">
-        <button type="submit" class="btn btn--primary btn--sm">Adicionar</button>
-      {% endform %}
+      {%- if card_variant.available -%}
+        {%- comment -%}
+          O formulário continua a ser um POST normal para /cart/add: sem JS o
+          browser submete-o e vai para o carrinho. Com JS, mini-cart.js
+          intercepta o submit e adiciona por AJAX sem sair da página.
+        {%- endcomment -%}
+        {% form 'product', card_product, data-atc-form: 'true' %}
+          <input type="hidden" name="id" value="{{ card_variant.id }}">
+          <button type="submit" class="btn btn--primary btn--sm btn--atc">
+            <span class="btn--atc__label">{{ atc_label }}</span>
+            <span class="btn--atc__spinner" aria-hidden="true"></span>
+            <span class="btn--atc__check" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.2 5.2L20 7"/></svg>
+            </span>
+          </button>
+        {% endform %}
+      {%- else -%}
+        <button type="button" class="btn btn--sm btn--soldout" disabled>Esgotado</button>
+      {%- endif -%}
     </div>
   </div>
 </div>
