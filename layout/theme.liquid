@@ -14,7 +14,7 @@
     /* A categoria pai preenche toda a altura da linha das categorias e o painel encosta ao
        fundo dessa linha (sem espaço), por isso o hover nunca se perde ao descer do texto
        para o painel. */
-    .site-header__navrow{position:relative}
+    .site-header__inner{position:relative}
     .site-nav{align-self:stretch}
     .nav-item--parent{position:static;align-self:stretch;display:flex;align-items:center}
     .nav-mega{position:absolute;top:100%;left:0;right:0;background:#fff;
@@ -54,16 +54,6 @@
 </head>
 <body class="template-{{ request.page_type }}">
 
-  <div class="announce">
-    <div class="announce__inner wrap">
-      <span class="announce__msg">{{ settings.announcement_text }}</span>
-      <a href="tel:+351931198604" class="announce__phone">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        Dúvidas? Contacte-nos! <strong>931 198 604</strong>
-      </a>
-    </div>
-  </div>
-
   <header class="site-header">
     <div class="wrap site-header__inner">
       <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-drawer">
@@ -82,6 +72,27 @@
         {% endif %}
       </a>
       {% render 'header-search' %}
+
+      {%- comment -%} Vantagem dos portes grátis, à direita da pesquisa. {%- endcomment -%}
+      {%- assign ship_threshold = settings.free_shipping_threshold | default: 45 -%}
+      {%- if shop.shipping_policy.url != blank -%}
+        {%- assign perk_tag = 'a' -%}
+      {%- else -%}
+        {%- assign perk_tag = 'div' -%}
+      {%- endif -%}
+      <{{ perk_tag }} class="header-perk"{% if perk_tag == 'a' %} href="{{ shop.shipping_policy.url }}"{% endif %}>
+        <svg class="header-perk__icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="1" y="4.5" width="14" height="11" rx="1.5"/>
+          <path d="M15 8h4l4 3.5v4H15z"/>
+          <circle cx="6" cy="18" r="2.2"/>
+          <circle cx="18" cy="18" r="2.2"/>
+        </svg>
+        <span class="header-perk__text">
+          <strong>Portes grátis</strong>
+          <span>a partir de {{ ship_threshold }}€</span>
+        </span>
+      </{{ perk_tag }}>
+
       <div class="header-icons">
         <a href="{{ routes.account_url }}" aria-label="Conta"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg></a>
         <div class="cart-wrap">
@@ -92,12 +103,12 @@
           {% render 'mini-cart' %}
         </div>
       </div>
-    </div>
 
-    {%- comment -%} As categorias ficam numa linha própria, por baixo da barra de pesquisa. {%- endcomment -%}
-    <div class="site-header__navbar">
-      <div class="wrap site-header__navrow">
-        <nav class="site-nav">
+      {%- comment -%}
+        As categorias ficam na segunda linha da mesma grelha, a começar na coluna
+        da pesquisa — por isso alinham sempre com ela, seja qual for a largura do logo.
+      {%- endcomment -%}
+      <nav class="site-nav">
           {% for link in linklists.main-menu.links %}
           {%- if link.links.size > 0 -%}
             <div class="nav-item nav-item--parent">
@@ -135,8 +146,7 @@
             </div>
           {%- endif -%}
           {% endfor %}
-        </nav>
-      </div>
+      </nav>
     </div>
 
     {% render 'search-panel' %}

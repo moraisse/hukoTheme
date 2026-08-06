@@ -13,13 +13,8 @@
       {
         "type": "image_picker",
         "id": "logo",
-        "label": "Logo"
-      },
-      {
-        "type": "text",
-        "id": "announcement_text",
-        "label": "Barra de anúncio",
-        "default": "Envio rápido em Portugal e Espanha · Devoluções gratuitas em 30 dias"
+        "label": "Logo",
+        "info": "O header é verde-escuro: usa uma versão clara do logo."
       }
     ]
   },

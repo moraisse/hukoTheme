@@ -33,26 +33,31 @@ body.template-policy .shopify-policy__body ul,body.template-policy .shopify-poli
 .btn--ghost{background:transparent;border:1.5px solid var(--ink);color:var(--ink)}
 .btn--ghost:hover{border-color:var(--green);color:var(--forest)}
 .btn--sm{padding:9px 18px;font-size:13.5px}
-/* announcement */
-.announce{background:var(--forest);color:var(--bg);padding:9px 20px;font-size:13px;letter-spacing:.1em;text-transform:uppercase}
-.announce em{color:var(--gold);font-style:normal;margin:0 10px}
-.announce__inner{display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap}
-.announce__msg{flex:1;min-width:0;text-align:center}
-.announce__phone{display:inline-flex;align-items:center;gap:7px;flex-shrink:0;color:var(--gold);white-space:nowrap;transition:color .2s}
-.announce__phone:hover{color:var(--bg)}
-.announce__phone strong{font-weight:700;letter-spacing:.03em}
-@media(max-width:680px){.announce__inner{justify-content:center;text-align:center}.announce__msg{flex:auto;width:100%}}
 /* header */
-/* O header é um único bloco em verde-floresta, encostado à barra de anúncio (da
-   mesma cor) para lerem como uma só faixa — sem separadores entre as linhas. */
+/* Bloco único em verde-floresta, sem separadores. As duas linhas vivem na mesma
+   grelha: o logo ocupa a coluna 1 nas duas linhas e as categorias começam na
+   coluna da pesquisa, por isso ficam sempre alinhadas com ela. */
 .site-header{position:sticky;top:0;z-index:100;background:var(--forest);color:var(--bg)}
-.site-header__inner{height:70px;display:flex;align-items:center;gap:26px}
-.site-header__logo{flex-shrink:0}
+.site-header__inner{display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto auto;
+  grid-template-rows:70px minmax(46px,auto);
+  align-items:center;column-gap:26px}
+.site-header__logo{grid-column:1;grid-row:1 / 3;align-self:center}
 .site-header__logo img{height:40px}
-/* Segunda linha do header, só com as categorias, alinhadas à esquerda como o resto. */
-.site-header__navbar{background:var(--forest)}
-.site-header__navrow{display:flex;justify-content:flex-start;height:44px}
-.site-nav{display:flex;align-items:center;justify-content:flex-start;gap:28px;font-size:15px;font-weight:500;flex-wrap:wrap}
+.header-search{grid-column:2;grid-row:1}
+.header-perk{grid-column:3;grid-row:1}
+.header-icons{grid-column:4;grid-row:1}
+.site-nav{grid-column:2 / 5;grid-row:2;align-self:stretch;
+  display:flex;align-items:center;justify-content:flex-start;gap:28px;font-size:15px;font-weight:500;flex-wrap:wrap}
+/* portes grátis, à direita da pesquisa */
+.header-perk{display:flex;align-items:center;gap:11px;flex-shrink:0;color:var(--bg);line-height:1.25;border-bottom:none}
+.header-perk__icon{flex-shrink:0;stroke:var(--gold);transition:stroke .2s}
+a.header-perk:hover{color:var(--bg)}
+a.header-perk:hover .header-perk__icon{stroke:var(--green)}
+.header-perk__text{display:flex;flex-direction:column;font-size:13px;white-space:nowrap}
+.header-perk__text strong{font-weight:600;letter-spacing:.01em}
+.header-perk__text span{color:rgba(250,248,243,.68)}
+@media(max-width:1150px){.header-perk{display:none}}
 .nav-item{position:relative}
 .nav-item__link{display:inline-flex;align-items:center;gap:6px;padding:6px 0;color:var(--bg);border-bottom:2px solid transparent}
 .site-header .nav-item__link:hover{color:#fff;border-bottom-color:var(--gold)}
@@ -167,14 +172,19 @@ body.template-policy .shopify-policy__body ul,body.template-policy .shopify-poli
 .cart-link{position:relative;display:flex;transition:opacity .18s}
 .cart-link:hover{opacity:.72}
 .cart-count{position:absolute;top:-7px;right:-9px;background:var(--green);color:var(--forest);font-size:11px;font-weight:700;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-/* Em ecrãs pequenos as categorias vivem no drawer, e a barra de pesquisa passa
-   para uma linha própria por baixo do logo. */
+/* Em ecrãs pequenos as categorias vivem no drawer; a pesquisa e os portes grátis
+   passam a linhas próprias por baixo do logo. */
 @media(max-width:900px){
   .site-nav{display:none}
-  .site-header__navbar{display:none}
-  .site-header__inner{height:auto;flex-wrap:wrap;gap:12px 16px;padding-top:12px;padding-bottom:14px}
-  .header-search{order:5;flex:1 1 100%;max-width:none;margin-left:0}
+  .site-header__inner{grid-template-columns:auto auto minmax(0,1fr);grid-template-rows:auto auto auto;
+    column-gap:14px;row-gap:11px;padding-top:12px;padding-bottom:13px}
+  .nav-toggle{grid-column:1;grid-row:1}
+  .site-header__logo{grid-column:2;grid-row:1;justify-self:start}
+  .header-icons{grid-column:3;grid-row:1;justify-self:end}
+  .header-search{grid-column:1 / 4;grid-row:2;max-width:none}
   .header-search.is-active{max-width:none}
+  .header-perk{display:flex;grid-column:1 / 4;grid-row:3;justify-self:center}
+  .header-perk__text{flex-direction:row;gap:5px;font-size:12.5px}
 }
 /* hamburger toggle */
 .nav-toggle{display:none;align-items:center;justify-content:center;width:42px;height:42px;margin-left:-8px;background:none;border:none;cursor:pointer;color:var(--bg);flex-shrink:0}
