@@ -313,9 +313,28 @@ body .prod-card--white{background:#fff}
   .breadcrumb [aria-current]{max-width:52vw}
 }
 .toolbar{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding-bottom:28px}
-.toolbar__sort{margin-left:auto;color:var(--soft);font-size:14.5px}
 .toolbar .facets-toggle{margin-bottom:0}
-select.sort{background:transparent;border:none;font-family:var(--sans);font-size:14.5px;font-weight:500;cursor:pointer}
+/* ordenação */
+.sort-form{margin-left:auto;display:flex;align-items:center;gap:12px}
+.sort-field{display:flex;align-items:center;gap:11px;margin-left:auto}
+.sort-form .sort-field{margin-left:0}
+.sort-field__label{font-size:13.5px;color:var(--soft);white-space:nowrap}
+.sort-field__control{position:relative;display:flex;align-items:center}
+/* appearance:none tira a seta do sistema para se poder usar a do tema, a mesma
+   das categorias; o espaço à direita é o que a deixa respirar. */
+.sort-field__select{appearance:none;-webkit-appearance:none;
+  padding:10px 42px 10px 19px;border:1.5px solid var(--line);border-radius:999px;background:#fff;
+  font-family:var(--sans);font-size:14.5px;font-weight:500;color:var(--forest);
+  cursor:pointer;outline:none;transition:border-color .18s,box-shadow .18s}
+.sort-field__select:hover{border-color:var(--green)}
+.sort-field__select:focus-visible{border-color:var(--green);box-shadow:0 0 0 3px rgba(46,204,113,.2)}
+.sort-field__caret{position:absolute;right:17px;pointer-events:none;color:var(--soft);transition:color .18s,transform .18s}
+.sort-field__control:hover .sort-field__caret{color:var(--forest);transform:translateY(1px)}
+@media(max-width:600px){
+  .sort-field__label{display:none}
+  .sort-field,.sort-form{flex:1;justify-content:flex-end}
+  .sort-field__select{width:100%;max-width:230px}
+}
 .pagination{display:flex;align-items:center;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:56px;font-size:15px}
 .pagination__link{display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 16px;
   border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font-weight:500;line-height:1}

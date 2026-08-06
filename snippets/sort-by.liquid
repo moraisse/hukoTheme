@@ -1,0 +1,47 @@
+{%- comment -%}
+  Seletor de ordenação das páginas de listagem.
+
+  Parâmetros:
+    sort_value — ordenação atual
+    has_facets — true quando a página tem a barra de filtros. Nesse caso o
+                 seletor liga-se ao formulário dos filtros (form="FacetsForm"),
+                 para ordenar não perder os filtros aplicados; sem filtros leva
+                 um formulário próprio.
+
+  As opções da pesquisa e das coleções não são as mesmas — a Shopify só aceita
+  relevância e preço em resultados de pesquisa.
+{%- endcomment -%}
+
+{%- if request.page_type == 'search' -%}
+  {%- assign sort_options = 'relevance|Relevância,price-ascending|Preço: mais baixo,price-descending|Preço: mais alto' | split: ',' -%}
+{%- else -%}
+  {%- assign sort_options = 'best-selling|Mais vendidos,price-ascending|Preço: mais baixo,price-descending|Preço: mais alto,created-descending|Novidades' | split: ',' -%}
+{%- endif -%}
+
+{%- capture sort_field -%}
+  <div class="sort-field">
+    <label class="sort-field__label" for="SortBy">Ordenar por</label>
+    <div class="sort-field__control">
+      <select id="SortBy" name="sort_by" class="sort-field__select"{% if has_facets %} form="FacetsForm"{% endif %} onchange="this.form.submit()">
+        {%- for option in sort_options -%}
+          {%- assign parts = option | split: '|' -%}
+          <option value="{{ parts[0] }}"{% if sort_value == parts[0] %} selected{% endif %}>{{ parts[1] }}</option>
+        {%- endfor -%}
+      </select>
+      <svg class="sort-field__caret" width="12" height="12" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5 5 6.5 8 3.5"/></svg>
+    </div>
+  </div>
+{%- endcapture -%}
+
+{%- if has_facets -%}
+  {{ sort_field }}
+{%- else -%}
+  <form method="get" class="sort-form">
+    {%- if request.page_type == 'search' -%}
+      <input type="hidden" name="q" value="{{ search.terms | escape }}">
+      <input type="hidden" name="type" value="product">
+    {%- endif -%}
+    {{ sort_field }}
+    <noscript><button type="submit" class="btn btn--ghost btn--sm">Ordenar</button></noscript>
+  </form>
+{%- endif -%}

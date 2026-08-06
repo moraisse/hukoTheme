@@ -23,17 +23,23 @@
       <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary" style="margin-top:24px">Ver todos os produtos</a>
     {% else %}
 
-      {% if search.filters.size > 0 %}
-        <button type="button" class="facets-toggle" data-facets-toggle aria-expanded="false" aria-controls="FacetsSidebar">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
-          Filtros
-        </button>
-      {% endif %}
+      {%- assign has_facets = false -%}
+      {%- if search.filters.size > 0 -%}{%- assign has_facets = true -%}{%- endif -%}
 
-      <div class="results-layout{% if search.filters.size == 0 %} results-layout--full{% endif %}">
-        {% if search.filters.size > 0 %}
+      <div class="toolbar">
+        {% if has_facets %}
+          <button type="button" class="facets-toggle" data-facets-toggle aria-expanded="false" aria-controls="FacetsSidebar">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+            Filtros
+          </button>
+        {% endif %}
+        {% render 'sort-by', sort_value: search.sort_by, has_facets: has_facets %}
+      </div>
+
+      <div class="results-layout{% unless has_facets %} results-layout--full{% endunless %}">
+        {% if has_facets %}
           <aside class="results-side" id="FacetsSidebar">
-            {% render 'facets', filters: search.filters, sort_value: search.sort_by, clear_url: clear_url %}
+            {% render 'facets', filters: search.filters, sort_value: search.sort_by, clear_url: clear_url, has_sort_control: true %}
           </aside>
         {% endif %}
 

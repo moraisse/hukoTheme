@@ -16,29 +16,7 @@
       </button>
     {% endif %}
 
-    {%- comment -%}
-      Com filtros, o seletor de ordenação passa a pertencer ao formulário dos
-      filtros (atributo form=). Assim, ordenar não perde os filtros aplicados nem
-      é preciso repetir os valores em campos escondidos.
-    {%- endcomment -%}
-    {% capture sort_options %}
-      <option value="best-selling" {% if sort == 'best-selling' %}selected{% endif %}>Mais vendidos</option>
-      <option value="price-ascending" {% if sort == 'price-ascending' %}selected{% endif %}>Preço: mais baixo</option>
-      <option value="price-descending" {% if sort == 'price-descending' %}selected{% endif %}>Preço: mais alto</option>
-      <option value="created-descending" {% if sort == 'created-descending' %}selected{% endif %}>Novidades</option>
-    {% endcapture %}
-
-    {% if has_facets %}
-      <label class="toolbar__sort">Ordenar:
-        <select class="sort" name="sort_by" form="FacetsForm" onchange="this.form.submit()">{{ sort_options }}</select>
-      </label>
-    {% else %}
-      <form method="get" class="toolbar__sort">
-        <label>Ordenar:
-          <select class="sort" name="sort_by" onchange="this.form.submit()">{{ sort_options }}</select>
-        </label>
-      </form>
-    {% endif %}
+    {% render 'sort-by', sort_value: sort, has_facets: has_facets %}
   </div>
 
   <div class="results-layout{% unless has_facets %} results-layout--full{% endunless %}">
