@@ -1,35 +1,55 @@
 {%- comment -%}
-  Seletor de ordenação das páginas de listagem.
+  Seletor de ordenação das páginas de listagem, com painel de opções próprio
+  (a lista nativa do sistema operativo não se consegue estilizar).
 
   Parâmetros:
     sort_value — ordenação atual
-    has_facets — true quando a página tem a barra de filtros. Nesse caso o
-                 seletor liga-se ao formulário dos filtros (form="FacetsForm"),
-                 para ordenar não perder os filtros aplicados; sem filtros leva
-                 um formulário próprio.
+    has_facets — true quando a página tem a barra de filtros. Nesse caso o campo
+                 escondido liga-se ao formulário dos filtros (form="FacetsForm"),
+                 para ordenar não perder os filtros — e filtrar não perder a
+                 ordenação; sem filtros leva um formulário próprio.
 
   As opções da pesquisa e das coleções não são as mesmas — a Shopify só aceita
   relevância e preço em resultados de pesquisa.
 {%- endcomment -%}
 
 {%- if request.page_type == 'search' -%}
-  {%- assign sort_options = 'relevance|Relevância,price-ascending|Preço: mais baixo,price-descending|Preço: mais alto' | split: ',' -%}
+  {%- assign sort_options = 'relevance|Relevância,price-ascending|Preço: menor para maior,price-descending|Preço: maior para menor' | split: ',' -%}
 {%- else -%}
-  {%- assign sort_options = 'best-selling|Mais vendidos,price-ascending|Preço: mais baixo,price-descending|Preço: mais alto,created-descending|Novidades' | split: ',' -%}
+  {%- assign sort_options = 'best-selling|Mais vendidos,price-ascending|Preço: menor para maior,price-descending|Preço: maior para menor,created-descending|Novidades primeiro' | split: ',' -%}
 {%- endif -%}
 
+{%- assign current_label = '' -%}
+{%- for option in sort_options -%}
+  {%- assign parts = option | split: '|' -%}
+  {%- if sort_value == parts[0] -%}{%- assign current_label = parts[1] -%}{%- endif -%}
+{%- endfor -%}
+
 {%- capture sort_field -%}
-  <div class="sort-field">
-    <label class="sort-field__label" for="SortBy">Ordenar por</label>
-    <div class="sort-field__control">
-      <select id="SortBy" name="sort_by" class="sort-field__select"{% if has_facets %} form="FacetsForm"{% endif %} onchange="this.form.submit()">
-        {%- for option in sort_options -%}
-          {%- assign parts = option | split: '|' -%}
-          <option value="{{ parts[0] }}"{% if sort_value == parts[0] %} selected{% endif %}>{{ parts[1] }}</option>
-        {%- endfor -%}
-      </select>
-      <svg class="sort-field__caret" width="12" height="12" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5 5 6.5 8 3.5"/></svg>
+  <div class="sort-dd" data-sort>
+    <input type="hidden" name="sort_by" value="{{ sort_value | escape }}" data-sort-input{% if has_facets %} form="FacetsForm"{% endif %}>
+
+    <button type="button" class="sort-dd__trigger" data-sort-trigger aria-haspopup="listbox" aria-expanded="false" aria-controls="SortOptions">
+      <span class="sort-dd__prefix">Ordenar por</span>
+      <span class="sort-dd__value" data-sort-label>{% if current_label != blank %}{{ current_label }}{% else %}…{% endif %}</span>
+      <span class="sort-dd__icon" aria-hidden="true">
+        <svg class="sort-dd__caret" width="12" height="12" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3.5 5 6.5 8 3.5"/></svg>
+        <svg class="sort-dd__close" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </span>
+    </button>
+
+    <div class="sort-dd__panel" id="SortOptions" data-sort-panel role="listbox" aria-label="Ordenar por">
+      <span class="sort-dd__arrow" aria-hidden="true"></span>
+      {%- for option in sort_options -%}
+        {%- assign parts = option | split: '|' -%}
+        <button type="button" class="sort-dd__option" role="option" data-sort-option data-value="{{ parts[0] }}"
+          aria-selected="{% if sort_value == parts[0] %}true{% else %}false{% endif %}">
+          {{ parts[1] }}
+          <svg class="sort-dd__check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12.5 5.2 5.2L20 7"/></svg>
+        </button>
+      {%- endfor -%}
     </div>
+
   </div>
 {%- endcapture -%}
 
@@ -42,6 +62,5 @@
       <input type="hidden" name="type" value="product">
     {%- endif -%}
     {{ sort_field }}
-    <noscript><button type="submit" class="btn btn--ghost btn--sm">Ordenar</button></noscript>
   </form>
 {%- endif -%}
