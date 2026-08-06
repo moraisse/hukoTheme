@@ -466,6 +466,25 @@ a.pagination__link:hover{border-color:var(--forest);color:var(--forest)}
   font-family:var(--sans);font-size:13px;font-weight:500;color:var(--forest);
   text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--green)}
 
+/* Barra de preço: os dois inputs range ficam sobrepostos, transparentes, e só os
+   puxadores recebem cliques — o rasto visível é o .facet-range__track por baixo. */
+.facet-range{position:relative;height:26px;margin:2px 0 14px}
+.facet-range__track{position:absolute;top:11px;left:0;right:0;height:4px;border-radius:999px;background:var(--line)}
+.facet-range__fill{position:absolute;top:0;bottom:0;border-radius:999px;background:var(--green)}
+.facet-range__input{position:absolute;top:0;left:0;width:100%;height:26px;margin:0;
+  -webkit-appearance:none;appearance:none;background:none;pointer-events:none}
+.facet-range__input:focus{outline:none}
+.facet-range__input::-webkit-slider-thumb{-webkit-appearance:none;pointer-events:auto;cursor:grab;
+  width:17px;height:17px;border-radius:50%;background:var(--forest);border:2.5px solid #fff;
+  box-shadow:0 1px 5px rgba(30,61,47,.35);transition:transform .12s}
+.facet-range__input::-webkit-slider-thumb:active{cursor:grabbing;transform:scale(1.12)}
+.facet-range__input::-moz-range-thumb{pointer-events:auto;cursor:grab;
+  width:17px;height:17px;border-radius:50%;background:var(--forest);border:2.5px solid #fff;
+  box-shadow:0 1px 5px rgba(30,61,47,.35)}
+.facet-range__input::-moz-range-track{background:none;border:none}
+.facet-range__input:focus-visible::-webkit-slider-thumb{outline:2px solid var(--green);outline-offset:2px}
+.facet-range__input:focus-visible::-moz-range-thumb{outline:2px solid var(--green);outline-offset:2px}
+
 .facet-price{display:flex;align-items:flex-end;gap:9px}
 .facet-price__field{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--soft)}
 .facet-price__field input{width:100%;padding:9px 11px;border:1.5px solid var(--line);border-radius:10px;

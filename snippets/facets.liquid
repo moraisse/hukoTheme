@@ -71,22 +71,51 @@
       <div class="facet__body">
         {%- case filter.type -%}
           {%- when 'price_range' -%}
+            {%- comment -%}
+              Barra deslizante de dois puxadores, como recomendam as diretrizes da
+              Shopify, com os campos numéricos por baixo para quem usa teclado ou
+              leitor de ecrã. Os puxadores não têm `name`: escrevem nos campos
+              numéricos, que são os que vão no formulário.
+            {%- endcomment -%}
+            {%- assign price_max = filter.range_max | divided_by: 100.0 | ceil -%}
+            {%- if price_max > 0 -%}
+              {%- if filter.min_value.value -%}
+                {%- assign price_from = filter.min_value.value | divided_by: 100.0 | floor -%}
+              {%- else -%}
+                {%- assign price_from = 0 -%}
+              {%- endif -%}
+              {%- if filter.max_value.value -%}
+                {%- assign price_to = filter.max_value.value | divided_by: 100.0 | ceil -%}
+              {%- else -%}
+                {%- assign price_to = price_max -%}
+              {%- endif -%}
+              <div class="facet-range" data-facet-range data-max="{{ price_max }}">
+                <span class="facet-range__track" aria-hidden="true"><span class="facet-range__fill" data-facet-range-fill></span></span>
+                <input type="range" class="facet-range__input" data-facet-range-from
+                  min="0" max="{{ price_max }}" step="1" value="{{ price_from }}" aria-label="Preço mínimo">
+                <input type="range" class="facet-range__input" data-facet-range-to
+                  min="0" max="{{ price_max }}" step="1" value="{{ price_to }}" aria-label="Preço máximo">
+              </div>
+            {%- endif -%}
+
             <div class="facet-price">
               <label class="facet-price__field">
-                <span>Mín.</span>
+                <span>De</span>
                 <input type="number" inputmode="decimal" min="0" step="1"
-                  max="{{ filter.range_max | money_without_currency | replace: ',', '.' }}"
+                  max="{{ price_max }}"
                   name="{{ filter.min_value.param_name }}"
+                  data-facet-price-from
                   placeholder="0"
                   {% if filter.min_value.value %}value="{{ filter.min_value.value | money_without_currency | replace: ',', '.' }}"{% endif %}>
               </label>
               <span class="facet-price__sep" aria-hidden="true">–</span>
               <label class="facet-price__field">
-                <span>Máx.</span>
+                <span>Até</span>
                 <input type="number" inputmode="decimal" min="0" step="1"
-                  max="{{ filter.range_max | money_without_currency | replace: ',', '.' }}"
+                  max="{{ price_max }}"
                   name="{{ filter.max_value.param_name }}"
-                  placeholder="{{ filter.range_max | money_without_currency | replace: ',', '.' }}"
+                  data-facet-price-to
+                  placeholder="{{ price_max }}"
                   {% if filter.max_value.value %}value="{{ filter.max_value.value | money_without_currency | replace: ',', '.' }}"{% endif %}>
               </label>
             </div>
