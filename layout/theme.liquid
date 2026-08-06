@@ -60,18 +60,32 @@
       <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-drawer">
         <span class="nav-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
       </button>
-      <a href="{{ routes.root_url }}" class="site-header__logo">
+      {%- comment -%}
+        Marca: logo em cima e assinatura por baixo, ocupando as duas linhas da
+        grelha — é o que dá peso ao canto esquerdo e equilibra a linha das
+        categorias, como nos exemplos de referência.
+      {%- endcomment -%}
+      <div class="site-header__brand">
+        <a href="{{ routes.root_url }}" class="site-header__logo">
+          {%- comment -%}
+            O header é verde-escuro, por isso a versão por omissão é a clara — a
+            mesma que o rodapé usa. Um logo carregado nas definições tem de ser
+            igualmente claro para se ver.
+          {%- endcomment -%}
+          {% if settings.logo != blank %}
+            <img src="{{ settings.logo | image_url: width: 420 }}" alt="{{ shop.name }}">
+          {% else %}
+            <img src="{{ 'huko-logo-light.svg' | asset_url }}" alt="{{ shop.name }}">
+          {% endif %}
+        </a>
         {%- comment -%}
-          O header é verde-escuro, por isso a versão por omissão é a clara — a
-          mesma que o rodapé usa. Um logo carregado nas definições tem de ser
-          igualmente claro para se ver.
+          Sem filtro `default` de propósito: assim, esvaziar o campo nas
+          definições esconde mesmo a assinatura (o valor inicial vem do schema).
         {%- endcomment -%}
-        {% if settings.logo != blank %}
-          <img src="{{ settings.logo | image_url: width: 300 }}" alt="{{ shop.name }}">
-        {% else %}
-          <img src="{{ 'huko-logo-light.svg' | asset_url }}" alt="{{ shop.name }}">
-        {% endif %}
-      </a>
+        {%- if settings.header_tagline != blank -%}
+          <span class="site-header__tagline">{{ settings.header_tagline }}</span>
+        {%- endif -%}
+      </div>
       {%- comment -%}
         A pesquisa e os portes grátis andam juntos: ficam no mesmo flex, encostados
         um ao outro, por isso quando a barra cresce ao ser clicada o bloco dos

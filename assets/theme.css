@@ -42,8 +42,14 @@ body.template-policy .shopify-policy__body ul,body.template-policy .shopify-poli
   grid-template-columns:auto minmax(0,1fr) auto;
   grid-template-rows:70px minmax(46px,auto);
   align-items:center;column-gap:26px}
-.site-header__logo{grid-column:1;grid-row:1 / 3;align-self:center}
-.site-header__logo img{height:40px}
+/* A marca ocupa as duas linhas: logo em cima, assinatura por baixo — esta última
+   com um filete dourado à esquerda, o mesmo acento usado nos eyebrows da loja. */
+.site-header__brand{grid-column:1;grid-row:1 / 3;align-self:center;
+  display:flex;flex-direction:column;justify-content:center;gap:8px;min-width:0}
+.site-header__logo{display:block}
+.site-header__logo img{height:56px;width:auto}
+.site-header__tagline{max-width:210px;padding-left:11px;border-left:2px solid var(--gold);
+  font-size:11.5px;line-height:1.35;font-weight:300;letter-spacing:.01em;color:rgba(250,248,243,.62)}
 /* Pesquisa + portes grátis no mesmo flex: o segundo acompanha o crescimento do primeiro. */
 .header-mid{grid-column:2;grid-row:1;display:flex;align-items:center;gap:20px;min-width:0}
 .header-icons{grid-column:3;grid-row:1}
@@ -192,7 +198,9 @@ a.header-perk:hover .header-perk__icon{stroke:var(--green)}
   .site-header__inner{grid-template-columns:auto auto minmax(0,1fr);grid-template-rows:auto auto;
     column-gap:14px;row-gap:11px;padding-top:12px;padding-bottom:13px}
   .nav-toggle{grid-column:1;grid-row:1}
-  .site-header__logo{grid-column:2;grid-row:1;justify-self:start}
+  .site-header__brand{grid-column:2;grid-row:1;justify-self:start}
+  .site-header__logo img{height:38px}
+  .site-header__tagline{display:none}
   .header-icons{grid-column:3;grid-row:1;justify-self:end}
   .header-mid{grid-column:1 / 4;grid-row:2;flex-direction:column;align-items:stretch;gap:10px}
   .header-search,.header-search.is-active{flex:0 0 auto}
