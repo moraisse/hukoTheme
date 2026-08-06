@@ -4,9 +4,12 @@
   Pesquisa e navegação (app Search & Discovery) — não há listas fixas no tema.
 
   Parâmetros:
-    filters    — search.filters ou collection.filters
-    sort_value — ordenação atual, para não se perder ao filtrar
-    clear_url  — URL da página sem filtros, para o "Limpar tudo"
+    filters          — search.filters ou collection.filters
+    sort_value       — ordenação atual, para não se perder ao filtrar
+    clear_url        — URL da página sem filtros, para o "Limpar tudo"
+    has_sort_control — true quando a página tem um seletor de ordenação ligado a
+                       este formulário por form="FacetsForm"; nesse caso o campo
+                       escondido de ordenação sairia repetido
 
   O formulário é um GET normal: sem JS, o botão "Aplicar filtros" no fim submete
   tudo. Com JS, facets.js submete assim que se mexe num campo e esconde o botão.
@@ -23,14 +26,16 @@
   {%- endif -%}
 {%- endfor -%}
 
-<form method="get" class="facets" data-facets>
+<form method="get" class="facets" id="FacetsForm" data-facets>
   {%- if request.page_type == 'search' -%}
     <input type="hidden" name="q" value="{{ search.terms | escape }}">
     <input type="hidden" name="type" value="product">
   {%- endif -%}
-  {%- if sort_value != blank -%}
-    <input type="hidden" name="sort_by" value="{{ sort_value | escape }}">
-  {%- endif -%}
+  {%- unless has_sort_control -%}
+    {%- if sort_value != blank -%}
+      <input type="hidden" name="sort_by" value="{{ sort_value | escape }}">
+    {%- endif -%}
+  {%- endunless -%}
 
   <div class="facets__head">
     <span class="facets__title">Filtrar</span>

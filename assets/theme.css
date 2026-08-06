@@ -313,9 +313,8 @@ body .prod-card--white{background:#fff}
   .breadcrumb [aria-current]{max-width:52vw}
 }
 .toolbar{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding-bottom:28px}
-.chips{display:flex;gap:10px;flex-wrap:wrap}
-.chip{background:#fff;border:1px solid #E0DACB;border-radius:999px;font-family:var(--sans);font-size:14px;font-weight:500;padding:9px 18px;cursor:pointer}
-.chip.is-active,.chip:hover{background:var(--forest);border-color:var(--forest);color:var(--bg)}
+.toolbar__sort{margin-left:auto;color:var(--soft);font-size:14.5px}
+.toolbar .facets-toggle{margin-bottom:0}
 select.sort{background:transparent;border:none;font-family:var(--sans);font-size:14.5px;font-weight:500;cursor:pointer}
 .pagination{display:flex;align-items:center;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:56px;font-size:15px}
 .pagination__link{display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:0 16px;
@@ -417,10 +416,11 @@ a.pagination__link:hover{border-color:var(--forest);color:var(--forest)}
 /* ===== Resultados com filtros laterais ===== */
 .results-layout{display:grid;grid-template-columns:252px minmax(0,1fr);gap:40px;align-items:start}
 .results-layout--full{grid-template-columns:minmax(0,1fr)}
-/* Com a coluna de filtros ao lado, três colunas de produtos respiram melhor. */
-.results-main .prod-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-@media(max-width:1200px){.results-main .prod-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:520px){.results-main .prod-grid{grid-template-columns:1fr}}
+/* Com a coluna de filtros ao lado, três colunas de produtos respiram melhor;
+   sem filtros a grelha mantém as quatro colunas normais. */
+.results-layout:not(.results-layout--full) .prod-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:1200px){.results-layout:not(.results-layout--full) .prod-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.results-layout:not(.results-layout--full) .prod-grid{grid-template-columns:1fr}}
 
 .facets-toggle{display:none;align-items:center;gap:9px;margin-bottom:20px;padding:11px 20px;
   background:#fff;border:1.5px solid var(--line);border-radius:999px;cursor:pointer;

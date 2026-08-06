@@ -1,31 +1,62 @@
+{%- assign sort = collection.sort_by | default: collection.default_sort_by -%}
+{%- assign has_facets = false -%}
+{%- if collection.filters.size > 0 -%}{%- assign has_facets = true -%}{%- endif -%}
+
 <div class="wrap">
   <div class="coll-head">
     <h1>{{ collection.title }}</h1>
     {% if collection.description != blank %}<p>{{ collection.description | strip_html }}</p>{% endif %}
   </div>
+
   <div class="toolbar">
-    <div class="chips">
-      {% for collection_item in collections limit: 6 %}
-        <a href="{{ collection_item.url }}" class="chip{% if collection_item.handle == collection.handle %} is-active{% endif %}">{{ collection_item.title }}</a>
-      {% endfor %}
-    </div>
-    <form method="get">
-      <label style="color:var(--soft);font-size:14.5px">Ordenar:
-        <select class="sort" name="sort_by" onchange="this.form.submit()">
-          {% assign sort = collection.sort_by | default: collection.default_sort_by %}
-          <option value="best-selling" {% if sort == 'best-selling' %}selected{% endif %}>Mais vendidos</option>
-          <option value="price-ascending" {% if sort == 'price-ascending' %}selected{% endif %}>Preço: mais baixo</option>
-          <option value="price-descending" {% if sort == 'price-descending' %}selected{% endif %}>Preço: mais alto</option>
-          <option value="created-descending" {% if sort == 'created-descending' %}selected{% endif %}>Novidades</option>
-        </select>
+    {% if has_facets %}
+      <button type="button" class="facets-toggle" data-facets-toggle aria-expanded="false" aria-controls="FacetsSidebar">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+        Filtros
+      </button>
+    {% endif %}
+
+    {%- comment -%}
+      Com filtros, o seletor de ordenação passa a pertencer ao formulário dos
+      filtros (atributo form=). Assim, ordenar não perde os filtros aplicados nem
+      é preciso repetir os valores em campos escondidos.
+    {%- endcomment -%}
+    {% capture sort_options %}
+      <option value="best-selling" {% if sort == 'best-selling' %}selected{% endif %}>Mais vendidos</option>
+      <option value="price-ascending" {% if sort == 'price-ascending' %}selected{% endif %}>Preço: mais baixo</option>
+      <option value="price-descending" {% if sort == 'price-descending' %}selected{% endif %}>Preço: mais alto</option>
+      <option value="created-descending" {% if sort == 'created-descending' %}selected{% endif %}>Novidades</option>
+    {% endcapture %}
+
+    {% if has_facets %}
+      <label class="toolbar__sort">Ordenar:
+        <select class="sort" name="sort_by" form="FacetsForm" onchange="this.form.submit()">{{ sort_options }}</select>
       </label>
-    </form>
+    {% else %}
+      <form method="get" class="toolbar__sort">
+        <label>Ordenar:
+          <select class="sort" name="sort_by" onchange="this.form.submit()">{{ sort_options }}</select>
+        </label>
+      </form>
+    {% endif %}
   </div>
-  {% paginate collection.products by 12 %}
-    <div class="prod-grid" style="padding-bottom:24px">
-      {% for product in collection.products %}{% render 'product-card', card_product: product, white: true %}{% endfor %}
+
+  <div class="results-layout{% unless has_facets %} results-layout--full{% endunless %}">
+    {% if has_facets %}
+      <aside class="results-side" id="FacetsSidebar">
+        {% render 'facets', filters: collection.filters, sort_value: sort, clear_url: collection.url, has_sort_control: true %}
+      </aside>
+    {% endif %}
+
+    <div class="results-main">
+      {% paginate collection.products by 12 %}
+        <div class="prod-grid" style="padding-bottom:24px">
+          {% for product in collection.products %}{% render 'product-card', card_product: product, white: true %}{% endfor %}
+        </div>
+        {% render 'pagination', paginate: paginate %}
+      {% endpaginate %}
     </div>
-    {% render 'pagination', paginate: paginate %}
-  {% endpaginate %}
+  </div>
+
   <div style="padding-bottom:72px"></div>
 </div>
