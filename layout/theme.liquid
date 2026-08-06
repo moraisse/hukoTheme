@@ -16,6 +16,7 @@
        para o painel. */
     .site-header__inner{position:relative}
     .site-nav{align-self:stretch}
+    /* position:static é essencial: é o que faz o painel abrir à largura toda do header. */
     .nav-item--parent{position:static;align-self:stretch;display:flex;align-items:center}
     .nav-mega{position:absolute;top:100%;left:0;right:0;background:#fff;
       border:1px solid var(--line);border-top:none;border-radius:0 0 20px 20px;
@@ -71,27 +72,33 @@
           <img src="{{ 'huko-logo-light.svg' | asset_url }}" alt="{{ shop.name }}">
         {% endif %}
       </a>
-      {% render 'header-search' %}
+      {%- comment -%}
+        A pesquisa e os portes grátis andam juntos: ficam no mesmo flex, encostados
+        um ao outro, por isso quando a barra cresce ao ser clicada o bloco dos
+        portes desliza com ela.
+      {%- endcomment -%}
+      <div class="header-mid">
+        {% render 'header-search' %}
 
-      {%- comment -%} Vantagem dos portes grátis, à direita da pesquisa. {%- endcomment -%}
-      {%- assign ship_threshold = settings.free_shipping_threshold | default: 45 -%}
-      {%- if shop.shipping_policy.url != blank -%}
-        {%- assign perk_tag = 'a' -%}
-      {%- else -%}
-        {%- assign perk_tag = 'div' -%}
-      {%- endif -%}
-      <{{ perk_tag }} class="header-perk"{% if perk_tag == 'a' %} href="{{ shop.shipping_policy.url }}"{% endif %}>
-        <svg class="header-perk__icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="1" y="4.5" width="14" height="11" rx="1.5"/>
-          <path d="M15 8h4l4 3.5v4H15z"/>
-          <circle cx="6" cy="18" r="2.2"/>
-          <circle cx="18" cy="18" r="2.2"/>
-        </svg>
-        <span class="header-perk__text">
-          <strong>Portes grátis</strong>
-          <span>a partir de {{ ship_threshold }}€</span>
-        </span>
-      </{{ perk_tag }}>
+        {%- assign ship_threshold = settings.free_shipping_threshold | default: 45 -%}
+        {%- if shop.shipping_policy.url != blank -%}
+          {%- assign perk_tag = 'a' -%}
+        {%- else -%}
+          {%- assign perk_tag = 'div' -%}
+        {%- endif -%}
+        <{{ perk_tag }} class="header-perk"{% if perk_tag == 'a' %} href="{{ shop.shipping_policy.url }}"{% endif %}>
+          <svg class="header-perk__icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="1" y="4.5" width="14" height="11" rx="1.5"/>
+            <path d="M15 8h4l4 3.5v4H15z"/>
+            <circle cx="6" cy="18" r="2.2"/>
+            <circle cx="18" cy="18" r="2.2"/>
+          </svg>
+          <span class="header-perk__text">
+            <strong>Portes grátis</strong>
+            <span>a partir de {{ ship_threshold }}€</span>
+          </span>
+        </{{ perk_tag }}>
+      </div>
 
       <div class="header-icons">
         <a href="{{ routes.account_url }}" aria-label="Conta"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg></a>
@@ -112,10 +119,7 @@
           {% for link in linklists.main-menu.links %}
           {%- if link.links.size > 0 -%}
             <div class="nav-item nav-item--parent">
-              <a href="{{ link.url }}" class="nav-item__link" aria-haspopup="true" aria-expanded="false">
-                {{ link.title }}
-                <svg class="nav-item__caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 3.5 5 6.5 8 3.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </a>
+              <a href="{{ link.url }}" class="nav-item__link" aria-haspopup="true" aria-expanded="false">{{ link.title }}</a>
               {%- assign mega_img = link.object.image -%}
               <div class="nav-mega" role="menu">
                 <div class="nav-mega__cols">

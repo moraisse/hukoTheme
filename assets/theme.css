@@ -39,17 +39,17 @@ body.template-policy .shopify-policy__body ul,body.template-policy .shopify-poli
    coluna da pesquisa, por isso ficam sempre alinhadas com ela. */
 .site-header{position:sticky;top:0;z-index:100;background:var(--forest);color:var(--bg)}
 .site-header__inner{display:grid;
-  grid-template-columns:auto minmax(0,1fr) auto auto;
+  grid-template-columns:auto minmax(0,1fr) auto;
   grid-template-rows:70px minmax(46px,auto);
   align-items:center;column-gap:26px}
 .site-header__logo{grid-column:1;grid-row:1 / 3;align-self:center}
 .site-header__logo img{height:40px}
-.header-search{grid-column:2;grid-row:1}
-.header-perk{grid-column:3;grid-row:1}
-.header-icons{grid-column:4;grid-row:1}
-.site-nav{grid-column:2 / 5;grid-row:2;align-self:stretch;
+/* Pesquisa + portes grátis no mesmo flex: o segundo acompanha o crescimento do primeiro. */
+.header-mid{grid-column:2;grid-row:1;display:flex;align-items:center;gap:20px;min-width:0}
+.header-icons{grid-column:3;grid-row:1}
+.site-nav{grid-column:2 / 4;grid-row:2;align-self:stretch;
   display:flex;align-items:center;justify-content:flex-start;gap:28px;font-size:15px;font-weight:500;flex-wrap:wrap}
-/* portes grátis, à direita da pesquisa */
+/* portes grátis, encostados à direita da pesquisa */
 .header-perk{display:flex;align-items:center;gap:11px;flex-shrink:0;color:var(--bg);line-height:1.25;border-bottom:none}
 .header-perk__icon{flex-shrink:0;stroke:var(--gold);transition:stroke .2s}
 a.header-perk:hover{color:var(--bg)}
@@ -58,11 +58,24 @@ a.header-perk:hover .header-perk__icon{stroke:var(--green)}
 .header-perk__text strong{font-weight:600;letter-spacing:.01em}
 .header-perk__text span{color:rgba(250,248,243,.68)}
 @media(max-width:1150px){.header-perk{display:none}}
-.nav-item{position:relative}
-.nav-item__link{display:inline-flex;align-items:center;gap:6px;padding:6px 0;color:var(--bg);border-bottom:2px solid transparent}
+/* Os itens esticam à altura da linha, por isso o sublinhado e o triângulo caem
+   exatamente no fundo do header — onde o painel branco começa. */
+.nav-item{position:relative;align-self:stretch;display:flex;align-items:center}
+.nav-item__link{position:relative;align-self:stretch;display:inline-flex;align-items:center;
+  color:var(--bg);border-bottom:2px solid transparent;transition:color .15s,border-color .15s}
 .site-header .nav-item__link:hover{color:#fff;border-bottom-color:var(--gold)}
-.nav-item__caret{stroke:currentColor;transition:transform .2s}
-.nav-item--parent:hover .nav-item__caret,.nav-item--parent:focus-within .nav-item__caret{transform:rotate(180deg)}
+/* Categoria com o painel aberto: sem sublinhado, com um triângulo branco que
+   encosta ao painel — como no menu de referência. */
+.site-header .nav-item--parent:hover > .nav-item__link,
+.site-header .nav-item--parent:focus-within > .nav-item__link{color:#fff;border-bottom-color:transparent}
+/* bottom:-2px compensa a borda inferior do link, para a base do triângulo
+   assentar mesmo no fundo do header, sem deixar uma fresta verde. */
+.nav-item--parent > .nav-item__link::after{content:"";position:absolute;left:50%;bottom:-2px;
+  border:9px solid transparent;border-bottom-color:#fff;
+  opacity:0;transform:translateX(-50%) translateY(5px);pointer-events:none;
+  transition:opacity .14s ease,transform .18s cubic-bezier(.34,1.4,.64,1)}
+.nav-item--parent:hover > .nav-item__link::after,
+.nav-item--parent:focus-within > .nav-item__link::after{opacity:1;transform:translateX(-50%) translateY(0)}
 /* dropdown (nível 2) */
 .nav-dropdown{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(6px);min-width:210px;margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px;box-shadow:0 18px 40px rgba(30,61,47,.14);display:flex;flex-direction:column;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .18s ease,transform .18s ease;z-index:120}
 .nav-dropdown::before{content:"";position:absolute;top:-14px;left:0;right:0;height:14px}
@@ -72,9 +85,9 @@ a.header-perk:hover .header-perk__icon{stroke:var(--green)}
 /* ===== Barra de pesquisa do header ===== */
 /* A barra ocupa o espaço livre entre o logo e os ícones e cresce ao receber
    foco, empurrando os resultados para o painel que abre por baixo do header. */
-.header-search{position:relative;flex:1 1 auto;min-width:0;max-width:560px;margin-left:0;
-  transition:max-width .32s cubic-bezier(.4,0,.2,1)}
-.header-search.is-active{max-width:min(780px,100%)}
+.header-search{position:relative;flex:0 1 560px;min-width:0;max-width:100%;
+  transition:flex-basis .32s cubic-bezier(.4,0,.2,1)}
+.header-search.is-active{flex-basis:780px}
 .header-search__form{display:flex;align-items:center;gap:4px;height:44px;padding:0 5px 0 16px;
   background:#fff;border:2px solid transparent;border-radius:999px;
   box-shadow:0 2px 10px rgba(0,0,0,.10);
@@ -176,14 +189,14 @@ a.header-perk:hover .header-perk__icon{stroke:var(--green)}
    passam a linhas próprias por baixo do logo. */
 @media(max-width:900px){
   .site-nav{display:none}
-  .site-header__inner{grid-template-columns:auto auto minmax(0,1fr);grid-template-rows:auto auto auto;
+  .site-header__inner{grid-template-columns:auto auto minmax(0,1fr);grid-template-rows:auto auto;
     column-gap:14px;row-gap:11px;padding-top:12px;padding-bottom:13px}
   .nav-toggle{grid-column:1;grid-row:1}
   .site-header__logo{grid-column:2;grid-row:1;justify-self:start}
   .header-icons{grid-column:3;grid-row:1;justify-self:end}
-  .header-search{grid-column:1 / 4;grid-row:2;max-width:none}
-  .header-search.is-active{max-width:none}
-  .header-perk{display:flex;grid-column:1 / 4;grid-row:3;justify-self:center}
+  .header-mid{grid-column:1 / 4;grid-row:2;flex-direction:column;align-items:stretch;gap:10px}
+  .header-search,.header-search.is-active{flex:0 0 auto}
+  .header-perk{display:flex;align-self:center}
   .header-perk__text{flex-direction:row;gap:5px;font-size:12.5px}
 }
 /* hamburger toggle */
