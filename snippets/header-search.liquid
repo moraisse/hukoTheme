@@ -1,9 +1,9 @@
 {%- comment -%}
-  Barra de pesquisa do header. O formulário continua a apontar para /search, por
-  isso sem JS (ou carregando Enter) a pesquisa completa funciona na mesma; com JS
-  os resultados aparecem no painel por baixo, sem sair da página.
+  Barra de pesquisa do header. Pesquisar abre sempre a página de resultados
+  completa (/search) — por Enter ou pelo botão. O JS só trata da barra em si:
+  cresce ao ser clicada e mostra o botão de limpar.
 {%- endcomment -%}
-<div class="header-search" data-search data-suggest-url="{{ routes.predictive_search_url }}">
+<div class="header-search" data-search>
   <form action="{{ routes.search_url }}" method="get" role="search" class="header-search__form">
     <input type="hidden" name="type" value="product">
     <svg class="header-search__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
@@ -16,9 +16,7 @@
       value="{{ search.terms | escape }}"
       placeholder="Pesquisar produtos, marcas…"
       autocomplete="off"
-      aria-label="Pesquisar na loja"
-      aria-controls="search-panel"
-      aria-expanded="false">
+      aria-label="Pesquisar na loja">
 
     <button type="button" class="header-search__clear" data-search-clear aria-label="Limpar pesquisa" hidden>
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>

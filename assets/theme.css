@@ -121,67 +121,8 @@ a.header-perk:hover .header-perk__icon{stroke:var(--green)}
 @media(max-width:1080px){.header-search.has-term .header-search__submit span{display:none}
   .header-search.has-term .header-search__submit{padding:9px 11px}}
 
-/* ===== Painel de resultados ===== */
-.search-overlay{position:fixed;inset:0;z-index:90;background:rgba(26,26,26,.26);animation:huko-fade-in .22s ease}
-@keyframes huko-fade-in{from{opacity:0}to{opacity:1}}
-.search-panel{position:absolute;top:100%;left:0;right:0;z-index:118;
-  opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-10px);
-  transition:opacity .2s ease,transform .26s cubic-bezier(.34,1.3,.64,1),visibility .26s}
-.search-panel.is-open{opacity:1;visibility:visible;pointer-events:auto;transform:none}
-/* Sem o padding lateral do .wrap, o painel alinha exatamente com o mega-menu. */
-.search-panel > .wrap{padding-left:0;padding-right:0}
-.search-panel__card{position:relative;background:#fff;border:1px solid var(--line);border-top:none;
-  border-radius:0 0 22px 22px;box-shadow:0 28px 54px rgba(30,61,47,.16);
-  padding:26px 32px 28px;max-height:min(72vh,680px);overflow-y:auto;scrollbar-width:thin}
-.search-panel__card::-webkit-scrollbar{width:6px}
-.search-panel__card::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px}
-.search-panel.is-loading .search-panel__card{min-height:220px}
-/* Numa nova pesquisa os resultados anteriores esbatem em vez de desaparecerem. */
-.search-panel.is-loading .search-panel__body{opacity:.5;transition:opacity .15s}
-.search-panel__close{position:absolute;top:16px;right:18px;z-index:2;display:flex;padding:6px;
-  border:none;background:#fff;border-radius:50%;cursor:pointer;color:var(--soft);transition:color .15s,background .15s}
-.search-panel__close:hover{color:var(--forest);background:var(--bg)}
-.search-panel__section{margin-bottom:26px}
-.search-panel__section:last-of-type{margin-bottom:0}
-.search-panel__label{display:block;margin-bottom:14px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;
-  font-weight:500;color:var(--gold)}
-.search-panel__empty{padding:22px 0 10px}
-.search-panel__empty p{margin:0;font-size:16px;color:var(--ink)}
-.search-panel__empty-hint{margin-top:8px !important;font-size:14.5px !important;color:var(--muted) !important;font-weight:300}
-.search-panel__all{display:inline-flex;align-items:center;gap:8px;margin-top:22px;padding:11px 22px;
-  border:1.5px solid var(--line);border-radius:999px;font-size:14px;font-weight:500;color:var(--forest);
-  transition:border-color .18s,background .18s}
-.search-panel__all:hover{border-color:var(--green);background:var(--bg)}
-
-.search-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.search-card{display:flex;flex-direction:column;align-items:center;text-align:center;gap:9px;
-  padding:14px 12px 16px;border-radius:16px;transition:background .18s,transform .18s}
-.search-card:hover{background:var(--bg);transform:translateY(-2px)}
-.search-card__img{width:100%;aspect-ratio:1;border-radius:13px;overflow:hidden;background:#EDE8DC}
-.search-card__img img{width:100%;height:100%;object-fit:cover}
-.search-card__title{font-size:14px;font-weight:500;line-height:1.35;color:var(--ink);
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.search-card:hover .search-card__title{color:var(--forest)}
-.search-card__price{font-family:var(--serif);font-size:16.5px;font-weight:700;color:#2DAF61}
-
-.search-skeleton{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.search-skeleton__cell{height:190px;border-radius:16px;
-  background:linear-gradient(100deg,#F3F0E8 30%,#FAF8F3 50%,#F3F0E8 70%);
-  background-size:220% 100%;animation:huko-shimmer 1.2s linear infinite}
-@keyframes huko-shimmer{to{background-position:-220% 0}}
-
-/* Enquanto a pesquisa está aberta o mega-menu não deve sobrepor-se ao painel. */
-.site-header.is-search-open .nav-mega{display:none}
-
-@media(max-width:1100px){.search-grid,.search-skeleton{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:640px){
-  .search-grid,.search-skeleton{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .search-panel__card{padding:20px 18px 22px;border-radius:0 0 18px 18px}
-  .search-skeleton__cell{height:150px}
-}
 @media(prefers-reduced-motion:reduce){
-  .header-search,.header-search__form,.header-search__submit,.search-panel{transition-duration:.01ms}
-  .search-skeleton__cell{animation:none}
+  .header-search,.header-search__form,.header-search__submit{transition-duration:.01ms}
 }
 
 .header-icons{display:flex;align-items:center;gap:22px;margin-left:auto;flex-shrink:0}
