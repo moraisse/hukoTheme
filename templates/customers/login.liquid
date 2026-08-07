@@ -1,9 +1,67 @@
-<div class="wrap" style="max-width:520px;padding-top:32px;padding-bottom:88px">
-  <h1 class="serif" style="font-size:38px;margin:0 0 28px">Iniciar sessão</h1>
-  {% form 'customer_login' %}
-  <label style="display:block;margin-bottom:16px"><span class="opt-label">Email</span><input type="email" name="customer[email]" style="width:100%;border:1.5px solid #E0DACB;border-radius:12px;padding:13px 18px;font-family:var(--sans);font-size:15px;background:#fff;outline:none"></label>
-  <label style="display:block;margin-bottom:16px"><span class="opt-label">Palavra-passe</span><input type="password" name="customer[password]" style="width:100%;border:1.5px solid #E0DACB;border-radius:12px;padding:13px 18px;font-family:var(--sans);font-size:15px;background:#fff;outline:none"></label>
-  <button type="submit" class="btn btn--primary" style="width:100%">Entrar</button>
-{% endform %}
-<p style="margin-top:20px;font-size:14.5px">Novo por aqui? <a href="{{ routes.account_register_url }}" style="text-decoration:underline">Criar conta</a></p>
+{%- comment -%}
+  O bloco de recuperação de palavra-passe vem primeiro no HTML de propósito: é o
+  que permite trocar entre os dois formulários só com CSS (#recover:target esconde
+  o irmão seguinte), sem depender de JavaScript.
+{%- endcomment -%}
+<div class="auth">
+  <div class="auth__card">
+    <div class="auth__form">
+
+      {%- assign recover_done = false -%}
+
+      <section id="recover" class="auth__pane">
+        {% form 'recover_customer_password' %}
+          {%- if form.posted_successfully? -%}{%- assign recover_done = true -%}{%- endif -%}
+
+          <h1 class="serif auth__title">Repor palavra-passe</h1>
+          <p class="auth__sub">Indique o seu email e enviamos-lhe uma ligação para definir uma nova palavra-passe.</p>
+
+          {% if form.errors %}
+            <ul class="auth-notice auth-notice--error">
+              {% for field in form.errors %}<li>{{ form.errors.messages[field] }}</li>{% endfor %}
+            </ul>
+          {% endif %}
+
+          {% render 'auth-field', type: 'email', name: 'email', label: 'Email', autocomplete: 'email', required: true, id: 'RecoverEmail' %}
+
+          <button type="submit" class="btn btn--primary auth__submit">Enviar ligação</button>
+          <p class="auth__alt"><a href="{{ routes.account_login_url }}">Voltar ao início de sessão</a></p>
+        {% endform %}
+      </section>
+
+      <section id="login" class="auth__pane">
+        <h1 class="serif auth__title">Iniciar sessão</h1>
+        <p class="auth__sub">Entre para acompanhar as suas encomendas e finalizar a compra mais depressa.</p>
+
+        {% if recover_done %}
+          <p class="auth-notice auth-notice--success">Se existir uma conta com esse email, enviámos-lhe uma ligação para repor a palavra-passe.</p>
+        {% endif %}
+
+        {% form 'customer_login' %}
+          {% if form.errors %}
+            <ul class="auth-notice auth-notice--error">
+              {% for field in form.errors %}<li>{{ form.errors.messages[field] }}</li>{% endfor %}
+            </ul>
+          {% endif %}
+
+          {% render 'auth-field', type: 'email', name: 'customer[email]', label: 'Email', autocomplete: 'email', required: true %}
+
+          <div class="auth-field__head">
+            <span class="auth-field__label">Palavra-passe</span>
+            <a href="#recover" class="auth__link">Esqueceu-se?</a>
+          </div>
+          <label class="auth-field auth-field--bare" for="Field-password">
+            <input id="Field-password" class="auth-field__input" type="password" name="customer[password]" autocomplete="current-password" required>
+          </label>
+
+          <button type="submit" class="btn btn--primary auth__submit">Entrar</button>
+        {% endform %}
+
+        <p class="auth__alt">Novo por aqui? <a href="{{ routes.account_register_url }}">Criar conta</a></p>
+      </section>
+
+    </div>
+
+    {% render 'auth-aside' %}
+  </div>
 </div>

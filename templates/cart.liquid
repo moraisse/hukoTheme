@@ -1,10 +1,10 @@
 <div class="wrap">
   <div class="cart-grid">
     <div>
-      <h1 class="serif" style="font-size:42px;margin:0 0 8px">O teu carrinho</h1>
+      <h1 class="serif" style="font-size:42px;margin:0 0 8px">O seu carrinho</h1>
       <p style="margin:0 0 32px;font-size:15.5px;color:var(--muted);font-weight:300">{{ cart.item_count }} artigos</p>
       {% if cart.item_count == 0 %}
-        <p class="rte">O teu carrinho está vazio.</p>
+        <p class="rte">O seu carrinho está vazio.</p>
         <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary" style="margin-top:20px">Explorar a coleção</a>
       {% else %}
       <form action="{{ routes.cart_url }}" method="post" novalidate>

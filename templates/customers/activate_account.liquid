@@ -1,8 +1,26 @@
-<div class="wrap" style="max-width:520px;padding-top:32px;padding-bottom:88px">
-  <h1 class="serif" style="font-size:38px;margin:0 0 28px">Ativar conta</h1>
-  {% form 'activate_customer_password' %}
-  <label style="display:block;margin-bottom:16px"><span class="opt-label">Palavra-passe</span><input type="password" name="customer[password]" style="width:100%;border:1.5px solid #E0DACB;border-radius:12px;padding:13px 18px;font-family:var(--sans);font-size:15px;background:#fff;outline:none"></label>
-  <label style="display:block;margin-bottom:16px"><span class="opt-label">Confirmar palavra-passe</span><input type="password" name="customer[password_confirmation]" style="width:100%;border:1.5px solid #E0DACB;border-radius:12px;padding:13px 18px;font-family:var(--sans);font-size:15px;background:#fff;outline:none"></label>
-  <button type="submit" class="btn btn--primary" style="width:100%">Ativar</button>
-{% endform %}
+<div class="auth">
+  <div class="auth__card">
+    <div class="auth__form">
+      <section class="auth__pane">
+        <h1 class="serif auth__title">Ativar conta</h1>
+        <p class="auth__sub">Defina uma palavra-passe para terminar a criação da sua conta.</p>
+
+        {% form 'activate_customer_password' %}
+          {% if form.errors %}
+            <ul class="auth-notice auth-notice--error">
+              {% for field in form.errors %}<li>{{ form.errors.messages[field] }}</li>{% endfor %}
+            </ul>
+          {% endif %}
+
+          {% render 'auth-field', type: 'password', name: 'customer[password]', label: 'Palavra-passe', autocomplete: 'new-password', required: true %}
+          {% render 'auth-field', type: 'password', name: 'customer[password_confirmation]', label: 'Confirmar palavra-passe', autocomplete: 'new-password', required: true %}
+
+          <button type="submit" class="btn btn--primary auth__submit">Ativar conta</button>
+          <p class="auth__alt"><button type="submit" name="decline" class="auth__link auth__link--button">Recusar convite</button></p>
+        {% endform %}
+      </section>
+    </div>
+
+    {% render 'auth-aside' %}
+  </div>
 </div>

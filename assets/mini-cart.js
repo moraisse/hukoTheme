@@ -102,7 +102,7 @@
   function renderShipping(total) {
     var missing = threshold - total;
     if (missing <= 0) {
-      shipMsgEl.innerHTML = 'Parabéns, tens <strong>Portes Grátis!</strong>';
+      shipMsgEl.innerHTML = 'Parabéns, tem <strong>Portes Grátis!</strong>';
       barEl.style.width = '100%';
       panel.classList.add('has-free-shipping');
     } else {

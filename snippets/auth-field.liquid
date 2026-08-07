@@ -1,0 +1,18 @@
+{%- comment -%}
+  Campo dos formulários de conta.
+
+  Parâmetros: type, name, label, autocomplete (opcional), value (opcional),
+  required (opcional), id (opcional — por omissão deriva do name).
+{%- endcomment -%}
+{%- assign field_id = id | default: name | replace: 'customer[', 'Field-' | replace: ']', '' -%}
+<label class="auth-field" for="{{ field_id }}">
+  <span class="auth-field__label">{{ label }}</span>
+  <input
+    id="{{ field_id }}"
+    class="auth-field__input"
+    type="{{ type | default: 'text' }}"
+    name="{{ name }}"
+    {% if autocomplete %}autocomplete="{{ autocomplete }}"{% endif %}
+    {% if value %}value="{{ value | escape }}"{% endif %}
+    {% if required %}required{% endif %}>
+</label>

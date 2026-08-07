@@ -1,0 +1,32 @@
+{%- comment -%}
+  Painel de marca ao lado dos formulários de conta. A fotografia é opcional e
+  escolhida nas definições do tema: fica esbatida por trás do verde, para dar
+  profundidade sem competir com o formulário. Sem imagem, o painel é o mesmo
+  verde sólido usado no header e na secção de valores.
+{%- endcomment -%}
+{%- assign ship_threshold = settings.free_shipping_threshold | default: 45 -%}
+<aside class="auth__aside">
+  {%- if settings.account_image != blank -%}
+    <img class="auth__aside-bg" src="{{ settings.account_image | image_url: width: 900 }}" alt="" aria-hidden="true" loading="lazy">
+  {%- endif -%}
+
+  <div class="auth__aside-body">
+    <div class="eyebrow">Conta HUKO</div>
+    <h2 class="serif auth__aside-title">Menos coisas. <em>Melhores</em> coisas.</h2>
+
+    <ul class="auth__perks">
+      <li>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12.5 5.2 5.2L20 7"/></svg>
+        Encomendas e devoluções num só sítio
+      </li>
+      <li>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12.5 5.2 5.2L20 7"/></svg>
+        Envios em 24h para Portugal e Espanha
+      </li>
+      <li>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12.5 5.2 5.2L20 7"/></svg>
+        Portes grátis acima de {{ ship_threshold }}€
+      </li>
+    </ul>
+  </div>
+</aside>
