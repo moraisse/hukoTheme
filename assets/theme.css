@@ -67,9 +67,18 @@ a.header-perk:hover .header-perk__icon{stroke:var(--green)}
 /* Os itens esticam à altura da linha, por isso o sublinhado e o triângulo caem
    exatamente no fundo do header — onde o painel branco começa. */
 .nav-item{position:relative;align-self:stretch;display:flex;align-items:center}
-.nav-item__link{position:relative;align-self:stretch;display:inline-flex;align-items:center;
-  color:var(--bg);border-bottom:2px solid transparent;transition:color .15s,border-color .15s}
-.site-header .nav-item__link:hover{color:#fff;border-bottom-color:var(--gold)}
+/* transform em vez de font-size: aumenta sem reposicionar as categorias vizinhas */
+.nav-item__link{position:relative;align-self:stretch;display:inline-flex;align-items:center;gap:7px;
+  background:none;border:none;padding:0;cursor:pointer;
+  font-family:var(--sans);font-size:15px;font-weight:500;
+  color:var(--bg);border-bottom:2px solid transparent;
+  transition:color .15s,border-color .15s,transform .22s cubic-bezier(.34,1.4,.64,1)}
+.site-header .nav-item__link:hover,
+.site-header .nav-item__link:focus-visible{color:#fff;border-bottom-color:var(--gold);transform:scale(1.07)}
+.site-header .nav-item__link:focus-visible{outline:none}
+@media(prefers-reduced-motion:reduce){
+  .site-header .nav-item__link:hover,.site-header .nav-item__link:focus-visible{transform:none}
+}
 /* Categoria com o painel aberto: sem sublinhado, com um triângulo branco que
    encosta ao painel — como no menu de referência. */
 .site-header .nav-item--parent:hover > .nav-item__link,
@@ -457,6 +466,46 @@ a.pagination__link:hover{border-color:var(--forest);color:var(--forest)}
 .values__grid p{color:rgba(250,248,243,.7);font-weight:300;font-size:15.5px;line-height:1.65;max-width:34ch;margin:0 auto}
 @media(max-width:900px){.values__grid{grid-template-columns:1fr}}
 .rte{font-size:17px;line-height:1.7;color:#4A4A44;font-weight:300}
+
+/* ===== Diretório de marcas (painel do menu) ===== */
+.brand-dir{display:grid;grid-template-columns:168px minmax(0,1fr);width:100%}
+.brand-dir__index{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;align-content:start;
+  padding:24px 20px;background:var(--bg);border-right:1px solid var(--line)}
+.brand-dir__letter{display:flex;align-items:center;justify-content:center;height:36px;
+  border:1px solid transparent;border-radius:10px;background:#fff;cursor:pointer;
+  font-family:var(--serif);font-size:14px;font-weight:700;letter-spacing:-.01em;color:var(--forest);
+  transition:background .15s,color .15s,border-color .15s}
+.brand-dir__letter--all{grid-column:1 / -1;font-family:var(--sans);font-size:13px;font-weight:500;letter-spacing:.02em}
+.brand-dir__letter:hover:not(:disabled){border-color:var(--green)}
+.brand-dir__letter.is-active{background:var(--forest);color:var(--bg)}
+.brand-dir__letter:disabled{background:none;color:var(--line);cursor:default}
+
+.brand-dir__main{display:flex;flex-direction:column;min-width:0}
+.brand-dir__search{display:flex;align-items:center;gap:10px;padding:18px 26px;
+  border-bottom:1px solid var(--line);color:var(--soft)}
+.brand-dir__search input{flex:1;min-width:0;border:none;outline:none;background:none;
+  font-family:var(--sans);font-size:15px;color:var(--ink)}
+.brand-dir__search input::placeholder{color:var(--soft)}
+.brand-dir__search input::-webkit-search-cancel-button{display:none}
+
+.brand-dir__scroll{padding:18px 26px 26px;max-height:min(56vh,460px);overflow-y:auto;scrollbar-width:thin}
+.brand-dir__scroll::-webkit-scrollbar{width:6px}
+.brand-dir__scroll::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px}
+.brand-dir__group{margin-bottom:22px}
+.brand-dir__group:last-of-type{margin-bottom:0}
+.brand-dir__letterhead{margin:0 0 12px;padding:8px 16px;border-radius:9px;background:var(--bg);
+  font-family:var(--serif);font-size:15px;font-weight:700;color:var(--forest);letter-spacing:-.01em}
+.brand-dir__list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2px 20px}
+.brand-dir__item{padding:8px 10px;border-radius:8px;border-bottom:none;
+  font-size:14.5px;line-height:1.35;color:var(--muted);transition:background .15s,color .15s}
+.brand-dir__item:hover{background:var(--bg);color:var(--forest)}
+.brand-dir__empty{margin:6px 0 0;font-size:15px;color:var(--muted);font-weight:300}
+
+@media(max-width:1150px){
+  .brand-dir__list{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .brand-dir__index{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .brand-dir{grid-template-columns:132px minmax(0,1fr)}
+}
 
 /* ===== Nomes de produto em maiúsculas ===== */
 /* Feito em CSS e não com o filtro `upcase` de propósito: assim o texto real

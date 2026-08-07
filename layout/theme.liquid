@@ -164,6 +164,21 @@
             </div>
           {%- endif -%}
           {% endfor %}
+
+          {%- comment -%}
+            "Marcas" não vem do menu do lojista: é o tema que o acrescenta, com o
+            diretório de marcas como painel. O botão só abre o painel — quem
+            navega são as marcas lá dentro.
+          {%- endcomment -%}
+          <div class="nav-item nav-item--parent nav-item--brands">
+            <button type="button" class="nav-item__link" aria-haspopup="true" aria-expanded="false">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="8" r="3.2"/><circle cx="17" cy="8" r="3.2"/><rect x="8.8" y="14.5" width="6.4" height="6.4" rx="1.4"/></svg>
+              Marcas
+            </button>
+            <div class="nav-mega nav-mega--brands" role="menu">
+              {% render 'brands-directory' %}
+            </div>
+          </div>
       </nav>
     </div>
   </header>
@@ -217,6 +232,26 @@
             <a href="{{ link.url }}" class="mobile-nav__link mobile-nav__link--solo">{{ link.title }}</a>
           {%- endif -%}
         {% endfor %}
+
+        {%- comment -%} Mesmas marcas do painel de desktop, em acordeão. {%- endcomment -%}
+        {%- assign drawer_vendors = collections.all.all_vendors | sort -%}
+        {%- if drawer_vendors.size > 0 -%}
+          <div class="mobile-nav__group">
+            <div class="mobile-nav__row">
+              <span class="mobile-nav__link">Marcas</span>
+              <button class="mobile-nav__expand" aria-label="Mostrar marcas" aria-expanded="false">
+                <svg width="14" height="14" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5 5 6.5 8 3.5"/></svg>
+              </button>
+            </div>
+            <div class="mobile-nav__sub">
+              <div class="mobile-nav__sub-inner">
+                {%- for vendor in drawer_vendors -%}
+                  <a href="{{ vendor | url_for_vendor }}" class="mobile-nav__sublink">{{ vendor }}</a>
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
       </nav>
     </aside>
   </div>
@@ -345,6 +380,7 @@
   </script>
   <script src="{{ 'mini-cart.js' | asset_url }}" defer></script>
   <script src="{{ 'search.js' | asset_url }}" defer></script>
+  <script src="{{ 'brands.js' | asset_url }}" defer></script>
   {% if request.page_type == 'search' or request.page_type == 'collection' %}
     <script src="{{ 'facets.js' | asset_url }}" defer></script>
     <script src="{{ 'sort.js' | asset_url }}" defer></script>
