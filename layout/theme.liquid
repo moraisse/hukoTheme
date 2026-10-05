@@ -4,6 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>{{ page_title }}{% unless page_title contains shop.name %} — {{ shop.name }}{% endunless %}</title>
+  <link rel="icon" type="image/png" sizes="192x192" href="{{ 'favicon.png' | asset_url }}">
+  <link rel="apple-touch-icon" href="{{ 'favicon.png' | asset_url }}">
+  <meta property="og:site_name" content="HUKO pets">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebSite","name":"HUKO pets","url":"https://hukopets.com/"}
+  </script>
   {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
