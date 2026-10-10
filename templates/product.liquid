@@ -23,8 +23,9 @@
       </div>
       {% if product.images.size > 0 %}
         {%- comment -%}
-          Imagens com tag "#variant:<valor>" no alt pertencem a essa variante
-          (option1/cor) e só aparecem quando ela está selecionada; imagens sem
+          Imagens com tag "#variant:<valor>" no alt pertencem às variantes com
+          esse valor numa das opções (normalmente a Cor) e só aparecem quando
+          uma delas está selecionada; imagens sem
           tag são comuns a todas. A tag é retirada do alt renderizado. Os dados
           alimentam o carrossel/lightbox em JS — não há miniaturas visíveis.
         {%- endcomment -%}
@@ -121,7 +122,7 @@
     {{ variant.options | join: ' / ' | json }}: {
       "id": {{ variant.id }},
       "available": {{ variant.available }},
-      "option1": {{ variant.option1 | json }},
+      "options": {{ variant.options | json }},
       "price": {{ variant.price | money | json }},
       "title": {{ variant.metafields.huko.variant_title.value | default: product.title | json }},
       "description": {{ variant.metafields.huko.variant_description.value | default: product.description | json }}
@@ -188,7 +189,7 @@
         lead.textContent = text.length > 180 ? text.slice(0, 177) + '…' : text;
       }
     }
-    if (window.HukoGallery) window.HukoGallery.computeVisible(v.option1);
+    if (window.HukoGallery) window.HukoGallery.computeVisible(v.options);
     refreshAvailability();
   }
 
@@ -226,9 +227,11 @@
   var visible = images.slice();
   var index = 0;
 
-  function computeVisible(variantTag){
+  // A tag pode corresponder a qualquer opção da variante (Cor nem sempre é option1).
+  function computeVisible(optionValues){
+    var values = optionValues || [];
     visible = images.filter(function(img){
-      return !img.variantTag || !variantTag || img.variantTag === variantTag;
+      return !img.variantTag || !values.length || values.indexOf(img.variantTag) !== -1;
     });
     if (!visible.length) visible = images.slice(0, 1);
     index = 0;
@@ -295,7 +298,7 @@
   });
 
   window.HukoGallery = { computeVisible: computeVisible };
-  computeVisible({{ current_variant.option1 | json }});
+  computeVisible({{ current_variant.options | json }});
 })();
 </script>
 
