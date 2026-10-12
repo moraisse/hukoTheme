@@ -66,7 +66,10 @@
     if (!m) return;
     var code = decodeURIComponent(m[1]);
     var key = 'discount_seen_' + code;
-    try { if (sessionStorage.getItem(key)) return; sessionStorage.setItem(key, '1'); } catch (e) {}
+    try {
+      if (localStorage.getItem(key)) return;
+      localStorage.setItem(key, '1');
+    } catch (e) { return; }
     var b = document.getElementById('discount-banner');
     b.textContent = '🐾 Código ' + code + ' aplicado! O desconto aparece no carrinho e no checkout.';
     b.hidden = false;
