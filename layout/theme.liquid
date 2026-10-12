@@ -59,6 +59,20 @@
   </style>
   {{ content_for_header }}
 </head>
+<div id="discount-banner" hidden style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999;background:#1f7a4d;color:#fff;padding:14px 22px;border-radius:12px;font-size:15px;box-shadow:0 6px 20px rgba(0,0,0,.15)"></div>
+<script>
+  (function () {
+    var m = document.cookie.match(/(?:^|; )discount_code=([^;]+)/);
+    if (!m) return;
+    var code = decodeURIComponent(m[1]);
+    var key = 'discount_seen_' + code;
+    try { if (sessionStorage.getItem(key)) return; sessionStorage.setItem(key, '1'); } catch (e) {}
+    var b = document.getElementById('discount-banner');
+    b.textContent = '🐾 Código ' + code + ' aplicado! O desconto aparece no carrinho e no checkout.';
+    b.hidden = false;
+    setTimeout(function () { b.hidden = true; }, 7000);
+  })();
+</script>
 <body class="template-{{ request.page_type }}">
 
   <header class="site-header">

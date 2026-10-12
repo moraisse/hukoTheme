@@ -21,7 +21,10 @@
               <span style="min-width:20px;text-align:center;font-weight:500">{{ item.quantity }}</span>
               <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}" style="padding:9px 15px">+</a>
             </div>
-            <span class="price" style="min-width:84px;text-align:right">{{ item.final_line_price | money }}</span>
+            <div class="row"><span class="label">Subtotal</span><span>{{ cart.original_total_price | money }}</span></div>
+{% for d in cart.discount_applications %}
+  <div class="row"><span class="label">Desconto ({{ d.title }})</span><span style="color:var(--green);font-weight:500">−{{ d.total_allocated_amount | money }}</span></div>
+{% endfor %}
           </div>
         {% endfor %}
       </form>
