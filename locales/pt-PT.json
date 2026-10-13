@@ -1,5 +1,8 @@
 {
   "general": {
+    "navigation": {
+      "pro": "Pro"
+    },
     "search": {
       "placeholder": "Pesquisar"
     }

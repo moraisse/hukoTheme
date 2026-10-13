@@ -174,12 +174,23 @@ a.header-perk:hover .header-perk__icon{stroke:var(--green)}
 .mobile-drawer__close{background:none;border:none;cursor:pointer;color:var(--ink);display:flex;padding:4px}
 body.drawer-open{overflow:hidden}
 /* mobile nav items */
+.nav-item--grooming{padding-left:20px;background:linear-gradient(var(--gold),var(--gold)) left center / 1px 24px no-repeat}
+.nav-grooming__label{display:inline-flex;align-items:center;gap:9px;white-space:nowrap}
+.nav-item--grooming .nav-grooming__label{padding:7px 11px;border-radius:7px;background:color-mix(in srgb,var(--gold) 20%,var(--forest))}
+.nav-grooming__badge{display:inline-flex;align-items:center;padding:3px 6px;border-radius:4px;
+  background:var(--gold);color:var(--forest);font-size:10px;font-weight:800;line-height:1.2;letter-spacing:.06em;text-transform:uppercase}
+.site-header .nav-item--grooming > .nav-item__link:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 .mobile-nav{padding:8px 14px 32px}
 .mobile-nav__link{display:block;padding:15px 10px;font-size:17px;font-weight:500;border-bottom:1px solid var(--line)}
 .mobile-nav__link--solo{border-bottom:1px solid var(--line)}
 .mobile-nav__group{border-bottom:1px solid var(--line)}
 .mobile-nav__row{display:flex;align-items:center;justify-content:space-between}
 .mobile-nav__row .mobile-nav__link{flex:1;border-bottom:none}
+.mobile-nav__group--grooming,.mobile-nav__link--grooming{margin-top:10px;padding-top:10px;border-top:1px solid var(--gold)}
+.mobile-nav__group--grooming > .mobile-nav__row,.mobile-nav__link--grooming > .nav-grooming__label{
+  background:color-mix(in srgb,var(--gold) 20%,var(--bg));border-radius:7px;color:var(--forest)}
+.mobile-nav__link--grooming > .nav-grooming__label{width:100%;padding:12px 10px}
+.mobile-nav__link--grooming{padding-right:0;padding-left:0}
 .mobile-nav__expand{background:none;border:none;cursor:pointer;color:var(--muted);padding:14px 10px;display:flex;align-items:center}
 .mobile-nav__expand svg{transition:transform .25s ease}
 .mobile-nav__group.is-expanded .mobile-nav__expand svg{transform:rotate(180deg)}

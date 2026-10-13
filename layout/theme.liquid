@@ -156,9 +156,16 @@
       {%- assign navigation_links = linklists.main-menu.links | reject: 'handle', 'grooming' | concat: grooming_links -%}
       <nav class="site-nav">
           {% for link in navigation_links %}
+          {%- capture navigation_label -%}
+            {%- if link.handle == 'grooming' -%}
+              <span class="nav-grooming__label">{{ link.title }} <span class="nav-grooming__badge">{{ 'general.navigation.pro' | t }}</span></span>
+            {%- else -%}
+              {{ link.title }}
+            {%- endif -%}
+          {%- endcapture -%}
           {%- if link.links.size > 0 -%}
-            <div class="nav-item nav-item--parent">
-              <a href="{{ link.url }}" class="nav-item__link" aria-haspopup="true" aria-expanded="false">{{ link.title }}</a>
+            <div class="nav-item nav-item--parent{% if link.handle == 'grooming' %} nav-item--grooming{% endif %}">
+              <a href="{{ link.url }}" class="nav-item__link" aria-haspopup="true" aria-expanded="false">{{ navigation_label }}</a>
               {%- assign mega_img = link.object.image -%}
               <div class="nav-mega" role="menu">
                 <div class="nav-mega__cols">
@@ -184,8 +191,8 @@
               </div>
             </div>
           {%- else -%}
-            <div class="nav-item">
-              <a href="{{ link.url }}" class="nav-item__link">{{ link.title }}</a>
+            <div class="nav-item{% if link.handle == 'grooming' %} nav-item--grooming{% endif %}">
+              <a href="{{ link.url }}" class="nav-item__link">{{ navigation_label }}</a>
             </div>
           {%- endif -%}
           {% endfor %}
@@ -219,10 +226,17 @@
       </div>
       <nav class="mobile-nav">
         {% for link in navigation_links %}
+          {%- capture navigation_label -%}
+            {%- if link.handle == 'grooming' -%}
+              <span class="nav-grooming__label">{{ link.title }} <span class="nav-grooming__badge">{{ 'general.navigation.pro' | t }}</span></span>
+            {%- else -%}
+              {{ link.title }}
+            {%- endif -%}
+          {%- endcapture -%}
           {%- if link.links.size > 0 -%}
-            <div class="mobile-nav__group">
+            <div class="mobile-nav__group{% if link.handle == 'grooming' %} mobile-nav__group--grooming{% endif %}">
               <div class="mobile-nav__row">
-                <a href="{{ link.url }}" class="mobile-nav__link">{{ link.title }}</a>
+                <a href="{{ link.url }}" class="mobile-nav__link">{{ navigation_label }}</a>
                 <button class="mobile-nav__expand" aria-label="Mostrar subcategorias de {{ link.title }}" aria-expanded="false">
                   <svg width="14" height="14" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5 5 6.5 8 3.5"/></svg>
                 </button>
@@ -254,7 +268,7 @@
               </div>
             </div>
           {%- else -%}
-            <a href="{{ link.url }}" class="mobile-nav__link mobile-nav__link--solo">{{ link.title }}</a>
+            <a href="{{ link.url }}" class="mobile-nav__link mobile-nav__link--solo{% if link.handle == 'grooming' %} mobile-nav__link--grooming{% endif %}">{{ navigation_label }}</a>
           {%- endif -%}
         {% endfor %}
 
