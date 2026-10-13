@@ -1,14 +1,24 @@
 {% doc %}
   Identifies collections and products in the Grooming navigation tree.
+  @param {collection} [current_collection] - Current collection context.
+  @param {product} [current_product] - Current product context.
 {% enddoc %}
+{%- assign context_collection = current_collection | default: collection -%}
+{%- assign context_product = current_product | default: product -%}
 {%- assign grooming_root = linklists.main-menu.links | where: 'handle', 'grooming' | first -%}
-{%- capture grooming_urls -%}|/collections/grooming|{{ grooming_root.url }}|{%- for child in grooming_root.links -%}{{ child.url }}|{%- for grandchild in child.links -%}{{ grandchild.url }}|{%- endfor -%}{%- endfor -%}{%- endcapture -%}
-{%- if collection != blank -%}
-  {%- assign needle = '|' | append: collection.url | append: '|' -%}
-  {%- if grooming_urls contains needle -%}true{%- endif -%}
+{%- capture grooming_destination -%}{%- render 'grooming-url' -%}{%- endcapture -%}
+{%- capture grooming_urls -%}|/collections/grooming|{{ grooming_destination }}|{{ grooming_root.url }}|{%- for child in grooming_root.links -%}{{ child.url }}|{%- for grandchild in child.links -%}{{ grandchild.url }}|{%- endfor -%}{%- endfor -%}{%- endcapture -%}
+{%- if context_collection != blank -%}
+  {%- assign handle_prefix = context_collection.handle | slice: 0, 9 -%}
+  {%- assign needle = '|' | append: context_collection.url | append: '|' -%}
+  {%- if context_collection.handle == 'grooming' or handle_prefix == 'grooming-' or grooming_urls contains needle -%}true{%- endif -%}
 {%- elsif request.page_type == 'product' -%}
-  {%- for product_collection in product.collections -%}
+  {%- for product_collection in context_product.collections -%}
+    {%- assign handle_prefix = product_collection.handle | slice: 0, 9 -%}
     {%- assign needle = '|' | append: product_collection.url | append: '|' -%}
-    {%- if grooming_urls contains needle -%}true{%- break -%}{%- endif -%}
+    {%- if product_collection.handle == 'grooming' or handle_prefix == 'grooming-' or grooming_urls contains needle -%}true{%- break -%}{%- endif -%}
   {%- endfor -%}
+{%- elsif request.path != blank -%}
+  {%- assign needle = '|' | append: request.path | append: '|' -%}
+  {%- if grooming_urls contains needle -%}true{%- endif -%}
 {%- endif -%}

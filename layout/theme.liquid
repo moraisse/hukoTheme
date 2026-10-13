@@ -76,10 +76,14 @@
     setTimeout(function () { b.hidden = true; }, 7000);
   })();
 </script>
-{%- capture grooming_context -%}{%- render 'grooming-context' -%}{%- endcapture -%}
+{%- capture grooming_context -%}{%- render 'grooming-context', current_collection: collection, current_product: product -%}{%- endcapture -%}
+{%- assign grooming_context = grooming_context | strip -%}
 {%- assign grooming_root = linklists.main-menu.links | where: 'handle', 'grooming' | first -%}
+{%- capture grooming_destination -%}{%- render 'grooming-url' -%}{%- endcapture -%}
 {%- assign is_grooming = false -%}
 {%- if grooming_context == 'true' -%}{%- assign is_grooming = true -%}{%- endif -%}
+{%- assign grooming_handle_prefix = collection.handle | slice: 0, 9 -%}
+{%- if collection.handle == 'grooming' or grooming_handle_prefix == 'grooming-' -%}{%- assign is_grooming = true -%}{%- endif -%}
 <body class="template-{{ request.page_type }}{% if is_grooming %} space-grooming{% endif %}">
 
   <header class="site-header">
@@ -160,6 +164,8 @@
       {%- assign navigation_links = linklists.main-menu.links | reject: 'handle', 'grooming' | concat: grooming_links -%}
       <nav class="site-nav">
           {% for link in navigation_links %}
+          {%- assign navigation_url = link.url -%}
+          {%- if link.handle == 'grooming' -%}{%- assign navigation_url = grooming_destination -%}{%- endif -%}
           {%- capture navigation_label -%}
             {%- if link.handle == 'grooming' -%}
               <span class="nav-grooming__label">{{ link.title }} <span class="nav-grooming__badge">{{ 'general.navigation.pro' | t }}</span></span>
@@ -169,7 +175,7 @@
           {%- endcapture -%}
           {%- if link.links.size > 0 -%}
             <div class="nav-item nav-item--parent{% if link.handle == 'grooming' %} nav-item--grooming{% endif %}">
-              <a href="{{ link.url }}" class="nav-item__link" aria-haspopup="true" aria-expanded="false">{{ navigation_label }}</a>
+              <a href="{{ navigation_url }}" class="nav-item__link" aria-haspopup="true" aria-expanded="false">{{ navigation_label }}</a>
               {%- assign mega_img = link.object.image -%}
               <div class="nav-mega" role="menu">
                 <div class="nav-mega__cols">
@@ -187,7 +193,7 @@
                   {%- endfor -%}
                 </div>
                 {%- if mega_img != blank -%}
-                  <a href="{{ link.url }}" class="nav-mega__media">
+                  <a href="{{ navigation_url }}" class="nav-mega__media">
                     <img src="{{ mega_img | image_url: width: 600 }}" alt="{{ link.title }}" loading="lazy" width="290" height="440">
                     <span class="nav-mega__media-label">Ver tudo em {{ link.title }} →</span>
                   </a>
@@ -196,7 +202,7 @@
             </div>
           {%- else -%}
             <div class="nav-item{% if link.handle == 'grooming' %} nav-item--grooming{% endif %}">
-              <a href="{{ link.url }}" class="nav-item__link">{{ navigation_label }}</a>
+              <a href="{{ navigation_url }}" class="nav-item__link">{{ navigation_label }}</a>
             </div>
           {%- endif -%}
           {% endfor %}
@@ -230,6 +236,8 @@
       </div>
       <nav class="mobile-nav">
         {% for link in navigation_links %}
+          {%- assign navigation_url = link.url -%}
+          {%- if link.handle == 'grooming' -%}{%- assign navigation_url = grooming_destination -%}{%- endif -%}
           {%- capture navigation_label -%}
             {%- if link.handle == 'grooming' -%}
               <span class="nav-grooming__label">{{ link.title }} <span class="nav-grooming__badge">{{ 'general.navigation.pro' | t }}</span></span>
@@ -240,7 +248,7 @@
           {%- if link.links.size > 0 -%}
             <div class="mobile-nav__group{% if link.handle == 'grooming' %} mobile-nav__group--grooming{% endif %}">
               <div class="mobile-nav__row">
-                <a href="{{ link.url }}" class="mobile-nav__link">{{ navigation_label }}</a>
+                <a href="{{ navigation_url }}" class="mobile-nav__link">{{ navigation_label }}</a>
                 <button class="mobile-nav__expand" aria-label="Mostrar subcategorias de {{ link.title }}" aria-expanded="false">
                   <svg width="14" height="14" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5 5 6.5 8 3.5"/></svg>
                 </button>
@@ -272,7 +280,7 @@
               </div>
             </div>
           {%- else -%}
-            <a href="{{ link.url }}" class="mobile-nav__link mobile-nav__link--solo{% if link.handle == 'grooming' %} mobile-nav__link--grooming{% endif %}">{{ navigation_label }}</a>
+            <a href="{{ navigation_url }}" class="mobile-nav__link mobile-nav__link--solo{% if link.handle == 'grooming' %} mobile-nav__link--grooming{% endif %}">{{ navigation_label }}</a>
           {%- endif -%}
         {% endfor %}
 
@@ -303,7 +311,7 @@
     {% if is_grooming %}
       <div class="grooming-space-bar">
         <div class="wrap">
-          <a href="{{ grooming_root.url | default: '/collections/grooming' }}">Grooming <span class="nav-grooming__badge">{{ 'general.navigation.pro' | t }}</span></a>
+          <a href="{{ grooming_destination }}">Grooming <span class="nav-grooming__badge">{{ 'general.navigation.pro' | t }}</span></a>
           <span>{{ 'general.grooming.professional' | t }}</span>
         </div>
       </div>
@@ -339,7 +347,7 @@
           {% endfor %}
           {% for link in grooming_links %}
             <div class="footer-grooming">
-              <a href="{{ link.url }}" class="footer-grooming__link">
+              <a href="{{ grooming_destination }}" class="footer-grooming__link">
                 <span class="nav-grooming__label">{{ link.title }} <span class="nav-grooming__badge">{{ 'general.navigation.pro' | t }}</span></span>
               </a>
             </div>

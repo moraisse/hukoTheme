@@ -1,8 +1,12 @@
 {%- assign sort = collection.sort_by | default: collection.default_sort_by -%}
-{%- capture grooming_context -%}{%- render 'grooming-context' -%}{%- endcapture -%}
+{%- capture grooming_context -%}{%- render 'grooming-context', current_collection: collection -%}{%- endcapture -%}
+{%- assign grooming_context = grooming_context | strip -%}
 {%- assign is_grooming = false -%}
 {%- if grooming_context == 'true' -%}{%- assign is_grooming = true -%}{%- endif -%}
+{%- assign grooming_handle_prefix = collection.handle | slice: 0, 9 -%}
+{%- if collection.handle == 'grooming' or grooming_handle_prefix == 'grooming-' -%}{%- assign is_grooming = true -%}{%- endif -%}
 {%- assign grooming_root = linklists.main-menu.links | where: 'handle', 'grooming' | first -%}
+{%- capture grooming_destination -%}{%- render 'grooming-url' -%}{%- endcapture -%}
 {%- assign has_facets = false -%}
 {%- if collection.filters.size > 0 -%}{%- assign has_facets = true -%}{%- endif -%}
 
@@ -24,7 +28,7 @@
 
   {% if is_grooming and grooming_root.links.size > 0 %}
     <nav class="grooming-categories" aria-label="{{ 'general.grooming.categories' | t | escape }}">
-      <a href="{{ grooming_root.url }}"{% if collection.url == grooming_root.url %} aria-current="page"{% endif %}>{{ 'general.grooming.all' | t }}</a>
+      <a href="{{ grooming_destination }}"{% if collection.url == grooming_destination %} aria-current="page"{% endif %}>{{ 'general.grooming.all' | t }}</a>
       {% for child in grooming_root.links %}
         <a href="{{ child.url }}"{% if collection.url == child.url %} aria-current="page"{% endif %}>{{ child.title }}</a>
       {% endfor %}

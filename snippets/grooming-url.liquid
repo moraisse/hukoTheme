@@ -1,0 +1,9 @@
+{% doc %}
+  Resolves the Grooming destination when its menu item is a placeholder.
+{% enddoc %}
+{%- assign root = linklists.main-menu.links | where: 'handle', 'grooming' | first -%}
+{%- assign destination = root.url | strip -%}
+{%- if destination == blank or destination == '#' -%}
+  {%- assign destination = root.object.url | default: collections.grooming.url | default: '/collections/grooming' -%}
+{%- endif -%}
+{{- destination -}}
