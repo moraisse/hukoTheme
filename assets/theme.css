@@ -180,6 +180,9 @@ body.drawer-open{overflow:hidden}
 .nav-grooming__badge{display:inline-flex;align-items:center;padding:3px 6px;border-radius:4px;
   background:var(--gold);color:var(--forest);font-size:10px;font-weight:800;line-height:1.2;letter-spacing:.06em;text-transform:uppercase}
 .site-header .nav-item--grooming > .nav-item__link:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.nav-item--grooming > .nav-mega{background:color-mix(in srgb,var(--gold) 20%,var(--bg));border-color:var(--gold)}
+.nav-item--grooming > .nav-item__link::after{border-bottom-color:color-mix(in srgb,var(--gold) 20%,var(--bg))}
+.nav-item--grooming .nav-mega__links{border-left-color:var(--gold)}
 .mobile-nav{padding:8px 14px 32px}
 .mobile-nav__link{display:block;padding:15px 10px;font-size:17px;font-weight:500;border-bottom:1px solid var(--line)}
 .mobile-nav__link--solo{border-bottom:1px solid var(--line)}
