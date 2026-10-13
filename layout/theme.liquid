@@ -347,10 +347,21 @@
           {% if shop.privacy_policy %}<a href="{{ shop.privacy_policy.url }}">Política de privacidade</a>{% endif %}
           {% if shop.terms_of_service %}<a href="{{ shop.terms_of_service.url }}">Termos de serviço</a>{% endif %}
           {% if shop.shipping_policy %}<a href="{{ shop.shipping_policy.url }}">Política de envio</a>{% endif %}
+          {%- capture complaints_book_link -%}
+            <a href="https://www.livroreclamacoes.pt/Inicio/" class="footer-complaints-book" target="_blank" rel="noopener noreferrer">
+              <img src="{{ 'livro-reclamacoes.png' | asset_url }}" alt="{{ 'general.footer.complaints_book' | t | escape }}" width="500" height="207" loading="lazy">
+            </a>
+          {%- endcapture -%}
+          {%- assign complaints_book_shown = false -%}
           {% for policy in shop.policies %}
             {% if policy.url contains 'contact-information' %}<a href="{{ policy.url }}">Informações de contacto</a>{% endif %}
-            {% if policy.url contains 'legal-notice' %}<a href="{{ policy.url }}">Aviso legal</a>{% endif %}
+            {% if policy.url contains 'legal-notice' %}
+              <a href="{{ policy.url }}">Aviso legal</a>
+              {{ complaints_book_link }}
+              {%- assign complaints_book_shown = true -%}
+            {% endif %}
           {% endfor %}
+          {% unless complaints_book_shown %}{{ complaints_book_link }}{% endunless %}
         </div>
       </div>
       <div class="site-footer__base">

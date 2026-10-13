@@ -1,5 +1,8 @@
 {
   "general": {
+    "footer": {
+      "complaints_book": "Livro de Reclamações"
+    },
     "navigation": {
       "pro": "Pro"
     },

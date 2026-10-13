@@ -306,6 +306,10 @@ body .prod-card--white{background:#fff}
 .site-footer h4{margin:0 0 12px;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:500;font-family:var(--sans)}
 .site-footer a{color:rgba(250,248,243,.75);font-size:15px;font-weight:300;display:block;margin-bottom:12px}
 .site-footer a:hover{color:var(--green)}
+.site-footer .footer-complaints-book{width:140px;max-width:100%;margin-top:18px;opacity:.85;transition:opacity .15s}
+.footer-complaints-book img{display:block;width:100%;height:auto}
+.site-footer .footer-complaints-book:hover,.site-footer .footer-complaints-book:focus-visible{opacity:1}
+.site-footer .footer-complaints-book:focus-visible{outline:2px solid var(--gold);outline-offset:5px}
 .site-footer .footer-phone{font-weight:700;display:flex;align-items:center;gap:9px}
 .footer-icon{flex-shrink:0;width:22px;height:22px;padding:5px;border-radius:50%;background:var(--forest)}
 .footer-icon--whatsapp{background:#25D366}
