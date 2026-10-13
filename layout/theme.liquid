@@ -152,8 +152,10 @@
         As categorias ficam na segunda linha da mesma grelha, a começar na coluna
         da pesquisa — por isso alinham sempre com ela, seja qual for a largura do logo.
       {%- endcomment -%}
+      {%- assign grooming_links = linklists.main-menu.links | where: 'handle', 'grooming' -%}
+      {%- assign navigation_links = linklists.main-menu.links | reject: 'handle', 'grooming' | concat: grooming_links -%}
       <nav class="site-nav">
-          {% for link in linklists.main-menu.links %}
+          {% for link in navigation_links %}
           {%- if link.links.size > 0 -%}
             <div class="nav-item nav-item--parent">
               <a href="{{ link.url }}" class="nav-item__link" aria-haspopup="true" aria-expanded="false">{{ link.title }}</a>
@@ -216,7 +218,7 @@
         </button>
       </div>
       <nav class="mobile-nav">
-        {% for link in linklists.main-menu.links %}
+        {% for link in navigation_links %}
           {%- if link.links.size > 0 -%}
             <div class="mobile-nav__group">
               <div class="mobile-nav__row">
