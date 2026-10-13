@@ -326,6 +326,41 @@ body .prod-card--white{background:#fff}
 .pay__icon{height:26px;width:auto;border-radius:4px}
 @media(max-width:900px){.site-footer__cols{grid-template-columns:1fr 1fr}}
 /* collection page */
+.space-grooming{background:color-mix(in srgb,var(--gold) 8%,var(--bg))}
+.grooming-space-bar{background:color-mix(in srgb,var(--gold) 18%,var(--forest));color:var(--bg);border-bottom:1px solid var(--gold)}
+.grooming-space-bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:12px;padding-bottom:12px}
+.grooming-space-bar a{display:inline-flex;align-items:center;gap:10px;color:var(--bg);font-weight:700}
+.grooming-space-bar .wrap > span{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.space-grooming .coll-head{margin:28px 0 24px;padding:40px;border-radius:10px;background:var(--forest);border-left:4px solid var(--gold);color:var(--bg)}
+.grooming-heading__eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:16px;color:var(--gold);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.space-grooming .coll-head h1{font-size:clamp(30px,4vw,48px);margin:0 0 14px}
+.space-grooming .coll-head p{color:var(--bg);opacity:.85;font-size:16px;line-height:1.65}
+.grooming-heading__meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:28px;padding-top:18px;border-top:1px solid color-mix(in srgb,var(--gold) 35%,var(--forest));font-size:13px}
+.grooming-heading__meta a{color:var(--gold);text-decoration:underline;text-underline-offset:4px}
+.grooming-categories{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
+.grooming-categories a{padding:10px 15px;border:1px solid var(--line);border-radius:5px;color:var(--forest);font-size:14px;background:var(--bg)}
+.grooming-categories a:hover,.grooming-categories a[aria-current="page"]{background:var(--forest);border-color:var(--forest);color:var(--bg)}
+.space-grooming .toolbar{padding:16px 0 22px;border-top:1px solid var(--line);margin-bottom:8px}
+.space-grooming .prod-card{border:1px solid var(--line);border-radius:8px;box-shadow:none}
+.space-grooming .prod-card:hover{border-color:var(--gold);transform:none;box-shadow:0 8px 24px rgba(30,61,47,.08)}
+.space-grooming .prod-card__img{background:var(--bg)}
+.space-grooming .prod-card__img img{object-fit:contain;padding:18px}
+.space-grooming .btn{border-radius:5px;letter-spacing:0}
+.space-grooming .btn--primary:hover{background:var(--gold);color:var(--forest)}
+.space-grooming .badge{border-radius:4px}
+.space-grooming .badge--new{background:var(--forest);color:var(--bg)}
+.space-grooming .pdp__buy{padding:28px;border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:8px;background:var(--bg)}
+.space-grooming .pdp__buy h1{color:var(--forest)}
+.space-grooming .newsletter{border-top:1px solid var(--gold)}
+.space-grooming .newsletter button{background:var(--gold);color:var(--forest);border-radius:5px}
+.space-grooming a:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+@media(max-width:768px){
+  .space-grooming .coll-head{padding:26px 22px;margin-top:22px}
+  .space-grooming .pdp__buy{padding:20px}
+  .grooming-space-bar .wrap > span{font-size:10px;letter-spacing:.06em}
+  .grooming-categories{gap:8px}
+  .grooming-categories a{padding:9px 12px;font-size:13px}
+}
 .coll-head{padding:48px 0 40px}
 .coll-head h1{font-size:46px;margin:0 0 14px}
 .coll-head p{margin:0;font-size:17px;line-height:1.65;color:var(--muted);font-weight:300;max-width:620px}

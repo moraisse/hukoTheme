@@ -1,0 +1,14 @@
+{% doc %}
+  Identifies collections and products in the Grooming navigation tree.
+{% enddoc %}
+{%- assign grooming_root = linklists.main-menu.links | where: 'handle', 'grooming' | first -%}
+{%- capture grooming_urls -%}|/collections/grooming|{{ grooming_root.url }}|{%- for child in grooming_root.links -%}{{ child.url }}|{%- for grandchild in child.links -%}{{ grandchild.url }}|{%- endfor -%}{%- endfor -%}{%- endcapture -%}
+{%- if collection != blank -%}
+  {%- assign needle = '|' | append: collection.url | append: '|' -%}
+  {%- if grooming_urls contains needle -%}true{%- endif -%}
+{%- elsif request.page_type == 'product' -%}
+  {%- for product_collection in product.collections -%}
+    {%- assign needle = '|' | append: product_collection.url | append: '|' -%}
+    {%- if grooming_urls contains needle -%}true{%- break -%}{%- endif -%}
+  {%- endfor -%}
+{%- endif -%}

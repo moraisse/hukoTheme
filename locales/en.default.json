@@ -1,5 +1,13 @@
 {
   "general": {
+    "grooming": {
+      "professional": "Professional space",
+      "intro": "Equipment and care for everyday grooming work.",
+      "product_count": "{{ count }} products",
+      "support": "Contact the team",
+      "categories": "Grooming categories",
+      "all": "All grooming"
+    },
     "footer": {
       "complaints_book": "Livro de Reclamações"
     },

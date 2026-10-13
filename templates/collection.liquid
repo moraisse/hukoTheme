@@ -1,12 +1,35 @@
 {%- assign sort = collection.sort_by | default: collection.default_sort_by -%}
+{%- capture grooming_context -%}{%- render 'grooming-context' -%}{%- endcapture -%}
+{%- assign is_grooming = false -%}
+{%- if grooming_context == 'true' -%}{%- assign is_grooming = true -%}{%- endif -%}
+{%- assign grooming_root = linklists.main-menu.links | where: 'handle', 'grooming' | first -%}
 {%- assign has_facets = false -%}
 {%- if collection.filters.size > 0 -%}{%- assign has_facets = true -%}{%- endif -%}
 
 <div class="wrap">
   <div class="coll-head">
+    {% if is_grooming %}
+      <div class="grooming-heading__eyebrow">{{ 'general.grooming.professional' | t }} <span class="nav-grooming__badge">{{ 'general.navigation.pro' | t }}</span></div>
+    {% endif %}
     <h1>{{ collection.title }}</h1>
     {% if collection.description != blank %}<p>{{ collection.description | strip_html }}</p>{% endif %}
+    {% if is_grooming %}
+      {% if collection.description == blank %}<p>{{ 'general.grooming.intro' | t }}</p>{% endif %}
+      <div class="grooming-heading__meta">
+        <span>{{ 'general.grooming.product_count' | t: count: collection.products_count }}</span>
+        <a href="mailto:geral@hukopets.com">{{ 'general.grooming.support' | t }} <span aria-hidden="true">↗</span></a>
+      </div>
+    {% endif %}
   </div>
+
+  {% if is_grooming and grooming_root.links.size > 0 %}
+    <nav class="grooming-categories" aria-label="{{ 'general.grooming.categories' | t | escape }}">
+      <a href="{{ grooming_root.url }}"{% if collection.url == grooming_root.url %} aria-current="page"{% endif %}>{{ 'general.grooming.all' | t }}</a>
+      {% for child in grooming_root.links %}
+        <a href="{{ child.url }}"{% if collection.url == child.url %} aria-current="page"{% endif %}>{{ child.title }}</a>
+      {% endfor %}
+    </nav>
+  {% endif %}
 
   <div class="toolbar">
     {% if has_facets %}

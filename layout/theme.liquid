@@ -76,7 +76,11 @@
     setTimeout(function () { b.hidden = true; }, 7000);
   })();
 </script>
-<body class="template-{{ request.page_type }}">
+{%- capture grooming_context -%}{%- render 'grooming-context' -%}{%- endcapture -%}
+{%- assign grooming_root = linklists.main-menu.links | where: 'handle', 'grooming' | first -%}
+{%- assign is_grooming = false -%}
+{%- if grooming_context == 'true' -%}{%- assign is_grooming = true -%}{%- endif -%}
+<body class="template-{{ request.page_type }}{% if is_grooming %} space-grooming{% endif %}">
 
   <header class="site-header">
     <div class="wrap site-header__inner">
@@ -296,13 +300,21 @@
   </div>
 
   <main>
+    {% if is_grooming %}
+      <div class="grooming-space-bar">
+        <div class="wrap">
+          <a href="{{ grooming_root.url | default: '/collections/grooming' }}">Grooming <span class="nav-grooming__badge">{{ 'general.navigation.pro' | t }}</span></a>
+          <span>{{ 'general.grooming.professional' | t }}</span>
+        </div>
+      </div>
+    {% endif %}
     {% render 'breadcrumb' %}
     {{ content_for_layout }}
   </main>
 
   <section class="newsletter">
     <div class="newsletter__inner">
-      <div class="eyebrow">Junta-te à matilha</div>
+      <div class="eyebrow">{% if is_grooming %}{{ 'general.grooming.professional' | t }}{% else %}Junta-te à matilha{% endif %}</div>
       <h2 class="serif">Novidades, lançamentos e <em>10% de desconto</em> na primeira compra</h2>
       <p>Sem spam. Apenas o essencial, uma vez por mês.</p>
       {% form 'customer' %}
