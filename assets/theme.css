@@ -306,6 +306,11 @@ body .prod-card--white{background:#fff}
 .site-footer h4{margin:0 0 12px;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:500;font-family:var(--sans)}
 .site-footer a{color:rgba(250,248,243,.75);font-size:15px;font-weight:300;display:block;margin-bottom:12px}
 .site-footer a:hover{color:var(--green)}
+.footer-grooming{margin-top:18px;padding-top:14px;border-top:1px solid var(--gold)}
+.site-footer .footer-grooming__link{display:inline-flex;padding:7px 11px;border-radius:7px;
+  background:color-mix(in srgb,var(--gold) 20%,var(--forest));color:var(--bg);font-weight:500}
+.site-footer .footer-grooming__link:hover{color:var(--gold)}
+.site-footer .footer-grooming__link:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 .site-footer .footer-complaints-book{width:140px;max-width:100%;margin-top:18px;opacity:.85;transition:opacity .15s}
 .footer-complaints-book img{display:block;width:100%;height:auto}
 .site-footer .footer-complaints-book:hover,.site-footer .footer-complaints-book:focus-visible{opacity:1}

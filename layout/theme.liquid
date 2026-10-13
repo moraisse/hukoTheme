@@ -322,7 +322,16 @@
         </div>
         <div>
           <h4>Loja</h4>
-          {% for link in linklists.main-menu.links limit: 4 %}<a href="{{ link.url }}">{{ link.title }}</a>{% endfor %}
+          {% for link in linklists.main-menu.links limit: 4 %}
+            {% unless link.handle == 'grooming' %}<a href="{{ link.url }}">{{ link.title }}</a>{% endunless %}
+          {% endfor %}
+          {% for link in grooming_links %}
+            <div class="footer-grooming">
+              <a href="{{ link.url }}" class="footer-grooming__link">
+                <span class="nav-grooming__label">{{ link.title }} <span class="nav-grooming__badge">{{ 'general.navigation.pro' | t }}</span></span>
+              </a>
+            </div>
+          {% endfor %}
         </div>
         <div>
           <h4>Apoio ao cliente</h4>
