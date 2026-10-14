@@ -2,6 +2,7 @@
   <h1 class="serif" style="font-size:42px;margin:0 0 36px">Coleções</h1>
   <div class="cat-grid" style="grid-template-columns:repeat(3,minmax(0,1fr))">
     {% for collection in collections %}
+      {% if collection.products_count == 0 %}{% continue %}{% endif %}
       <a href="{{ collection.url }}" class="cat-card">
         <div class="cat-card__img" style="height:260px">{% if collection.featured_image %}<img src="{{ collection.featured_image | image_url: width: 600 }}" alt="{{ collection.title | escape }}" loading="lazy">{% endif %}</div>
         <div class="cat-card__row"><span>{{ collection.title }}</span><span class="arrow">→</span></div>
