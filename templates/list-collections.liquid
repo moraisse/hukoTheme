@@ -1,12 +1,92 @@
-<div class="wrap" style="padding-top:28px;padding-bottom:88px">
-  <h1 class="serif" style="font-size:42px;margin:0 0 36px">Coleções</h1>
-  <div class="cat-grid" style="grid-template-columns:repeat(3,minmax(0,1fr))">
-    {% for collection in collections %}
-      {% if collection.products_count == 0 %}{% continue %}{% endif %}
-      <a href="{{ collection.url }}" class="cat-card">
-        <div class="cat-card__img" style="height:260px">{% if collection.featured_image %}<img src="{{ collection.featured_image | image_url: width: 600 }}" alt="{{ collection.title | escape }}" loading="lazy">{% endif %}</div>
-        <div class="cat-card__row"><span>{{ collection.title }}</span><span class="arrow">→</span></div>
-      </a>
-    {% endfor %}
+{%- comment -%}
+  Página de coleções agrupada pela árvore de handles: as coleções de topo
+  (caes, gatos, peixes, grooming) abrem uma secção cada; os seus filhos diretos
+  aparecem como cartões e os netos como ligações dentro de cada cartão.
+  O pai de cada coleção é o handle mais comprido que seja prefixo do seu
+  ("peixes-lagos-alimentacao" → "peixes-lagos"). Coleções sem produtos ficam de fora.
+{%- endcomment -%}
+{%- assign root_handles = 'caes,gatos,peixes,grooming' | split: ',' -%}
+
+{%- paginate collections by 250 -%}
+  {%- assign all_handles = collections | map: 'handle' -%}
+
+  {%- capture parent_map -%}
+    {%- for c in collections -%}
+      {%- assign parent = '' -%}
+      {%- for h in all_handles -%}
+        {%- assign prefix = h | append: '-' -%}
+        {%- assign head = c.handle | slice: 0, prefix.size -%}
+        {%- if head == prefix and h.size > parent.size -%}{%- assign parent = h -%}{%- endif -%}
+      {%- endfor -%}
+      |{{ c.handle }}>{{ parent }}|
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  <div class="wrap coll-index">
+    <header class="coll-index__head">
+      <p class="eyebrow">Loja</p>
+      <h1 class="serif">Coleções</h1>
+      <nav class="coll-index__jump" aria-label="Ir para a coleção">
+        {%- for rh in root_handles -%}
+          {%- assign root = collections[rh] -%}
+          {%- if root.products_count > 0 -%}
+            <a href="#coll-{{ rh }}">{{ root.title | downcase | capitalize }}</a>
+          {%- endif -%}
+        {%- endfor -%}
+      </nav>
+    </header>
+
+    {%- for rh in root_handles -%}
+      {%- assign root = collections[rh] -%}
+      {%- if root.products_count == 0 -%}{%- continue -%}{%- endif -%}
+      {%- assign root_key = '>' | append: rh | append: '|' -%}
+
+      <section class="coll-group" id="coll-{{ rh }}" aria-labelledby="coll-{{ rh }}-title">
+        <div class="coll-group__head">
+          {%- if root.featured_image -%}
+            <div class="coll-group__thumb"><img src="{{ root.featured_image | image_url: width: 160 }}" alt="" width="80" height="80" loading="lazy"></div>
+          {%- endif -%}
+          <div class="coll-group__title">
+            <h2 id="coll-{{ rh }}-title">{{ root.title | downcase | capitalize }}</h2>
+            <span class="coll-count">{{ root.products_count }} produtos</span>
+          </div>
+          <a href="{{ root.url }}" class="btn btn--ghost btn--sm coll-group__all">Ver tudo<span class="visually-hidden"> em {{ root.title | downcase | capitalize }}</span> →</a>
+        </div>
+
+        <div class="coll-grid">
+          {%- for c in collections -%}
+            {%- if c.products_count == 0 -%}{%- continue -%}{%- endif -%}
+            {%- assign key = '|' | append: c.handle | append: root_key -%}
+            {%- unless parent_map contains key -%}{%- continue -%}{%- endunless -%}
+            {%- assign child_key = '>' | append: c.handle | append: '|' -%}
+
+            <article class="coll-card">
+              <a href="{{ c.url }}" class="coll-card__media" tabindex="-1" aria-hidden="true">
+                {%- if c.featured_image -%}
+                  <img src="{{ c.featured_image | image_url: width: 640 }}"
+                       srcset="{{ c.featured_image | image_url: width: 360 }} 360w, {{ c.featured_image | image_url: width: 640 }} 640w"
+                       sizes="(max-width:600px) 50vw, (max-width:1100px) 33vw, 25vw"
+                       alt="" loading="lazy">
+                {%- else -%}
+                  <span class="coll-card__fallback">{{ c.title | slice: 0 }}</span>
+                {%- endif -%}
+              </a>
+              <div class="coll-card__body">
+                <h3><a href="{{ c.url }}">{{ c.title }}</a></h3>
+                <span class="coll-count">{{ c.products_count }} produtos</span>
+                {%- capture subs -%}
+                  {%- for s in collections -%}
+                    {%- if s.products_count == 0 -%}{%- continue -%}{%- endif -%}
+                    {%- assign skey = '|' | append: s.handle | append: child_key -%}
+                    {%- if parent_map contains skey -%}<li><a href="{{ s.url }}">{{ s.title }}</a></li>{%- endif -%}
+                  {%- endfor -%}
+                {%- endcapture -%}
+                {%- if subs != blank -%}<ul class="coll-card__subs">{{ subs }}</ul>{%- endif -%}
+              </div>
+            </article>
+          {%- endfor -%}
+        </div>
+      </section>
+    {%- endfor -%}
   </div>
-</div>
+{%- endpaginate -%}
