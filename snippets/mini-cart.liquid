@@ -26,6 +26,17 @@
       <strong data-mini-cart-total>{{ cart.total_price | money }}</strong>
     </div>
 
+    <div class="mini-cart__ship" data-mini-cart-ship>
+      <p class="mini-cart__ship-msg" data-mini-cart-ship-msg></p>
+      <div class="mini-cart__bar">
+        <span class="mini-cart__bar-fill" data-mini-cart-bar></span>
+      </div>
+      <div class="mini-cart__bar-labels">
+        <span>0€</span>
+        <span>{{ ship_threshold }}€</span>
+      </div>
+    </div>
+
     <ul class="mini-cart__trust" aria-label="Garantias de compra">
       {%- comment -%} Ícones de traço em duas cores: contorno verde escuro, detalhe em verde HUKO {%- endcomment -%}
       <li>
@@ -47,17 +58,6 @@
       <form action="{{ routes.cart_url }}" method="post">
         <button type="submit" name="checkout" class="btn btn--primary btn--sm mini-cart__btn">Finalizar compra</button>
       </form>
-    </div>
-
-    <div class="mini-cart__ship" data-mini-cart-ship>
-      <p class="mini-cart__ship-msg" data-mini-cart-ship-msg></p>
-      <div class="mini-cart__bar">
-        <span class="mini-cart__bar-fill" data-mini-cart-bar></span>
-      </div>
-      <div class="mini-cart__bar-labels">
-        <span>0€</span>
-        <span>{{ ship_threshold }}€</span>
-      </div>
     </div>
   </div>
 </div>

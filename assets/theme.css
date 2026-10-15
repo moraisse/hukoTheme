@@ -827,7 +827,7 @@ body.template-product .breadcrumb [aria-current]{text-transform:uppercase;letter
 .mini-cart__actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .mini-cart__actions form{margin:0}
 .mini-cart__btn{width:100%;padding:12px 10px;font-size:14.5px}
-.mini-cart__ship{margin-top:16px;padding:14px 16px;background:var(--bg);border-radius:14px}
+.mini-cart__ship{margin-bottom:12px;padding:14px 16px;background:var(--bg);border-radius:14px}
 .mini-cart__ship-msg{margin:0 0 10px;font-size:13.5px;color:var(--muted);text-align:center}
 .mini-cart__ship-msg strong{color:var(--forest);font-weight:600}
 .mini-cart.has-free-shipping .mini-cart__ship{background:rgba(46,204,113,.09)}
