@@ -816,14 +816,14 @@ body.template-product .breadcrumb [aria-current]{text-transform:uppercase;letter
 .mini-cart__total{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
 .mini-cart__total span{font-size:14px;color:var(--muted)}
 .mini-cart__total strong{font-family:var(--serif);font-size:22px;font-weight:700;letter-spacing:-.02em;color:var(--forest)}
-/* Garantias: caixa bege da marca, ícones verde vivo sobre círculo verde escuro (como o logótipo) */
-.mini-cart__trust{list-style:none;margin:0 0 14px;padding:14px 6px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
-  background:#F3F0E8;border:1px solid var(--line);border-radius:14px}
-.mini-cart__trust li{display:flex;flex-direction:column;align-items:center;gap:8px;padding:0 6px;text-align:center;
-  font-size:13px;font-weight:500;line-height:1.25;color:var(--forest)}
+/* Garantias: caixa bege da marca; ícones de traço verde escuro com detalhe em verde HUKO */
+.mini-cart__trust{list-style:none;margin:0 0 12px;padding:11px 4px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  background:#F3F0E8;border:1px solid var(--line);border-radius:12px}
+.mini-cart__trust li{display:flex;flex-direction:column;align-items:center;gap:5px;padding:0 6px;text-align:center;
+  font-size:12px;font-weight:500;line-height:1.25;color:var(--forest)}
 .mini-cart__trust li+li{border-left:1px solid #E4DDCB}
-.mini-cart__trust-icon{width:36px;height:36px;border-radius:50%;background:var(--forest);color:var(--green);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mini-cart .mini-cart__trust-icon{flex-shrink:0;stroke:var(--forest)}
+.mini-cart .mini-cart__trust-icon .accent{stroke:#2DAF61}
 .mini-cart__actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .mini-cart__actions form{margin:0}
 .mini-cart__btn{width:100%;padding:12px 10px;font-size:14.5px}
