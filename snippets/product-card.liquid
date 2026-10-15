@@ -18,7 +18,7 @@
 <div class="prod-card{% if white %} prod-card--white{% endif %}">
   <a href="{{ card_product.url }}?variant={{ card_variant.id }}" class="prod-card__img">
     {% if card_product.featured_image %}
-      <img src="{{ card_product.featured_image | image_url: width: 600 }}" alt="{{ card_product.featured_image.alt | escape }}" loading="lazy">
+      <img src="{{ card_product.featured_image | image_url: width: 600 }}" alt="{{ card_product.featured_image.alt | split: '#variant:' | first | strip | default: card_product.title | escape }}" loading="lazy">
     {% endif %}
     {% if card_variant.compare_at_price > card_variant.price %}
       <span class="badge badge--sale">Promoção</span>

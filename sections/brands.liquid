@@ -19,7 +19,36 @@
   <div class="brands__viewport">
     <div class="brands__track" data-brands-track>
       {%- for file in brand_files -%}
-        {%- assign brand_name = file | split: '.' | first | replace: '_', ' ' -%}
+        {%- assign brand_key = file | split: '.' | first -%}
+        {%- case brand_key -%}
+          {%- when '3_claveles' -%}{%- assign brand_name = '3 Claveles' -%}
+          {%- when 'agui' -%}{%- assign brand_name = 'Agui' -%}
+          {%- when 'andis' -%}{%- assign brand_name = 'Andis' -%}
+          {%- when 'antos' -%}{%- assign brand_name = 'Antos' -%}
+          {%- when 'barry_king' -%}{%- assign brand_name = 'Barry King' -%}
+          {%- when 'burbur_aura' -%}{%- assign brand_name = 'Burbur Aura' -%}
+          {%- when 'burbur_basics' -%}{%- assign brand_name = 'Burbur Basics' -%}
+          {%- when 'burbur_friend' -%}{%- assign brand_name = 'Burbur Friends' -%}
+          {%- when 'burbur_pro' -%}{%- assign brand_name = 'Burbur Pro' -%}
+          {%- when 'ca' -%}{%- assign brand_name = 'CA' -%}
+          {%- when 'classic' -%}{%- assign brand_name = 'Classic' -%}
+          {%- when 'dingo_natura' -%}{%- assign brand_name = 'Dingonatura' -%}
+          {%- when 'flexy' -%}{%- assign brand_name = 'Flexi' -%}
+          {%- when 'freedog' -%}{%- assign brand_name = 'Freedog' -%}
+          {%- when 'groom_professional' -%}{%- assign brand_name = 'Groom Professional' -%}
+          {%- when 'groomtek' -%}{%- assign brand_name = 'Groomtek' -%}
+          {%- when 'haquoss' -%}{%- assign brand_name = 'Haquoss' -%}
+          {%- when 'hau_miau' -%}{%- assign brand_name = 'Hau&Miau' -%}
+          {%- when 'lolo_pets' -%}{%- assign brand_name = 'Lolo Pets' -%}
+          {%- when 'lolo_pets_classic' -%}{%- assign brand_name = 'Lolo Pets Classic' -%}
+          {%- when 'max_biocide' -%}{%- assign brand_name = 'Max Biocide' -%}
+          {%- when 'oudor_lock' -%}{%- assign brand_name = 'Odour Lock' -%}
+          {%- when 'panama_pet' -%}{%- assign brand_name = 'Panama Pet' -%}
+          {%- when 'pawppin' -%}{%- assign brand_name = 'Pawppin' -%}
+          {%- when 'red_dingo' -%}{%- assign brand_name = 'Red Dingo' -%}
+          {%- when 'transgroom' -%}{%- assign brand_name = 'Transgroom' -%}
+          {%- else -%}{%- assign brand_name = brand_key | replace: '_', ' ' -%}
+        {%- endcase -%}
         <div class="brand-card">
           <img src="{{ file | asset_url }}" alt="{{ brand_name | escape }}" loading="lazy" width="150" height="72">
         </div>

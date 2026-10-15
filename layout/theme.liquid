@@ -322,12 +322,12 @@
 
   <section class="newsletter">
     <div class="newsletter__inner">
-      <div class="eyebrow">{% if is_grooming %}{{ 'general.grooming.professional' | t }}{% else %}Junta-te à matilha{% endif %}</div>
+      <div class="eyebrow">{% if is_grooming %}{{ 'general.grooming.professional' | t }}{% else %}Junte-se à matilha{% endif %}</div>
       <h2 class="serif">Novidades, lançamentos e <em>10% de desconto</em> na primeira compra</h2>
       <p>Sem spam. Apenas o essencial, uma vez por mês.</p>
       {% form 'customer' %}
         <input type="hidden" name="contact[tags]" value="newsletter">
-        <input type="email" name="contact[email]" placeholder="O teu email" required>
+        <input type="email" name="contact[email]" placeholder="O seu email" required>
         <button type="submit">Receber novidades</button>
       {% endform %}
     </div>
@@ -394,9 +394,9 @@
         </div>
       </div>
       <div class="site-footer__base">
-        <small>© {{ 'now' | date: '%Y' }} insight-coding.com. Todos os direitos reservados.</small>
+        <small>© {{ 'now' | date: '%Y' }} HUKO pets · Insight Coding, Lda. Todos os direitos reservados.</small>
         <div class="pay">
-          {%- assign payment_types = 'visa,master,maestro,union_pay,apple_pay,google_pay,klarna,multibanco' | split: ',' -%}
+          {%- assign payment_types = 'visa,master,maestro,apple_pay,google_pay,klarna,multibanco' | split: ',' -%}
           {%- for type in payment_types -%}
             {{ type | payment_type_svg_tag: class: 'pay__icon' }}
           {%- endfor -%}

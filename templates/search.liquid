@@ -14,12 +14,12 @@
     </p>
   {% else %}
     <h1 class="serif" style="font-size:42px;margin:0 0 12px">Pesquisar</h1>
-    <p class="rte" style="margin:0 0 32px">Usa a barra de pesquisa no topo da página para encontrar produtos.</p>
+    <p class="rte" style="margin:0 0 32px">Use a barra de pesquisa no topo da página para encontrar produtos.</p>
   {% endif %}
 
   {% if search.performed %}
     {% if search.results_count == 0 %}
-      <p class="rte">Não encontrámos nada para “{{ search.terms | escape }}”. Experimenta outra palavra ou explora as categorias do menu.</p>
+      <p class="rte">Não encontrámos nada para “{{ search.terms | escape }}”. Experimente outra palavra ou explore as categorias do menu.</p>
       <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary" style="margin-top:24px">Ver todos os produtos</a>
     {% else %}
 
