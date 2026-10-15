@@ -816,6 +816,9 @@ body.template-product .breadcrumb [aria-current]{text-transform:uppercase;letter
 .mini-cart__total{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
 .mini-cart__total span{font-size:14px;color:var(--muted)}
 .mini-cart__total strong{font-family:var(--serif);font-size:22px;font-weight:700;letter-spacing:-.02em;color:var(--forest)}
+.mini-cart__trust{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px;font-size:12px;color:var(--muted)}
+.mini-cart__trust li{display:flex;align-items:center;gap:5px;white-space:nowrap}
+.mini-cart__trust svg{flex-shrink:0;color:var(--forest)}
 .mini-cart__actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .mini-cart__actions form{margin:0}
 .mini-cart__btn{width:100%;padding:12px 10px;font-size:14.5px}
