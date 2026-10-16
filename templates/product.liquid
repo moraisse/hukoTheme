@@ -307,24 +307,68 @@
 })();
 </script>
 
-{% assign rel = collections.all %}
-{% if collection %}{% assign rel = collection %}{% endif %}
-{% if rel.products.size > 1 %}
-<section class="section section--card">
-  <div class="wrap">
-    <h2 class="serif" style="font-size:32px;margin:0 0 36px">Combina bem com</h2>
-    <div class="prod-grid">
-      {% assign shown = 0 %}
-      {% for p in rel.products %}
-        {% if p.id != product.id and shown < 4 %}
-          {% render 'product-card', card_product: p %}
-          {% assign shown = shown | plus: 1 %}
-        {% endif %}
-      {% endfor %}
+{%- comment -%}
+  "Combina bem com": o contentor é preenchido por fetch com a secção
+  product-recommendations (Product Recommendations API). Até lá, ou sem JS,
+  mostra produtos da coleção mais específica do produto (a de menos produtos,
+  ignorando as coleções gerais). Sem coleção adequada não mostra nada.
+{%- endcomment -%}
+{%- assign rec_skip = 'caes,gatos,grooming,frontpage,all' | split: ',' -%}
+{%- assign rec_coll = collection -%}
+{%- unless rec_coll -%}
+  {%- assign rec_best = 1000000 -%}
+  {%- for c in product.collections -%}
+    {%- if rec_skip contains c.handle -%}{%- continue -%}{%- endif -%}
+    {%- if c.products_count > 1 and c.products_count < rec_best -%}
+      {%- assign rec_coll = c -%}
+      {%- assign rec_best = c.products_count -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endunless -%}
+{%- assign rec_shown = 0 -%}
+{%- capture rec_cards -%}
+  {%- if rec_coll -%}
+    {%- for p in rec_coll.products -%}
+      {%- if p.id != product.id and p.available and rec_shown < 4 -%}
+        {% render 'product-card', card_product: p %}
+        {%- assign rec_shown = rec_shown | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- for p in rec_coll.products -%}
+      {%- if p.id != product.id and p.available == false and rec_shown < 4 -%}
+        {% render 'product-card', card_product: p %}
+        {%- assign rec_shown = rec_shown | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+<div data-product-recs data-url="{{ routes.product_recommendations_url }}?product_id={{ product.id }}&limit=4&section_id=product-recommendations">
+  {%- if rec_shown > 0 -%}
+  <section class="section section--card">
+    <div class="wrap">
+      <h2 class="serif" style="font-size:32px;margin:0 0 36px">Combina bem com</h2>
+      <div class="prod-grid">
+        {{ rec_cards }}
+      </div>
     </div>
-  </div>
-</section>
-{% endif %}
+  </section>
+  {%- endif -%}
+</div>
+<script>
+(function(){
+  var box = document.querySelector('[data-product-recs]');
+  if (!box || !window.fetch) return;
+  fetch(box.getAttribute('data-url'))
+    .then(function(r){ return r.ok ? r.text() : ''; })
+    .then(function(html){
+      if (!html) return;
+      var doc = new DOMParser().parseFromString(html, 'text/html');
+      var section = doc.querySelector('.section--card');
+      if (section && section.querySelector('.prod-card')) box.innerHTML = section.outerHTML;
+    })
+    .catch(function(){});
+})();
+</script>
 {%- assign v = product.selected_or_first_available_variant -%}
 <script type="application/ld+json">
 {

@@ -1,0 +1,24 @@
+{%- comment -%}
+  "Combina bem com": produtos relacionados da Product Recommendations API
+  (intent "related"). Pedida por fetch a partir de templates/product.liquid
+  (?product_id=…&section_id=product-recommendations); sem resultados não
+  desenha nada e a página mantém a versão de recurso em Liquid.
+{%- endcomment -%}
+{%- if recommendations.performed and recommendations.products_count > 0 -%}
+<section class="section section--card">
+  <div class="wrap">
+    <h2 class="serif" style="font-size:32px;margin:0 0 36px">Combina bem com</h2>
+    <div class="prod-grid">
+      {% for p in recommendations.products limit: 4 %}
+        {% render 'product-card', card_product: p %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Recomendações de produto"
+}
+{% endschema %}
