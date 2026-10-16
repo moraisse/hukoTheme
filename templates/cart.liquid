@@ -36,6 +36,7 @@
       <div class="row"><span class="label">Envio</span><span style="color:var(--green);font-weight:500">calculado no checkout</span></div>
       <hr>
       <div class="total"><span style="font-weight:500">Total</span><span class="price">{{ cart.total_price | money }}</span></div>
+      {% render 'trust-strip' %}
       <form action="{{ routes.cart_url }}" method="post">
         <button type="submit" name="checkout" class="btn btn--primary" style="width:100%">Finalizar compra</button>
       </form>

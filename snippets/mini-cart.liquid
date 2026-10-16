@@ -37,21 +37,7 @@
       </div>
     </div>
 
-    <ul class="mini-cart__trust" aria-label="Garantias de compra">
-      {%- comment -%} Ícones de traço em duas cores: contorno verde escuro, detalhe em verde HUKO {%- endcomment -%}
-      <li>
-        <svg class="mini-cart__trust-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path class="accent" d="m9 12 2 2 4-4"/></svg>
-        Pagamento seguro
-      </li>
-      <li>
-        <svg class="mini-cart__trust-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle class="accent" cx="17" cy="18" r="2"/><circle class="accent" cx="7" cy="18" r="2"/></svg>
-        Envio com tracking
-      </li>
-      <li>
-        <svg class="mini-cart__trust-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"/><path class="accent" d="M21 16v2a4 4 0 0 1-4 4h-5"/></svg>
-        Apoio HUKO pets
-      </li>
-    </ul>
+    {% render 'trust-strip' %}
 
     <div class="mini-cart__actions">
       <a href="{{ routes.cart_url }}" class="btn btn--ghost btn--sm mini-cart__btn">Ver carrinho</a>
