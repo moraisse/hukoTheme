@@ -318,6 +318,14 @@ body .prod-card--white{background:#fff}
 .site-footer .footer-phone{font-weight:700;display:flex;align-items:center;gap:9px}
 .footer-icon{flex-shrink:0;width:22px;height:22px;padding:5px;border-radius:50%;background:var(--forest)}
 .footer-icon--whatsapp{background:#25D366}
+/* Redes sociais: por baixo dos contactos do apoio ao cliente */
+.footer-social{margin-top:22px;padding-top:18px;border-top:1px solid rgba(250,248,243,.12)}
+.footer-social__label{display:block;margin-bottom:12px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:500}
+.footer-social__links{display:flex;gap:10px}
+.site-footer .footer-social__link{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;margin:0;border-radius:50%;
+  border:1px solid rgba(250,248,243,.22);color:var(--bg);transition:background .15s,border-color .15s,color .15s}
+.site-footer .footer-social__link:hover{background:var(--green);border-color:var(--green);color:var(--forest)}
+.site-footer .footer-social__link:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 .site-footer__brand img{height:44px;margin-bottom:18px}
 .site-footer__brand p{color:rgba(250,248,243,.6);font-weight:300;font-size:15px;line-height:1.65;max-width:34ch}
 .site-footer__base{display:flex;align-items:center;justify-content:space-between;padding-top:28px;flex-wrap:wrap;gap:16px}
