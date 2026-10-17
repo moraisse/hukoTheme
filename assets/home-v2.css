@@ -1,0 +1,191 @@
+/* HUKO pets — página inicial v2
+   Tudo com prefixo .hv / hv- para não mexer no resto do site.
+   Usa as variáveis do theme.css (--forest, --green, --gold, --bg, --line, --muted, --serif, --sans). */
+
+.hv{--hv-ink:#1A1A1A;--hv-price:#1F8A4C}
+.hv .eyebrow{color:#9A8350;font-weight:600}
+.hv-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:26px}
+.hv-head h2{font-family:var(--serif);font-weight:700;letter-spacing:-.02em;font-size:36px;line-height:1.1;margin:6px 0 0}
+.hv-more{font-weight:600;font-size:15px;color:var(--forest);border-bottom:2px solid var(--green);padding-bottom:2px;white-space:nowrap}
+.hv-more:hover{color:var(--forest);border-bottom-color:var(--gold)}
+.hv-btn{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:14px 30px;font-size:15.5px;font-weight:500;letter-spacing:.03em;min-height:46px;box-sizing:border-box;transition:background .2s,color .2s,border-color .2s;font-family:var(--sans)}
+.hv-btn--green{background:var(--green);color:var(--forest);font-weight:600}
+.hv-btn--green:hover{background:var(--gold);color:var(--forest)}
+.hv-btn--dark{background:var(--forest);color:var(--bg)}
+.hv-btn--dark:hover{background:var(--green);color:var(--forest)}
+.hv-btn--ghost-light{border:1.5px solid rgba(250,248,243,.6);color:var(--bg)}
+.hv-btn--ghost-light:hover{border-color:var(--green);color:#fff}
+.hv-btn--ghost{border:1.5px solid var(--ink);color:var(--ink)}
+.hv-btn--ghost:hover{border-color:var(--green);color:var(--forest)}
+
+/* cupão (clicável: copia o código) */
+.hv-coupon{display:inline-flex;align-items:center;gap:12px;padding:10px 18px;border:1.5px dashed var(--gold);border-radius:999px;background:rgba(201,178,122,.12);cursor:pointer;user-select:none;font-family:var(--sans);color:inherit}
+.hv-coupon__label{font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.8}
+.hv-coupon__code{font-family:var(--serif);font-weight:700;font-size:17px;color:var(--gold)}
+.hv-coupon__action{font-size:12px;font-weight:600;border-left:1px solid rgba(201,178,122,.5);padding-left:12px}
+.hv-coupon.is-copied{border-color:var(--green)}
+
+/* ---------- Produtos recortados em composição ---------- */
+.hv-stk{display:flex;align-items:flex-end;justify-content:center;box-sizing:border-box}
+.hv-stk img{display:block;min-width:0;flex:0 1 auto;max-width:44%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 14px 18px rgba(20,30,24,.28))}
+.hv-stk img + img{margin-left:-3%}
+.hv-stk--end{justify-content:flex-end}
+.hv-stk--start{justify-content:flex-start}
+.hv-sticker{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border-radius:999px;font-family:var(--serif);font-weight:800;line-height:.95;letter-spacing:-.03em;box-shadow:0 10px 24px rgba(20,30,24,.22);transform:rotate(-8deg);z-index:4}
+.hv-sticker small{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-top:4px}
+
+/* ---------- Topo: carrossel + 2 banners ---------- */
+.hv-top{padding-top:28px;display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:20px}
+.hv-hero{position:relative;display:grid;height:470px;border-radius:24px;overflow:hidden}
+.hv-slide{grid-area:1/1;position:relative;display:flex;border-radius:24px;overflow:hidden;opacity:0;visibility:hidden;transition:opacity .6s ease}
+.hv-slide.is-active{opacity:1;visibility:visible}
+.hv-slide__text{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:40px 44px 64px;width:50%;box-sizing:border-box}
+.hv-slide__title{font-family:var(--serif);font-weight:700;letter-spacing:-.02em;font-size:clamp(30px,3.3vw,48px);line-height:1.04;margin:0}
+.hv-slide__text p{font-size:17px;line-height:1.55;font-weight:300;margin:0;max-width:42ch;opacity:.9}
+.hv-slide__actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:6px}
+.hv-slide__pics{position:absolute;right:0;top:0;bottom:0;width:52%}
+.hv-slide__circle{position:absolute;left:6%;right:2%;bottom:-30%;height:110%;border-radius:999px}
+.hv-slide__pics .hv-stk{position:absolute;left:2%;right:4%;top:16%;bottom:7%}
+.hv-vtab{position:absolute;right:0;top:50%;transform:translateY(-50%);writing-mode:vertical-rl;background:var(--bg);color:var(--forest);font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:16px 9px;border-radius:12px 0 0 12px;z-index:3}
+.hv-dots{position:absolute;left:44px;bottom:24px;display:flex;gap:10px;z-index:5}
+.hv-dot{width:10px;height:10px;border-radius:999px;border:none;padding:0;cursor:pointer;background:rgba(127,127,120,.45);transition:all .3s}
+.hv-dot.is-active{width:28px;background:var(--gold)}
+
+.hv-side{display:grid;grid-template-rows:minmax(0,1fr) minmax(0,1fr);gap:20px;height:470px}
+.hv-mini{position:relative;overflow:hidden;border-radius:24px;padding:22px 24px;display:flex;flex-direction:column;justify-content:space-between;gap:6px;min-height:0}
+.hv-mini > span{position:relative;z-index:1}
+.hv-mini__title{font-family:var(--serif);font-weight:700;letter-spacing:-.02em;font-size:22px;line-height:1.1;max-width:9ch}
+.hv-mini__link{align-self:flex-start;font-weight:600;font-size:14.5px;border-bottom:2px solid currentColor;padding-bottom:2px}
+.hv-mini .hv-stk{position:absolute;right:14px;bottom:12px}
+
+/* ---------- Faixa de vantagens ---------- */
+.hv-trust{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:#fff;border:1px solid #EEE9DD;border-radius:16px;margin-top:22px}
+.hv-trust > div{display:flex;align-items:flex-start;gap:14px;padding:18px 22px}
+.hv-trust > div + div{border-left:1px solid #EEE9DD}
+.hv-trust svg{flex-shrink:0;stroke:var(--green)}
+.hv-trust strong{display:block;font-size:15px;font-weight:600;color:var(--forest);margin-bottom:2px}
+.hv-trust span{display:block;font-size:13.5px;line-height:1.45;color:var(--muted)}
+
+/* ---------- Comprar por animal ---------- */
+.hv-section{padding-top:72px}
+.hv-animals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.hv-animal{border-radius:20px;padding:28px;min-height:170px;display:flex;flex-direction:column;justify-content:space-between;gap:16px;transition:transform .25s,box-shadow .25s}
+.hv-animal:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(30,61,47,.12)}
+.hv-animal__top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.hv-animal__name{font-family:var(--serif);font-weight:700;letter-spacing:-.02em;font-size:34px;line-height:1}
+.hv-animal__sub{font-size:15px;color:#4A4A44}
+
+/* ---------- Destaques com escolha ---------- */
+.hv-featured{margin-top:80px}
+.hv-seg{display:inline-flex;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:5px;gap:4px}
+.hv-seg button{display:inline-flex;align-items:center;gap:9px;border:none;background:transparent;border-radius:999px;padding:11px 24px;font-family:var(--sans);font-size:15px;font-weight:600;color:var(--forest);cursor:pointer;min-height:44px}
+.hv-seg button[aria-pressed="true"]{background:var(--forest);color:var(--bg)}
+.hv-seg svg{stroke:currentColor}
+.hv-panel[hidden]{display:none !important}
+.hv-center{display:flex;justify-content:center;margin-top:34px}
+
+/* cartões de produto só na home: fundo branco e imagem inteira */
+.hv .prod-card{background:#fff;border:1px solid #EEE9DD}
+.hv .prod-card__img{background:#fff;height:230px}
+.hv .prod-card__img img{object-fit:contain;padding:14px;box-sizing:border-box}
+.hv .prod-card__title{font-size:14.5px}
+
+/* ---------- Promoção Camas Agui ---------- */
+.hv-promo{border-radius:28px;background:var(--forest);color:var(--bg);overflow:hidden;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:stretch}
+.hv-promo__text{padding:52px 56px;display:flex;flex-direction:column;gap:18px}
+.hv-promo__text h2{font-family:var(--serif);font-weight:700;letter-spacing:-.02em;font-size:46px;line-height:1.06;margin:0;color:var(--bg)}
+.hv-promo__text h2 span{color:var(--green)}
+.hv-promo__text p{margin:0;font-size:17px;line-height:1.6;font-weight:300;color:rgba(250,248,243,.85);max-width:46ch}
+.hv-promo__pics{position:relative;min-height:380px;overflow:hidden}
+.hv-promo__circle{position:absolute;left:4%;right:-10%;top:12%;bottom:-40%;border-radius:999px;background:#24493A}
+.hv-promo__pics .hv-stk{position:absolute;left:6%;right:6%;top:24%;bottom:8%}
+.hv-promo-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px;margin-top:22px}
+@media (min-width:1101px){.hv-promo-row>:nth-child(n+6),.hv-split .prod-grid>:nth-child(n+4){display:none}.hv-promo-row .prod-card__foot,.hv-split .prod-card__foot{flex-wrap:nowrap;gap:8px}.hv-promo-row .prod-card__foot .btn--atc,.hv-split .prod-card__foot .btn--atc{padding-left:16px;padding-right:16px;white-space:nowrap}}
+
+/* ---------- Trio de marcas ---------- */
+.hv-trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.hv-brand{border-radius:22px;padding:32px;min-height:250px;display:flex;flex-direction:column;gap:12px}
+.hv-brand__name{font-family:var(--serif);font-weight:700;font-size:40px;letter-spacing:-.03em;line-height:1}
+.hv-brand__text{font-size:16px;line-height:1.55}
+.hv-brand__pics{position:relative;height:150px;margin-top:6px}
+.hv-brand__link{margin-top:auto;font-weight:600;align-self:flex-start;border-bottom:2px solid currentColor;padding-bottom:2px}
+
+/* ---------- Coleções com painel ---------- */
+.hv-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.4fr);gap:22px;align-items:stretch}
+.hv-split--rev{grid-template-columns:minmax(0,2.4fr) minmax(0,1fr)}
+.hv-split .prod-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.hv-cpanel{border-radius:22px;color:var(--bg);padding:36px 32px;display:flex;flex-direction:column;gap:16px}
+.hv-cpanel__title{font-family:var(--serif);font-weight:700;font-size:32px;line-height:1.1;letter-spacing:-.02em;color:var(--bg)}
+.hv-cpanel p{margin:0;font-size:15.5px;line-height:1.6;color:rgba(250,248,243,.85);font-weight:300}
+.hv-cpanel__chips{display:flex;flex-wrap:wrap;gap:8px}
+.hv-cpanel__chips span{padding:6px 12px;border-radius:999px;background:rgba(250,248,243,.12);font-size:13px}
+.hv-cpanel__pics{position:relative;height:170px;margin-top:auto}
+.hv-cpanel .hv-btn{align-self:flex-start}
+
+/* ---------- Dois banners médios ---------- */
+.hv-duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.hv-banner{border-radius:22px;min-height:260px;overflow:hidden;position:relative}
+.hv-banner__text{display:flex;flex-direction:column;justify-content:center;gap:10px;padding:32px;position:relative;z-index:1}
+.hv-banner__title{font-family:var(--serif);font-weight:700;font-size:28px;line-height:1.12;letter-spacing:-.02em}
+.hv-banner--photos{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.hv-banner__photos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+.hv-banner__photos img{width:100%;height:100%;object-fit:cover}
+.hv-banner--pack{display:flex;flex-direction:column;justify-content:center}
+.hv-banner--pack .hv-stk{position:absolute;right:16px;bottom:16px;width:56%;height:74%}
+
+.hv-bottom-space{height:88px}
+
+/* ================= Responsivo ================= */
+@media (max-width:1100px){
+  .hv-top{grid-template-columns:1fr}
+  .hv-side{height:auto;grid-template-rows:none;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hv-mini{min-height:210px}
+  .hv-trust{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hv-trust > div:nth-child(3){border-left:none}
+  .hv-trust > div:nth-child(n+3){border-top:1px solid #EEE9DD}
+  .hv-promo{grid-template-columns:1fr}
+  .hv-promo-row{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .hv-trio{grid-template-columns:1fr}
+  .hv-split,.hv-split--rev{grid-template-columns:1fr}
+  .hv-split .prod-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hv-duo{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  .hv-hero{height:auto}
+  .hv-slide{flex-direction:column}
+  .hv-slide__text{width:100%;padding:34px 24px 18px}
+  .hv-slide__pics{position:relative;width:100%;height:240px;order:2}
+  .hv-slide__text{padding-bottom:6px}
+  .hv-slide__pics .hv-sticker{transform:rotate(-8deg) scale(.8);transform-origin:top left}
+  .hv-vtab{display:none}
+  .hv-dots{left:auto;right:20px;bottom:18px}
+  .hv-animals{grid-template-columns:1fr}
+  .hv-promo__text{padding:36px 24px}
+  .hv-promo__text h2{font-size:34px}
+  .hv-promo__pics{min-height:270px}
+}
+@media (max-width:640px){
+  .hv-top{padding-top:16px}
+  .hv-side{grid-template-columns:1fr}
+  .hv-mini{min-height:190px}
+  .hv-trust{grid-template-columns:1fr}
+  .hv-trust > div + div{border-left:none;border-top:1px solid #EEE9DD}
+  .hv-head h2{font-size:28px}
+  .hv-section{padding-top:52px}
+  .hv-featured{margin-top:56px}
+  .hv-seg button{padding:10px 18px}
+  .hv .prod-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:12px}
+  .hv .prod-card__img{height:160px}
+  .hv .prod-card__body{padding:12px 12px 14px}
+  .hv .prod-card__title{font-size:12.5px}
+  .hv-promo-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .hv-pcard__img{height:150px}
+  .hv-brand{padding:26px;min-height:0}
+  .hv-cpanel{padding:28px 24px}
+  .hv-banner--photos{grid-template-columns:1fr}
+  .hv-banner__photos{height:200px}
+  .hv-banner--pack{min-height:0;justify-content:flex-start}
+  .hv-banner--pack .hv-stk{position:relative;right:auto;bottom:auto;left:auto;width:auto;height:170px;margin:0 16px 18px;justify-content:center}
+  .hv-bottom-space{height:56px}
+}
+@media (prefers-reduced-motion:reduce){.hv-slide{transition:none}}
