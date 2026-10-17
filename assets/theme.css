@@ -495,15 +495,41 @@ a.pagination__link:hover{border-color:var(--forest);color:var(--forest)}
 .pdp__desc .rte ul{margin:16px 0 0;padding-left:20px}
 .pdp__desc .rte li{margin-top:8px}
 .pdp__desc .rte strong{color:var(--ink);font-weight:600}
-.pdp__rating{display:inline-flex;align-self:flex-start;align-items:center;gap:8px;margin:-6px 0 14px;font-size:14px;color:var(--muted);border-bottom:none}
-.pdp__rating:hover .pdp__rating-text{color:var(--forest);text-decoration:underline}
-.pdp__rating-stars{font-size:16px;letter-spacing:2px;color:var(--line)}
-.pdp__reviews{padding:36px 0 72px;border-top:1px solid var(--line);scroll-margin-top:140px}
+/* avaliações (Judge.me) */
+.pdp__stars{--pct:0%;--star-off:color-mix(in srgb,var(--gold) 28%,var(--line));display:inline-block;font-size:16px;line-height:1;letter-spacing:2px;
+  background:linear-gradient(90deg,var(--gold) var(--pct),var(--star-off) var(--pct));-webkit-background-clip:text;background-clip:text;color:transparent}
+.pdp__rating{display:inline-flex;align-self:flex-start;align-items:center;gap:10px;margin:-10px 0 -4px;font-size:14px;color:var(--muted);border-bottom:none}
+.pdp__rating-text strong{color:var(--ink);font-weight:600}
+.pdp__rating:hover .pdp__rating-text{color:var(--forest);text-decoration:underline;text-underline-offset:3px}
+.pdp__reviews{padding:44px 0 80px;border-top:1px solid var(--line);scroll-margin-top:140px}
+.pdp__reviews-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin:0 0 24px}
+.pdp__reviews-head .eyebrow{display:block;margin:0 0 8px}
 .pdp__reviews h2{font-size:27px;margin:0 0 4px}
-.pdp__reviews-sub{margin:0 0 24px;color:var(--muted);font-size:15px;font-weight:300}
-#avaliacoes .jdgm-star{color:var(--gold)!important}
-#avaliacoes .jdgm-write-rev-link,#avaliacoes .jdgm-btn--solid{background:var(--forest)!important;border-color:var(--forest)!important;color:var(--bg)!important;border-radius:999px!important;padding:12px 26px!important;font-family:var(--sans)!important}
-#avaliacoes .jdgm-histogram__bar-content{background:var(--gold)!important}
+.pdp__reviews-sub{margin:0;color:var(--muted);font-size:15px;font-weight:300}
+.pdp__reviews-score{display:flex;align-items:center;gap:14px}
+.pdp__reviews-avg{font-size:44px;line-height:1;color:var(--forest)}
+.pdp__reviews-meta{display:flex;flex-direction:column;gap:6px;font-size:13.5px;color:var(--muted)}
+.pdp__reviews-meta .pdp__stars{font-size:18px}
+.pdp__reviews-card{background:#fff;border:1px solid #EEE9DD;border-radius:20px;padding:32px 36px}
+.pdp__reviews-card:empty{display:none}
+@media(max-width:600px){.pdp__reviews-card{padding:24px 18px;border-radius:16px}.pdp__reviews-avg{font-size:36px}}
+/* widget novo do Judge.me (classes jm-*): cores e tipografia da loja */
+#avaliacoes .jm-review-widget{--jm-review-widget-star-and-histogram-color:var(--gold)!important;--jm-review-widget-button-color:var(--forest)!important;
+  --jm-review-widget-button-text-color:var(--bg)!important;--jm-widget-primary-color:var(--forest)!important;--jm-review-widget-text-color:var(--ink)!important;
+  --jm-review-widget-lighter-text-color:var(--muted)!important;--jm-review-widget-form-button-color:var(--forest)!important;
+  --jm-review-widget-form-button-text-color:var(--bg)!important;--jm-review-widget-form-field-background-color:var(--bg)!important;
+  --jm-review-widget-bar-chart-height:6px!important;font-family:var(--sans)}
+#avaliacoes .jm-review-widget-minimal-header__title,#avaliacoes .jdgm-empty-state{display:none!important}
+#avaliacoes .jm-review-widget-minimal-header > .jm-cluster:not(:has(button,select,input)),
+#avaliacoes .jm-review-widget__body:has(> .jdgm-empty-state){display:none!important}
+#avaliacoes .jm-button--primary{background:var(--forest)!important;border-color:var(--forest)!important;color:var(--bg)!important;border-radius:999px!important;
+  padding:14px 30px!important;font-family:var(--sans)!important;font-size:15px!important;font-weight:500!important;letter-spacing:.03em;transition:background .2s}
+#avaliacoes .jm-button--primary:hover{background:var(--green)!important;border-color:var(--green)!important}
+#avaliacoes .jm-no-reviews-state{padding-block:0!important;margin-block:0!important}
+#avaliacoes .jm-no-reviews-state__text{font-family:var(--serif);font-size:20px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+#avaliacoes .jm-no-reviews-state__text::before{content:"★★★★★";display:block;margin:0 0 12px;font-size:26px;letter-spacing:6px;color:color-mix(in srgb,var(--gold) 28%,var(--line))}
+#avaliacoes .jm-no-reviews-state__text::after{content:"Partilhe a sua experiência e ajude outros donos a escolher.";display:block;margin:8px 0 0;font-family:var(--sans);font-size:15px;font-weight:300;letter-spacing:0;color:var(--muted)}
+#avaliacoes .jm-no-reviews-state__action-buttons{justify-content:center!important}
 /* cart */
 .cart-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:48px;align-items:start;padding:48px 0 88px}
 @media(max-width:900px){.cart-grid{grid-template-columns:1fr}}

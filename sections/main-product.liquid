@@ -1,6 +1,15 @@
 {%- assign current_variant = product.selected_or_first_available_variant -%}
 {%- assign initial_title = current_variant.metafields.huko.variant_title.value | default: product.title -%}
 {%- assign initial_desc = current_variant.metafields.huko.variant_description.value | default: product.description -%}
+{%- comment -%}
+  Média e número de avaliações: metafields standard (reviews.*) que o
+  Judge.me sincroniza com o Shopify. Alimentam o resumo junto ao título e o
+  cabeçalho da secção de comentários.
+{%- endcomment -%}
+{%- assign r_count = product.metafields.reviews.rating_count.value | default: 0 -%}
+{%- assign r_avg = product.metafields.reviews.rating.value.rating | default: 0 -%}
+{%- assign r_pct = r_avg | times: 20 -%}
+{%- assign r_avg_label = r_avg | round: 1 | append: '' | replace: '.', ',' -%}
 <div class="wrap">
   <div class="pdp">
     <div>
@@ -64,8 +73,12 @@
     <div class="pdp__buy">
       <h1 id="ProductTitle">{{ initial_title }}</h1>
       <a href="#avaliacoes" class="pdp__rating" data-rating-link>
-        <span class="pdp__rating-stars" aria-hidden="true">★★★★★</span>
-        <span class="pdp__rating-text">Seja o primeiro a avaliar</span>
+        <span class="pdp__stars" style="--pct:{{ r_pct }}%" aria-hidden="true">★★★★★</span>
+        {%- if r_count > 0 -%}
+          <span class="pdp__rating-text"><strong>{{ r_avg_label }}</strong> · {{ r_count }} comentário{% if r_count != 1 %}s{% endif %}</span>
+        {%- else -%}
+          <span class="pdp__rating-text">Seja o primeiro a avaliar</span>
+        {%- endif -%}
       </a>
       <p class="lead" id="ProductLead">{{ initial_desc | strip_html | truncate: 180 }}</p>
       <div style="display:flex;align-items:baseline;gap:14px">
@@ -111,11 +124,27 @@
     <div class="rte" id="ProductDesc">{{ initial_desc }}</div>
   </div>
   <section id="avaliacoes" class="pdp__reviews">
-    <h2 class="serif">Comentários dos clientes</h2>
-    <p class="pdp__reviews-sub">{{ product.title }}</p>
-    {%- for block in section.blocks -%}
-      {%- if block.type == '@app' -%}{% render block %}{%- endif -%}
-    {%- endfor -%}
+    <header class="pdp__reviews-head">
+      <div>
+        <span class="eyebrow">Avaliações</span>
+        <h2 class="serif">Comentários dos clientes</h2>
+        <p class="pdp__reviews-sub">{{ product.title }}</p>
+      </div>
+      {%- if r_count > 0 -%}
+        <div class="pdp__reviews-score">
+          <span class="pdp__reviews-avg serif">{{ r_avg_label }}</span>
+          <span class="pdp__reviews-meta">
+            <span class="pdp__stars" style="--pct:{{ r_pct }}%" aria-hidden="true">★★★★★</span>
+            <span>{{ r_count }} comentário{% if r_count != 1 %}s{% endif %}</span>
+          </span>
+        </div>
+      {%- endif -%}
+    </header>
+    <div class="pdp__reviews-card">
+      {%- for block in section.blocks -%}
+        {%- if block.type == '@app' -%}{% render block %}{%- endif -%}
+      {%- endfor -%}
+    </div>
   </section>
 </div>
 
@@ -427,49 +456,14 @@
 </script>
 
 {%- comment -%}
-  Resumo de avaliações junto ao título: o widget do Judge.me (app block em
-  #avaliacoes) é desenhado depois do carregamento; quando aparece, lê o número
-  de avaliações e a média e atualiza as estrelas/texto. O clique faz scroll
-  suave até à secção.
+  Resumo de avaliações junto ao título (desenhado em Liquid a partir dos
+  metafields reviews.*): o clique faz scroll suave até à secção.
 {%- endcomment -%}
 <script>
 (function(){
   var box = document.getElementById('avaliacoes');
   var link = document.querySelector('[data-rating-link]');
   if (!box || !link) return;
-  var stars = link.querySelector('.pdp__rating-stars');
-  var text = link.querySelector('.pdp__rating-text');
-
-  function update(){
-    var el = box.querySelector('.jdgm-rev-widg[data-number-of-reviews]') ||
-             box.querySelector('[data-number-of-reviews][data-average-rating]');
-    if (!el) return;
-    var n = parseInt(el.getAttribute('data-number-of-reviews'), 10) || 0;
-    var avg = parseFloat(el.getAttribute('data-average-rating')) || 0;
-    if (n > 0) {
-      var pct = Math.max(0, Math.min(100, avg / 5 * 100));
-      stars.style.backgroundImage = 'linear-gradient(90deg, var(--gold) ' + pct + '%, var(--line) ' + pct + '%)';
-      stars.style.webkitBackgroundClip = 'text';
-      stars.style.backgroundClip = 'text';
-      stars.style.color = 'transparent';
-      text.textContent = n + (n === 1 ? ' comentário' : ' comentários');
-      link.setAttribute('aria-label', avg.toFixed(1).replace('.', ',') + ' de 5 estrelas, ' + text.textContent);
-    } else {
-      stars.style.backgroundImage = '';
-      stars.style.color = 'var(--line)';
-      text.textContent = 'Seja o primeiro a avaliar';
-      link.removeAttribute('aria-label');
-    }
-  }
-
-  update();
-  if (window.MutationObserver) {
-    new MutationObserver(update).observe(box, {
-      childList: true, subtree: true, attributes: true,
-      attributeFilter: ['data-number-of-reviews', 'data-average-rating']
-    });
-  }
-
   link.addEventListener('click', function(e){
     e.preventDefault();
     box.scrollIntoView({ behavior: 'smooth', block: 'start' });
