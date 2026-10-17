@@ -1,0 +1,125 @@
+{%- comment -%}
+  Cabeçalho da página de marca (listagem de fornecedor /collections/vendors?q=…):
+  logótipo, nome, texto sobre o fabricante, origem e número de produtos.
+  Os textos só afirmam factos verificados sobre cada fabricante; para as
+  marcas sem informação pública fiável descrevem apenas a gama vendida.
+  Fornecedores "<MARCA> PROMO" usam a ficha da marca e ligam à gama completa.
+
+  Parâmetros:
+    vendor — nome do fornecedor (collection.current_vendor)
+    count  — número de produtos da listagem
+{%- endcomment -%}
+{%- assign vendor_up = vendor | upcase | strip -%}
+{%- assign brand_key = vendor_up | remove: ' PROMO' | strip -%}
+{%- assign is_promo = false -%}
+{%- if brand_key != vendor_up -%}{%- assign is_promo = true -%}{%- endif -%}
+
+{%- assign b_name = vendor -%}
+{%- assign b_logo = '' -%}
+{%- assign b_origin = '' -%}
+{%- capture burbur_intro -%}Cosmética profissional para cães e gatos criada em Espanha pela Burbur Pet Care, com sede em Alicante e presença em mais de 45 países.{%- endcapture -%}
+{%- capture b_text -%}
+  {%- case brand_key -%}
+    {%- when '3 CLAVELES' -%}
+      {%- assign b_name = '3 Claveles' -%}{%- assign b_logo = '3_claveles.png' -%}{%- assign b_origin = 'Logroño, Espanha' -%}
+      Marca da Bueno Hermanos, o único fabricante espanhol de tesouras e um dos maiores produtores mundiais de tesouras forjadas. Começou com tesouras de uso doméstico e alargou-se a tesouras profissionais, facas e alicates. Na HUKO encontra os corta-unhas para gatos e pequenos animais.
+    {%- when 'AGUI' -%}
+      {%- assign b_name = 'Agui' -%}{%- assign b_logo = 'agui.png' -%}{%- assign b_origin = 'Portugal' -%}
+      Marca portuguesa de produtos de descanso para cães e gatos: camas, colchões, tapetes impermeáveis e nichos, em tecidos e padrões para todos os estilos de casa.
+    {%- when 'ANDIS' -%}
+      {%- assign b_name = 'Andis' -%}{%- assign b_logo = 'andis.png' -%}{%- assign b_origin = 'EUA · desde 1922' -%}
+      Fundada em 1922 por Mathew Andis em Racine, no Wisconsin, a Andis é uma referência mundial em máquinas de tosquia. Na HUKO encontra máquinas, lâminas, peças de substituição, pentes e escovas para grooming profissional.
+    {%- when 'ANTOS' -%}
+      {%- assign b_name = 'Antos' -%}{%- assign b_logo = 'antos.png' -%}{%- assign b_origin = 'Países Baixos' -%}
+      Empresa neerlandesa sediada em Zaltbommel, especializada há mais de 30 anos em produtos de roer e snacks para cães e gatos. Ossos, patas, sticks e snacks semi-húmidos de origem natural.
+    {%- when 'BARRY KING' -%}
+      {%- assign b_name = 'Barry King' -%}{%- assign b_logo = 'barry_king.png' -%}{%- assign b_origin = 'Polónia' -%}
+      Marca da P.W. Hobby, empresa polaca de alimentação e acessórios para animais sediada perto de Bydgoszcz. Brinquedos de peluche, corda, látex e tecido, e comedouros em aço inoxidável.
+    {%- when 'BURBUR PRO' -%}
+      {%- assign b_name = 'Burbur Pro' -%}{%- assign b_logo = 'burbur_pro.png' -%}{%- assign b_origin = 'Alicante, Espanha' -%}
+      {{ burbur_intro }} A linha Pro é a dos salões de grooming: champôs, condicionadores, perfumes e vestuário profissional.
+    {%- when 'BURBUR AURA' -%}
+      {%- assign b_name = 'Burbur Aura' -%}{%- assign b_logo = 'burbur_aura.png' -%}{%- assign b_origin = 'Alicante, Espanha' -%}
+      {{ burbur_intro }} A linha Aura junta tratamentos de textura, volume e hidratação: champôs, máscaras e condicionadores.
+    {%- when 'BURBUR BASICS' -%}
+      {%- assign b_name = 'Burbur Basics' -%}{%- assign b_logo = 'burbur_basics.png' -%}{%- assign b_origin = 'Alicante, Espanha' -%}
+      {{ burbur_intro }} A linha Basics reúne o essencial em formato profissional, com champôs e condicionadores de 1 e 4 litros.
+    {%- when 'BURBUR FRIENDS' -%}
+      {%- assign b_name = 'Burbur Friends' -%}{%- assign b_logo = 'burbur_friend.png' -%}{%- assign b_origin = 'Alicante, Espanha' -%}
+      {{ burbur_intro }} A linha Friends é para usar em casa: champôs, máscaras e perfumes em formatos práticos.
+    {%- when 'DINGONATURA' -%}
+      {%- assign b_name = 'Dingonatura' -%}{%- assign b_logo = 'dingo_natura.jpg' -%}{%- assign b_origin = 'Espanha · desde 2001' -%}
+      Especialista espanhola em alimentação natural para cães e gatos desde 2001, criada por uma equipa de engenheiros, veterinários e nutricionistas. As receitas não levam corantes, conservantes artificiais nem transgénicos e são cozinhadas a vapor e em lume brando. É a casa das marcas Dingo, Natura Diet e Moments, e uma empresa cruelty-free certificada pela PETA.
+    {%- when 'FLEXI' -%}
+      {%- assign b_name = 'Flexi' -%}{%- assign b_logo = 'flexy.png' -%}{%- assign b_origin = 'Alemanha · desde 1973' -%}
+      Fabricante alemão de trelas extensíveis, fundado em 1973 por Manfred Bogdahn em Bargteheide, perto de Hamburgo. Trelas de fita e de corda para todos os tamanhos de cão, e acessórios como o sistema de luz LED.
+    {%- when 'FREEDOG' -%}
+      {%- assign b_name = 'Freedog' -%}{%- assign b_logo = 'freedog.png' -%}{%- assign b_origin = 'Barcelona · desde 1998' -%}
+      Empresa familiar fundada em Barcelona em 1998, hoje na segunda geração. Desenha internamente acessórios para cães e gatos: roupa, impermeáveis, camas, coleiras e brinquedos.
+    {%- when 'GROOM PROFESSIONAL' -%}
+      {%- assign b_name = 'Groom Professional' -%}{%- assign b_logo = 'groom_professional.png' -%}
+      Marca pensada por groomers para groomers, com champôs, ferramentas, equipamento de salão e vestuário profissional. Na HUKO encontra as tesouras Artesan e os casacos de grooming.
+    {%- when 'GROOMTEK' -%}
+      {%- assign b_name = 'Groomtek' -%}{%- assign b_logo = 'groomtek.png' -%}
+      Equipamento para salões de grooming: secadores, mesas fixas e elétricas, jaulas modulares e acessórios.
+    {%- when 'HAU&MIAU' -%}
+      {%- assign b_name = 'Hau&Miau' -%}{%- assign b_logo = 'hau_miau.png' -%}
+      Snacks naturais para cães: sticks, rolinhos, argolas e pedaços de carne de frango, pato, borrego e outras proteínas.
+    {%- when 'LOLO PETS CLASSIC' -%}
+      {%- assign b_name = 'Lolo Pets Classic' -%}{%- assign b_logo = 'lolo_pets_classic.png' -%}{%- assign b_origin = 'Polónia · desde 2005' -%}
+      A Lolo Pets foi criada em 2005 pela P.W. Hobby, empresa polaca de alimentação e acessórios para animais. A linha Classic reúne biscoitos e snacks de padaria para cães.
+    {%- when 'ODOUR LOCK' -%}
+      {%- assign b_name = 'Odour Lock' -%}{%- assign b_logo = 'oudor_lock.jpg' -%}{%- assign b_origin = 'Canadá' -%}
+      Areia aglomerante da Intersand, fabricante canadiano de areias para gato. É feita de argila bentonite natural, com uma tecnologia que impede a formação de amoníaco e controla os odores.
+    {%- when 'PANAMA PET' -%}
+      {%- assign b_name = 'Panama Pet' -%}{%- assign b_logo = 'panama_pet.png' -%}
+      Comedouros em aço inoxidável, simples e duplos, resistentes e fáceis de lavar.
+    {%- when 'PAWPPIN' -%}
+      {%- assign b_name = 'Pawppin' -%}{%- assign b_logo = 'pawppin.png' -%}
+      Arranhadores para gato em poste e casa, com plataformas, nichos e cilindros para trepar, arranhar e descansar.
+    {%- when 'RED DINGO' -%}
+      {%- assign b_name = 'Red Dingo' -%}{%- assign b_logo = 'red_dingo.png' -%}{%- assign b_origin = 'Sydney · desde 2002' -%}
+      Fundada em Sydney em 2002 por Barbara e Craig, depois de o seu cão Max gastar todos os acessórios que tinha. Começou com chapas de identificação em aço inox e esmalte e hoje faz coleiras, trelas, peitorais e brinquedos vendidos em mais de 50 países.
+    {%- when 'TRANSGROOM' -%}
+      {%- assign b_name = 'Transgroom' -%}{%- assign b_logo = 'transgroom.png' -%}{%- assign b_origin = 'Bélgica' -%}
+      Fornecedor belga de produtos profissionais para cuidado de animais, sediado em Moen, com marcas próprias como Show Tech, Yento, Tikima e Groom-X. Tesouras, pentes, stripping, laços e acessórios de grooming.
+  {%- endcase -%}
+{%- endcapture -%}
+{%- assign b_text = b_text | strip -%}
+
+{%- comment -%} Ligação entre a gama normal e a de promoções da mesma marca. {%- endcomment -%}
+{%- assign all_vendors = collections.all.all_vendors -%}
+{%- assign sibling = '' -%}
+{%- if is_promo -%}
+  {%- for v in all_vendors -%}{%- assign v_up = v | upcase -%}{%- if v_up == brand_key -%}{%- assign sibling = v -%}{%- endif -%}{%- endfor -%}
+{%- else -%}
+  {%- assign promo_key = brand_key | append: ' PROMO' -%}
+  {%- for v in all_vendors -%}{%- assign v_up = v | upcase -%}{%- if v_up == promo_key -%}{%- assign sibling = v -%}{%- endif -%}{%- endfor -%}
+{%- endif -%}
+
+<section class="brand-hero{% if b_logo == blank %} brand-hero--plain{% endif %}">
+  {%- if b_logo != blank -%}
+    <div class="brand-hero__logo">
+      <img src="{{ b_logo | asset_url }}" alt="{{ b_name | escape }}" width="220" height="110">
+    </div>
+  {%- endif -%}
+  <div class="brand-hero__body">
+    <span class="eyebrow">Marca{% if is_promo %} · Promoções{% endif %}</span>
+    <h1 class="serif">{{ b_name }}</h1>
+    {%- if b_text != blank -%}<p>{{ b_text }}</p>{%- endif -%}
+    <div class="brand-hero__meta">
+      {%- if b_origin != blank -%}
+        <span class="brand-hero__chip">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          {{ b_origin }}
+        </span>
+      {%- endif -%}
+      <span class="brand-hero__chip">{{ count }} produto{% if count != 1 %}s{% endif %}</span>
+      {%- if sibling != blank -%}
+        <a class="brand-hero__chip brand-hero__chip--link" href="{{ sibling | url_for_vendor }}">
+          {%- if is_promo -%}Ver toda a gama {{ b_name }}{%- else -%}Ver promoções {{ b_name }}{%- endif -%} →
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>

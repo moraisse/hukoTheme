@@ -20,38 +20,49 @@
     <div class="brands__track" data-brands-track>
       {%- for file in brand_files -%}
         {%- assign brand_key = file | split: '.' | first -%}
+        {%- assign brand_vendor = '' -%}
         {%- case brand_key -%}
-          {%- when '3_claveles' -%}{%- assign brand_name = '3 Claveles' -%}
-          {%- when 'agui' -%}{%- assign brand_name = 'Agui' -%}
-          {%- when 'andis' -%}{%- assign brand_name = 'Andis' -%}
-          {%- when 'antos' -%}{%- assign brand_name = 'Antos' -%}
-          {%- when 'barry_king' -%}{%- assign brand_name = 'Barry King' -%}
-          {%- when 'burbur_aura' -%}{%- assign brand_name = 'Burbur Aura' -%}
-          {%- when 'burbur_basics' -%}{%- assign brand_name = 'Burbur Basics' -%}
-          {%- when 'burbur_friend' -%}{%- assign brand_name = 'Burbur Friends' -%}
-          {%- when 'burbur_pro' -%}{%- assign brand_name = 'Burbur Pro' -%}
+          {%- when '3_claveles' -%}{%- assign brand_name = '3 Claveles' -%}{%- assign brand_vendor = '3 CLAVELES' -%}
+          {%- when 'agui' -%}{%- assign brand_name = 'Agui' -%}{%- assign brand_vendor = 'AGUI' -%}
+          {%- when 'andis' -%}{%- assign brand_name = 'Andis' -%}{%- assign brand_vendor = 'ANDIS' -%}
+          {%- when 'antos' -%}{%- assign brand_name = 'Antos' -%}{%- assign brand_vendor = 'ANTOS' -%}
+          {%- when 'barry_king' -%}{%- assign brand_name = 'Barry King' -%}{%- assign brand_vendor = 'BARRY KING' -%}
+          {%- when 'burbur_aura' -%}{%- assign brand_name = 'Burbur Aura' -%}{%- assign brand_vendor = 'BURBUR AURA' -%}
+          {%- when 'burbur_basics' -%}{%- assign brand_name = 'Burbur Basics' -%}{%- assign brand_vendor = 'BURBUR BASICS' -%}
+          {%- when 'burbur_friend' -%}{%- assign brand_name = 'Burbur Friends' -%}{%- assign brand_vendor = 'BURBUR FRIENDS' -%}
+          {%- when 'burbur_pro' -%}{%- assign brand_name = 'Burbur Pro' -%}{%- assign brand_vendor = 'BURBUR PRO' -%}
           {%- when 'ca' -%}{%- assign brand_name = 'CA' -%}
           {%- when 'classic' -%}{%- assign brand_name = 'Classic' -%}
-          {%- when 'dingo_natura' -%}{%- assign brand_name = 'Dingonatura' -%}
-          {%- when 'flexy' -%}{%- assign brand_name = 'Flexi' -%}
-          {%- when 'freedog' -%}{%- assign brand_name = 'Freedog' -%}
-          {%- when 'groom_professional' -%}{%- assign brand_name = 'Groom Professional' -%}
-          {%- when 'groomtek' -%}{%- assign brand_name = 'Groomtek' -%}
+          {%- when 'dingo_natura' -%}{%- assign brand_name = 'Dingonatura' -%}{%- assign brand_vendor = 'DINGONATURA' -%}
+          {%- when 'flexy' -%}{%- assign brand_name = 'Flexi' -%}{%- assign brand_vendor = 'FLEXI' -%}
+          {%- when 'freedog' -%}{%- assign brand_name = 'Freedog' -%}{%- assign brand_vendor = 'FREEDOG' -%}
+          {%- when 'groom_professional' -%}{%- assign brand_name = 'Groom Professional' -%}{%- assign brand_vendor = 'GROOM PROFESSIONAL' -%}
+          {%- when 'groomtek' -%}{%- assign brand_name = 'Groomtek' -%}{%- assign brand_vendor = 'GROOMTEK' -%}
           {%- when 'haquoss' -%}{%- assign brand_name = 'Haquoss' -%}
-          {%- when 'hau_miau' -%}{%- assign brand_name = 'Hau&Miau' -%}
-          {%- when 'lolo_pets' -%}{%- assign brand_name = 'Lolo Pets' -%}
-          {%- when 'lolo_pets_classic' -%}{%- assign brand_name = 'Lolo Pets Classic' -%}
+          {%- when 'hau_miau' -%}{%- assign brand_name = 'Hau&Miau' -%}{%- assign brand_vendor = 'HAU&MIAU' -%}
+          {%- when 'lolo_pets' -%}{%- assign brand_name = 'Lolo Pets' -%}{%- assign brand_vendor = 'LOLO PETS CLASSIC' -%}
+          {%- when 'lolo_pets_classic' -%}{%- assign brand_name = 'Lolo Pets Classic' -%}{%- assign brand_vendor = 'LOLO PETS CLASSIC' -%}
           {%- when 'max_biocide' -%}{%- assign brand_name = 'Max Biocide' -%}
-          {%- when 'oudor_lock' -%}{%- assign brand_name = 'Odour Lock' -%}
-          {%- when 'panama_pet' -%}{%- assign brand_name = 'Panama Pet' -%}
-          {%- when 'pawppin' -%}{%- assign brand_name = 'Pawppin' -%}
-          {%- when 'red_dingo' -%}{%- assign brand_name = 'Red Dingo' -%}
-          {%- when 'transgroom' -%}{%- assign brand_name = 'Transgroom' -%}
+          {%- when 'oudor_lock' -%}{%- assign brand_name = 'Odour Lock' -%}{%- assign brand_vendor = 'ODOUR LOCK' -%}
+          {%- when 'panama_pet' -%}{%- assign brand_name = 'Panama Pet' -%}{%- assign brand_vendor = 'PANAMA PET' -%}
+          {%- when 'pawppin' -%}{%- assign brand_name = 'Pawppin' -%}{%- assign brand_vendor = 'PAWPPIN' -%}
+          {%- when 'red_dingo' -%}{%- assign brand_name = 'Red Dingo' -%}{%- assign brand_vendor = 'RED DINGO' -%}
+          {%- when 'transgroom' -%}{%- assign brand_name = 'Transgroom' -%}{%- assign brand_vendor = 'TRANSGROOM' -%}
           {%- else -%}{%- assign brand_name = brand_key | replace: '_', ' ' -%}
         {%- endcase -%}
-        <div class="brand-card">
-          <img src="{{ file | asset_url }}" alt="{{ brand_name | escape }}" loading="lazy" width="150" height="72">
-        </div>
+        {%- comment -%}
+          Com fornecedor na loja, o cartão leva à página da marca (listagem de
+          fornecedor da Shopify, com a ficha do fabricante — ver brand-hero).
+        {%- endcomment -%}
+        {%- if brand_vendor != blank -%}
+          <a class="brand-card" href="{{ brand_vendor | url_for_vendor }}" aria-label="Ver produtos {{ brand_name | escape }}">
+            <img src="{{ file | asset_url }}" alt="{{ brand_name | escape }}" loading="lazy" width="150" height="72">
+          </a>
+        {%- else -%}
+          <div class="brand-card">
+            <img src="{{ file | asset_url }}" alt="{{ brand_name | escape }}" loading="lazy" width="150" height="72">
+          </div>
+        {%- endif -%}
       {%- endfor -%}
     </div>
   </div>

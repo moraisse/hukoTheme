@@ -11,6 +11,10 @@
 {%- if collection.filters.size > 0 -%}{%- assign has_facets = true -%}{%- endif -%}
 
 <div class="wrap">
+  {%- comment -%} Página de marca (listagem de fornecedor): ficha do fabricante em vez do cabeçalho normal. {%- endcomment -%}
+  {%- if collection.handle == 'vendors' and collection.current_vendor != blank -%}
+    {% render 'brand-hero', vendor: collection.current_vendor, count: collection.products_count %}
+  {%- else -%}
   <div class="coll-head">
     {% if is_grooming %}
       <div class="grooming-heading__eyebrow">{{ 'general.grooming.professional' | t }} <span class="nav-grooming__badge">{{ 'general.navigation.pro' | t }}</span></div>
@@ -25,6 +29,7 @@
       </div>
     {% endif %}
   </div>
+  {%- endif -%}
 
   {% if is_grooming and grooming_root.links.size > 0 %}
     <nav class="grooming-categories" aria-label="{{ 'general.grooming.categories' | t | escape }}">
