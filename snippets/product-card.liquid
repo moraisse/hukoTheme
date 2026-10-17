@@ -30,7 +30,6 @@
   </a>
   <div class="prod-card__body">
     <a href="{{ card_product.url }}?variant={{ card_variant.id }}" class="prod-card__title">{{ card_product.title }}</a>
-    <div class="jdgm-widget jdgm-preview-badge" data-id="{{ card_product.id }}" data-auto-install="false">{{ card_product.metafields.judgeme.badge }}</div>
     <div class="prod-card__foot">
       <span class="price">{{ card_variant.price | money }}</span>
       {%- if card_variant.available -%}
