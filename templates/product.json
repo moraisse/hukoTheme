@@ -11,10 +11,6 @@
   "sections": {
     "main": {
       "type": "main-product",
-      "settings": {}
-    },
-    "1792234355f426ef7b": {
-      "type": "apps",
       "blocks": {
         "judge_me_reviews_review_widget_DCMiJq": {
           "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
@@ -33,7 +29,6 @@
     }
   },
   "order": [
-    "main",
-    "1792234355f426ef7b"
+    "main"
   ]
 }
