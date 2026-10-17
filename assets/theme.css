@@ -948,3 +948,5 @@ body.template-product .breadcrumb [aria-current]{text-transform:uppercase;letter
 }
 @media(max-width:480px){.coll-group__head{gap:12px}.coll-group__all{padding:8px 14px}}
 @media(prefers-reduced-motion:reduce){.coll-card,.coll-card__media img{transition:none}.coll-card:hover{transform:none}.coll-card:hover .coll-card__media img{transform:none}}
+/* chat Shopify Inbox ("Precisa de ajuda?"): só em desktop */
+@media(max-width:900px){shopify-chat{display:none!important}}
