@@ -1,205 +1,372 @@
-<section class="hero-carousel" id="HeroCarousel" aria-roledescription="carrossel" aria-label="Destaques">
+{{ 'home-v2.css' | asset_url | stylesheet_tag }}
 
-  <div class="hero wrap hero-slide is-active" data-hero-slide>
-    <div>
-      <div class="eyebrow" style="margin-bottom:22px">Coleção {{ 'now' | date: '%Y' }}</div>
-      {% assign hero_title = settings.hero_title | default: 'Produtos premium para pets mais felizes' %}
-      {% assign hero_title = hero_title | replace: 'felizes', '<em style="font-style:italic;color:var(--forest)">felizes</em>' %}
-      <h1>{{ hero_title }}</h1>
-      <p>{{ settings.hero_subtitle }}</p>
-      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:26px">
-        <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">Comprar agora</a>
-        <a href="{{ routes.collections_url }}" class="btn btn--ghost">Ver coleções</a>
+{%- comment -%}
+  Página inicial v2 da HUKO pets.
+  Imagens dos banners: Conteúdo > Ficheiros (nomes começados por "home-").
+  Produtos em destaque: coleções "Destaques Cães" e "Destaques Gatos" (ordem manual).
+  Promoção: coleção "Camas Agui" + código AGUI10 (Descontos).
+{%- endcomment -%}
+
+{%- assign promo_code = 'AGUI10' -%}
+{%- assign promo_percent = 10 -%}
+
+{%- comment -%} Preços "Desde" calculados a partir dos produtos (mudam com o backoffice) {%- endcomment -%}
+{%- paginate collections['natura-diet'].products by 250 -%}
+  {%- capture min_natura -%}{% render 'hv-min-price', products: collections['natura-diet'].products %}{%- endcapture -%}
+{%- endpaginate -%}
+{%- capture min_dingo -%}{% render 'hv-min-price', products: collections['dingo'].products %}{%- endcapture -%}
+{%- capture min_moments -%}{% render 'hv-min-price', products: collections['snacks-moments'].products, title_has: 'Caixa 12' %}{%- endcapture -%}
+{%- capture min_reddingo -%}{% render 'hv-min-price', products: collections['peluches-red-dingo'].products %}{%- endcapture -%}
+{%- assign min_natura = min_natura | plus: 0 -%}
+{%- assign min_dingo = min_dingo | plus: 0 -%}
+{%- assign min_moments = min_moments | plus: 0 -%}
+{%- assign min_reddingo = min_reddingo | plus: 0 -%}
+{%- assign min_food = min_natura -%}
+{%- if min_food == 0 or min_dingo > 0 and min_dingo < min_food -%}{%- assign min_food = min_dingo -%}{%- endif -%}
+
+<div class="hv">
+
+  {%- comment -%} ========== Topo: carrossel + 2 banners ========== {%- endcomment -%}
+  <section class="wrap hv-top">
+    <div class="hv-hero" data-hv-hero aria-roledescription="carrossel" aria-label="Destaques">
+
+      <div class="hv-slide is-active" data-hv-slide style="background:#1E3D2F;color:#FAF8F3">
+        <div class="hv-slide__pics" aria-hidden="true">
+          <div class="hv-slide__circle" style="background:#24493A"></div>
+          <div class="hv-stk">
+            <img src="{{ 'home-agui-noble.webp' | file_url }}" alt="" style="height:58%;max-width:50%" width="640" height="320" fetchpriority="high">
+            <img src="{{ 'home-agui-crib.webp' | file_url }}" alt="" style="height:100%;max-width:44%;margin-left:-10%;position:relative;z-index:2" width="640" height="650">
+            <img src="{{ 'home-agui-curly.webp' | file_url }}" alt="" style="height:58%;max-width:48%;margin-left:-10%;position:relative;z-index:3" width="640" height="354">
+          </div>
+          <div class="hv-sticker" style="width:136px;height:136px;top:40px;left:4%;background:#C9B27A;color:#1E3D2F"><span style="font-size:48px">-{{ promo_percent }}%</span><small>{{ promo_code }}</small></div>
+        </div>
+        <span class="hv-vtab">Tempo limitado</span>
+        <div class="hv-slide__text">
+          <span class="eyebrow" style="color:#C9B27A">Promoção · Camas Agui</span>
+          <h1 class="hv-slide__title">Camas Agui com {{ promo_percent }}% de desconto</h1>
+          <p>Camas, donuts e iglus para cães e gatos, prontos para o frio. Aplique o código no checkout.</p>
+          <div class="hv-slide__actions">
+            <a href="/collections/camas-agui" class="hv-btn hv-btn--green">Ver camas Agui</a>
+            <button type="button" class="hv-coupon" data-hv-coupon data-code="{{ promo_code }}" aria-label="Copiar o código {{ promo_code }}">
+              <span class="hv-coupon__label">Código</span>
+              <span class="hv-coupon__code">{{ promo_code }}</span>
+              <span class="hv-coupon__action" data-hv-coupon-feedback>Copiar</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="hv-slide" data-hv-slide style="background:#EDE6F1;color:#2A1F33">
+        <div class="hv-slide__pics" aria-hidden="true">
+          <div class="hv-slide__circle" style="background:#DDCFE7"></div>
+          <div class="hv-stk">
+            <img src="{{ 'home-burbur-teatree.webp' | file_url }}" alt="" style="height:84%" loading="lazy" width="271" height="640">
+            <img src="{{ 'home-burbur-aloe.webp' | file_url }}" alt="" style="height:88%;position:relative;z-index:2" loading="lazy" width="270" height="640">
+            <img src="{{ 'home-burbur-perfume8.webp' | file_url }}" alt="" style="height:100%;position:relative;z-index:3" loading="lazy" width="155" height="640">
+            <img src="{{ 'home-burbur-aura.webp' | file_url }}" alt="" style="height:84%;position:relative;z-index:2" loading="lazy" width="193" height="640">
+            <img src="{{ 'home-burbur-pro-2em1.webp' | file_url }}" alt="" style="height:90%" loading="lazy" width="166" height="640">
+          </div>
+          <div class="hv-sticker" style="width:112px;height:112px;top:44px;left:6%;background:#3D2B4A;color:#FAF8F3"><span style="font-size:56px">4</span><small>linhas</small></div>
+        </div>
+        <div class="hv-slide__text">
+          <span class="eyebrow" style="color:#6B4F7E">Coleção Burbur</span>
+          <h2 class="hv-slide__title">O spa do seu pet, em casa</h2>
+          <p>Champôs, condicionadores e perfumes Burbur Friends, Pro e Aura para cães e gatos.</p>
+          <div class="hv-slide__actions">
+            <a href="/collections/burbur" class="hv-btn hv-btn--dark">Descobrir Burbur</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hv-slide" data-hv-slide style="background:#F1E9D8;color:#1A1A1A">
+        <div class="hv-slide__pics" aria-hidden="true">
+          <div class="hv-slide__circle" style="background:#E6D6B6"></div>
+          <div class="hv-stk">
+            <img src="{{ 'home-natura-dailyfood.webp' | file_url }}" alt="" style="height:90%" loading="lazy" width="353" height="640">
+            <img src="{{ 'home-moments-salmon.webp' | file_url }}" alt="" style="height:60%;position:relative;z-index:3" loading="lazy" width="454" height="640">
+            <img src="{{ 'home-dingo-puppy.webp' | file_url }}" alt="" style="height:100%;position:relative;z-index:2" loading="lazy" width="367" height="640">
+            <img src="{{ 'home-natura-pate.webp' | file_url }}" alt="" style="height:50%" loading="lazy" width="595" height="640">
+          </div>
+          {%- if min_food > 0 -%}<div class="hv-sticker" style="width:120px;height:120px;top:36px;left:5%;background:#1E3D2F;color:#FAF8F3"><span style="font-size:30px">{{ min_food | money }}</span><small>Desde</small></div>{%- endif -%}
+        </div>
+        <div class="hv-slide__text">
+          <span class="eyebrow">Natura Diet &amp; Dingo</span>
+          <h2 class="hv-slide__title">Nutrição natural para todos os dias</h2>
+          <p>Ração seca e húmida para cães e gatos, de cachorro a sénior, e snacks Moments.</p>
+          <div class="hv-slide__actions">
+            <a href="/collections/natura-diet" class="hv-btn hv-btn--dark">Ver alimentação</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hv-dots" role="tablist" aria-label="Escolher destaque">
+        <button type="button" class="hv-dot is-active" data-hv-dot="0" role="tab" aria-selected="true" aria-label="Destaque 1"></button>
+        <button type="button" class="hv-dot" data-hv-dot="1" role="tab" aria-selected="false" aria-label="Destaque 2"></button>
+        <button type="button" class="hv-dot" data-hv-dot="2" role="tab" aria-selected="false" aria-label="Destaque 3"></button>
       </div>
     </div>
-    <div class="hero__img">
-      {% if settings.hero_image != blank %}
-        <img
-          src="{{ settings.hero_image | image_url: width: 1200 }}"
-          srcset="{{ settings.hero_image | image_url: width: 600 }} 600w, {{ settings.hero_image | image_url: width: 1200 }} 1200w, {{ settings.hero_image | image_url: width: 1800 }} 1800w"
-          sizes="(min-width: 990px) 50vw, 100vw"
-          width="{{ settings.hero_image.width }}"
-          height="{{ settings.hero_image.height }}"
-          alt="{{ settings.hero_title | default: 'Produtos premium para pets mais felizes' | escape }}"
-          loading="eager"
-          fetchpriority="high"
-        >
-      {% else %}
-        <img
-          src="{{ 'happy_pets.jpg' | asset_url }}"
-          width="1200"
-          height="801"
-          alt="{{ settings.hero_title | default: 'Produtos premium para pets mais felizes' | escape }}"
-          loading="eager"
-          fetchpriority="high"
-        >
-      {% endif %}
-    </div>
-  </div>
 
-  <div class="hero wrap hero-slide" data-hero-slide>
-    <div>
-      <div class="eyebrow" style="margin-bottom:22px">Oferta por tempo limitado</div>
-      <h1>Desconto de <span class="hero-highlight">15%</span> em casotas de cão</h1>
-      <p>Resistentes à chuva e ao sol, pensadas para o conforto do seu cão durante todo o ano. Válido enquanto durar o stock.</p>
-      <div class="hero-coupon" data-coupon-copy data-code="CASOTA15">
-        <span class="hero-coupon__label">Código</span>
-        <span class="hero-coupon__code">CASOTA15</span>
-        <span class="hero-coupon__action" data-coupon-feedback>Copiar</span>
-      </div>
-      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:26px">
-        <a href="/collections/casotas-para-caes" class="btn btn--primary">Ver casotas</a>
-      </div>
-    </div>
-    <div class="hero__img hero__img--contain">
-     <img
-        src="https://cdn.shopify.com/s/files/1/1061/9460/0268/files/CA40002671.jpg?v=1791135163&width=600"
-        width="600"
-        height="600"
-        alt="Casota de plástico Sprint Eco — 15% de desconto com o código CASOTA15"
-        loading="lazy"
-      >
-    </div>
-  </div>
-
-  <div class="hero-dots" role="tablist" aria-label="Escolher destaque">
-    <button type="button" class="hero-dot is-active" data-hero-dot="0" role="tab" aria-selected="true" aria-label="Destaque 1"></button>
-    <button type="button" class="hero-dot" data-hero-dot="1" role="tab" aria-selected="false" aria-label="Destaque 2"></button>
-  </div>
-</section>
-
-<script>
-(function () {
-  var root = document.getElementById('HeroCarousel');
-  if (!root) return;
-  var slides = Array.prototype.slice.call(root.querySelectorAll('[data-hero-slide]'));
-  var dots = Array.prototype.slice.call(root.querySelectorAll('[data-hero-dot]'));
-  if (slides.length < 2) return;
-
-  var index = 0;
-  var intervalMs = 5000;
-  var timer = null;
-  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function show(next) {
-    index = (next + slides.length) % slides.length;
-    slides.forEach(function (slide, i) {
-      slide.classList.toggle('is-active', i === index);
-    });
-    dots.forEach(function (dot, i) {
-      dot.classList.toggle('is-active', i === index);
-      dot.setAttribute('aria-selected', i === index ? 'true' : 'false');
-    });
-  }
-
-  function start() {
-    if (reduceMotion) return;
-    stop();
-    timer = setInterval(function () { show(index + 1); }, intervalMs);
-  }
-  function stop() {
-    if (timer) { clearInterval(timer); timer = null; }
-  }
-
-  dots.forEach(function (dot, i) {
-    dot.addEventListener('click', function () { show(i); start(); });
-  });
-
-  root.addEventListener('mouseenter', stop);
-  root.addEventListener('mouseleave', start);
-  root.addEventListener('focusin', stop);
-  root.addEventListener('focusout', start);
-
-  start();
-
-  var coupon = root.querySelector('[data-coupon-copy]');
-  if (coupon) {
-    coupon.addEventListener('click', function () {
-      var code = coupon.getAttribute('data-code');
-      var feedback = coupon.querySelector('[data-coupon-feedback]');
-      var reset = function () { if (feedback) feedback.textContent = 'Copiar'; coupon.classList.remove('is-copied'); };
-      var done = function () {
-        if (feedback) feedback.textContent = 'Copiado!';
-        coupon.classList.add('is-copied');
-        setTimeout(reset, 2000);
-      };
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(code).then(done).catch(done);
-      } else {
-        done();
-      }
-    });
-  }
-})();
-</script>
-
-<section class="wrap" style="padding-bottom:96px">
-  <div class="section-head" style="text-align:left;display:flex;justify-content:space-between;align-items:flex-end">
-    <div><div class="eyebrow" style="margin-bottom:12px">Explorar</div><h2 class="serif" style="font-size:38px;margin:0">Comprar por categoria</h2></div>
-    <a href="{{ routes.collections_url }}">Ver tudo →</a>
-  </div>
-  <div class="cat-grid">
-    {% for collection in collections limit: 6 %}
-      <a href="{{ collection.url }}" class="cat-card">
-        <div class="cat-card__img">{% if collection.featured_image %}<img src="{{ collection.featured_image | image_url: width: 500 }}" alt="{{ collection.title | escape }}" loading="lazy">{% endif %}</div>
-        <div class="cat-card__row"><span>{{ collection.title }}</span><span class="arrow">→</span></div>
+    <div class="hv-side">
+      <a href="/collections/snacks-moments" class="hv-mini" style="background:#FBE3EC;color:#4A1830">
+        <span class="eyebrow" style="color:#9B2C5A">Dingonatura Moments</span>
+        <span class="hv-mini__title">Snacks em caixas de 12</span>
+        <span class="hv-mini__link">{% if min_moments > 0 %}Desde {{ min_moments | money }}{% else %}Ver snacks{% endif %} →</span>
+        <span class="hv-stk hv-stk--end" aria-hidden="true" style="width:50%;height:66%">
+          <img src="{{ 'home-moments-turkey.webp' | file_url }}" alt="" style="height:86%" loading="lazy" width="490" height="640">
+          <img src="{{ 'home-moments-salmon.webp' | file_url }}" alt="" style="height:100%;position:relative;z-index:2" loading="lazy" width="454" height="640">
+          <img src="{{ 'home-moments-iberico.webp' | file_url }}" alt="" style="height:86%" loading="lazy" width="490" height="640">
+        </span>
       </a>
-    {% endfor %}
-  </div>
-</section>
-
-<section class="section section--card">
-  <div class="wrap">
-    <div class="section-head"><div class="eyebrow" style="margin-bottom:12px">Seleção HUKO</div><h2>Produtos em destaque</h2></div>
-    <div class="prod-grid">
-      {% assign featured = collections[settings.featured_collection] | default: collections.frontpage %}
-      {% if featured.products.size > 0 %}
-        {% for product in featured.products limit: 8 %}{% render 'product-card', card_product: product %}{% endfor %}
-      {% else %}
-        {% for product in collections.all.products limit: 8 %}{% render 'product-card', card_product: product %}{% endfor %}
-      {% endif %}
+      <a href="/collections/grooming" class="hv-mini" style="background:#2B3A2E;color:#FAF8F3">
+        <span class="eyebrow" style="color:#C9B27A">Grooming Pro</span>
+        <span class="hv-mini__title">Equipamento para profissionais</span>
+        <span class="hv-mini__link" style="color:#C9B27A">Entrar no espaço Pro →</span>
+        <span class="hv-stk hv-stk--end" aria-hidden="true" style="width:40%;height:64%">
+          <img src="{{ 'home-burbur-pro-allbreeds.webp' | file_url }}" alt="" style="height:92%" loading="lazy" width="194" height="528">
+          <img src="{{ 'home-andis-easytrim.webp' | file_url }}" alt="" style="height:100%;position:relative;z-index:2" loading="lazy" width="162" height="554">
+          <img src="{{ 'home-andis-coolcare.webp' | file_url }}" alt="" style="height:88%" loading="lazy" width="144" height="494">
+        </span>
+      </a>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="section wrap">
-  <div class="props">
-    <div><svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke-width="1.6"><polygon points="17,4 30,17 17,30 4,17"/></svg><h3>Qualidade premium</h3><p>Marcas profissionais de referência, escolhidas para o dia a dia de cães e gatos.</p></div>
-    <div><svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke-width="1.6"><circle cx="17" cy="17" r="13"/><polyline points="11,17.5 15.5,22 23,12.5"/></svg><h3>Produtos selecionados</h3><p>Cada peça é escolhida com atenção ao detalhe.</p></div>
-    <div><svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke-width="1.6"><circle cx="17" cy="17" r="13"/><path d="M11 19c1.8 2.6 4 4 6 4s4.2-1.4 6-4"/></svg><h3>Conforto e bem-estar</h3><p>Materiais macios e seguros para patas, garras e narizes curiosos.</p></div>
-    <div><svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke-width="1.6"><rect x="4" y="10" width="17" height="12" rx="1.5"/><path d="M21 14h5l4 4v4h-9"/><circle cx="10" cy="25" r="2.6"/><circle cx="25" cy="25" r="2.6"/></svg><h3>Envio rápido</h3><p>Envio em 24h para Portugal Continental.</p></div>
-  </div>
-</section>
+  {%- comment -%} ========== Vantagens ========== {%- endcomment -%}
+  <section class="wrap">
+    <div class="hv-trust">
+      <div><svg width="32" height="32" viewBox="0 0 34 34" fill="none" stroke-width="1.6" aria-hidden="true"><polygon points="17,4 30,17 17,30 4,17"/></svg><p style="margin:0"><strong>Qualidade premium</strong><span>Marcas profissionais de referência, escolhidas para o dia a dia de cães e gatos.</span></p></div>
+      <div><svg width="32" height="32" viewBox="0 0 34 34" fill="none" stroke-width="1.6" aria-hidden="true"><circle cx="17" cy="17" r="13"/><polyline points="11,17.5 15.5,22 23,12.5"/></svg><p style="margin:0"><strong>Produtos selecionados</strong><span>Cada peça é escolhida com atenção ao detalhe.</span></p></div>
+      <div><svg width="32" height="32" viewBox="0 0 34 34" fill="none" stroke-width="1.6" aria-hidden="true"><circle cx="17" cy="17" r="13"/><path d="M11 19c1.8 2.6 4 4 6 4s4.2-1.4 6-4"/></svg><p style="margin:0"><strong>Conforto e bem-estar</strong><span>Materiais macios e seguros para patas, garras e narizes curiosos.</span></p></div>
+      <div><svg width="32" height="32" viewBox="0 0 34 34" fill="none" stroke-width="1.6" aria-hidden="true"><rect x="4" y="10" width="17" height="12" rx="1.5"/><path d="M21 14h5l4 4v4h-9"/><circle cx="10" cy="25" r="2.6"/><circle cx="25" cy="25" r="2.6"/></svg><p style="margin:0"><strong>Envio rápido</strong><span>Envio em 24h para Portugal Continental.</span></p></div>
+    </div>
+  </section>
 
-<section class="wrap editorial" style="padding-bottom:96px">
-  <div class="editorial__img">
-    {% if settings.editorial_image != blank %}
-      <img
-        src="{{ settings.editorial_image | image_url: width: 1200 }}"
-        srcset="{{ settings.editorial_image | image_url: width: 600 }} 600w, {{ settings.editorial_image | image_url: width: 1200 }} 1200w, {{ settings.editorial_image | image_url: width: 1800 }} 1800w"
-        sizes="(min-width: 990px) 50vw, 100vw"
-        width="{{ settings.editorial_image.width }}"
-        height="{{ settings.editorial_image.height }}"
-        alt="Cão e gato a descansar em casa com acessórios HUKO pets"
-        loading="lazy"
-      >
-    {% else %}
-      <img
-        src="{{ 'editorial.png' | asset_url }}"
-        width="1535"
-        height="1024"
-        alt="Cão e gato a descansar em casa com acessórios HUKO pets"
-        loading="lazy"
-      >
-    {% endif %}
-  </div>
-  <div>
-    <div class="eyebrow" style="margin-bottom:20px">A nossa filosofia</div>
-    <h2>Criado para pets. Escolhido por pessoas que se importam.</h2>
-    <p style="margin-top:20px">Na HUKO pets acreditamos que os acessórios do seu animal fazem parte da sua casa e da vida que partilham. Por isso selecionamos apenas produtos funcionais, bonitos e feitos para durar.</p>
-    <p style="margin-top:14px">Menos coisas, melhores coisas. Para animais felizes e donos tranquilos.</p>
-    <a href="/pages/sobre-nos" class="btn btn--ghost" style="margin-top:26px">Conhecer a HUKO</a>
-  </div>
-</section>
+  {%- comment -%} ========== Comprar por animal ========== {%- endcomment -%}
+  {%- assign c_caes = collections['caes'] -%}
+  {%- assign c_gatos = collections['gatos'] -%}
+  {%- assign c_groom = collections['grooming'] -%}
+  <section class="wrap hv-section">
+    <div class="hv-head">
+      <div><span class="eyebrow">Explorar</span><h2>Para quem está a comprar?</h2></div>
+      <a href="{{ routes.collections_url }}" class="hv-more">Todas as categorias →</a>
+    </div>
+    <div class="hv-animals">
+      <a href="/collections/caes" class="hv-animal" style="background:#E3EADF">
+        <span class="hv-animal__top"><span class="hv-animal__name" style="color:#1E3D2F">Cães</span><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#1E3D2F" stroke-width="1.4" aria-hidden="true"><circle cx="7" cy="7" r="1.8"/><circle cx="12" cy="5" r="1.8"/><circle cx="17" cy="7" r="1.8"/><circle cx="5" cy="12" r="1.6"/><path d="M8 17c0-3 2-5.5 4-5.5s4 2.5 4 5.5c0 2-1.8 3-4 3s-4-1-4-3z"/></svg></span>
+        <span class="hv-animal__sub">Ração, snacks, camas, trelas e brinquedos · <b>{{ c_caes.products_count }}</b> produtos</span>
+      </a>
+      <a href="/collections/gatos" class="hv-animal" style="background:#F1E9D8">
+        <span class="hv-animal__top"><span class="hv-animal__name" style="color:#1E3D2F">Gatos</span><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#1E3D2F" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M5 4l3 4h8l3-4v9a7 7 0 01-14 0z"/><circle cx="9.5" cy="12" r=".8"/><circle cx="14.5" cy="12" r=".8"/></svg></span>
+        <span class="hv-animal__sub">Areias, arranhadores, ração e acessórios · <b>{{ c_gatos.products_count }}</b> produtos</span>
+      </a>
+      <a href="/collections/grooming" class="hv-animal" style="background:#1E3D2F">
+        <span class="hv-animal__top"><span class="hv-animal__name" style="color:#FAF8F3">Grooming <span style="color:#C9B27A">Pro</span></span><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#C9B27A" stroke-width="1.4" aria-hidden="true"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8 16.5L18 4M16 16.5L6 4"/></svg></span>
+        <span class="hv-animal__sub" style="color:rgba(250,248,243,.8)">Tosquia, tesouras, mesas e cosmética · <b>{{ c_groom.products_count }}</b> produtos</span>
+      </a>
+    </div>
+  </section>
+
+  {%- comment -%} ========== Destaques com escolha Cães / Gatos ========== {%- endcomment -%}
+  <section class="section section--card hv-featured" data-hv-tabs>
+    <div class="wrap">
+      <div class="hv-head" style="align-items:center">
+        <div><span class="eyebrow">Seleção HUKO</span><h2>Produtos em destaque</h2></div>
+        <div class="hv-seg" role="group" aria-label="Escolher animal">
+          <button type="button" aria-pressed="true" data-hv-tab="caes">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="1.8" aria-hidden="true"><circle cx="7" cy="7" r="1.8"/><circle cx="12" cy="5" r="1.8"/><circle cx="17" cy="7" r="1.8"/><path d="M8 17c0-3 2-5.5 4-5.5s4 2.5 4 5.5c0 2-1.8 3-4 3s-4-1-4-3z"/></svg>
+            Cães
+          </button>
+          <button type="button" aria-pressed="false" data-hv-tab="gatos">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M5 4l3 4h8l3-4v9a7 7 0 01-14 0z"/></svg>
+            Gatos
+          </button>
+        </div>
+      </div>
+      <div class="hv-panel" data-hv-panel="caes">
+        <div class="prod-grid">
+          {%- for product in collections['destaques-caes'].products limit: 8 -%}{% render 'product-card', card_product: product %}{%- endfor -%}
+        </div>
+        <div class="hv-center"><a href="/collections/caes" class="hv-btn hv-btn--ghost">Ver todos os produtos para cães</a></div>
+      </div>
+      <div class="hv-panel" data-hv-panel="gatos" hidden>
+        <div class="prod-grid">
+          {%- for product in collections['destaques-gatos'].products limit: 8 -%}{% render 'product-card', card_product: product %}{%- endfor -%}
+        </div>
+        <div class="hv-center"><a href="/collections/gatos" class="hv-btn hv-btn--ghost">Ver todos os produtos para gatos</a></div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ========== Promoção Camas Agui ========== {%- endcomment -%}
+  <section class="wrap hv-section">
+    <div class="hv-promo">
+      <div class="hv-promo__text">
+        <span class="eyebrow" style="color:#C9B27A">Promoção · Camas Agui</span>
+        <h2>Noites quentes, <span>{{ promo_percent }}% mais baratas</span></h2>
+        <p>Camas, donuts, colchões e iglus Agui para cães e gatos. Tecidos suaves, modelos com capa amovível e versões impermeáveis. Use o código no checkout.</p>
+        <div class="hv-slide__actions">
+          <a href="/collections/camas-agui" class="hv-btn hv-btn--green">Ver camas Agui</a>
+          <button type="button" class="hv-coupon" data-hv-coupon data-code="{{ promo_code }}" aria-label="Copiar o código {{ promo_code }}" style="color:#FAF8F3">
+            <span class="hv-coupon__label">Código</span>
+            <span class="hv-coupon__code">{{ promo_code }}</span>
+            <span class="hv-coupon__action" data-hv-coupon-feedback>Copiar</span>
+          </button>
+        </div>
+      </div>
+      <div class="hv-promo__pics" aria-hidden="true">
+        <div class="hv-promo__circle"></div>
+        <div class="hv-stk">
+          <img src="{{ 'home-agui-scotland.webp' | file_url }}" alt="" style="height:52%;max-width:48%" loading="lazy" width="640" height="250">
+          <img src="{{ 'home-agui-crib.webp' | file_url }}" alt="" style="height:100%;max-width:42%;position:relative;z-index:2" loading="lazy" width="640" height="650">
+          <img src="{{ 'home-agui-furry.webp' | file_url }}" alt="" style="height:50%;max-width:48%" loading="lazy" width="640" height="345">
+        </div>
+        <div class="hv-sticker" style="width:128px;height:128px;top:26px;right:36px;background:#C9B27A;color:#1E3D2F"><span style="font-size:46px">-{{ promo_percent }}%</span><small>{{ promo_code }}</small></div>
+      </div>
+    </div>
+    <div class="hv-promo-row">
+      {%- assign promo_handles = 'agui-curly-donut-bed,agui-furry-donut,agui-scotland-bed,agui-urban-hexagonal-bed,agui-noble-bed,agui-crib-igloo' | split: ',' -%}
+      {%- for h in promo_handles -%}
+        {%- assign p = all_products[h] -%}
+        {%- if p != blank and p.available -%}{% render 'hv-promo-card', card_product: p, percent: promo_percent %}{%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+
+  {%- comment -%} ========== Trio de marcas ========== {%- endcomment -%}
+  <section class="wrap hv-section">
+    <div class="hv-head">
+      <div><span class="eyebrow">As nossas marcas</span><h2>Coleções que os clientes repetem</h2></div>
+    </div>
+    <div class="hv-trio">
+      <a href="/collections/burbur" class="hv-brand" style="background:#EDE6F1;color:#3D2B4A">
+        <span class="hv-brand__name">burbur</span>
+        <span class="hv-brand__text" style="color:#3F3A44">Champôs, condicionadores e perfumes. Das linhas Friends para casa às linhas Pro e Aura dos groomers.</span>
+        <span class="hv-brand__pics hv-stk hv-stk--end" aria-hidden="true">
+          <img src="{{ 'home-burbur-teatree.webp' | file_url }}" alt="" style="height:90%" loading="lazy" width="271" height="640">
+          <img src="{{ 'home-burbur-perfume8.webp' | file_url }}" alt="" style="height:100%" loading="lazy" width="155" height="640">
+          <img src="{{ 'home-burbur-aura.webp' | file_url }}" alt="" style="height:84%" loading="lazy" width="193" height="640">
+        </span>
+        <span class="hv-brand__link">Ver coleção Burbur →</span>
+      </a>
+      <a href="/collections/dingo" class="hv-brand" style="background:#F4E4D3;color:#7A3216">
+        <span class="hv-brand__name">Dingo</span>
+        <span class="hv-brand__text" style="color:#4A3A30">Ração diária para cada fase da vida e os snacks Moments em caixas de 12: salmão, peru, ibérico e queijo.</span>
+        <span class="hv-brand__pics hv-stk hv-stk--end" aria-hidden="true">
+          <img src="{{ 'home-dingo-puppy.webp' | file_url }}" alt="" style="height:92%" loading="lazy" width="367" height="640">
+          <img src="{{ 'home-moments-turkey.webp' | file_url }}" alt="" style="height:80%" loading="lazy" width="490" height="640">
+          <img src="{{ 'home-moments-iberico.webp' | file_url }}" alt="" style="height:66%" loading="lazy" width="490" height="640">
+        </span>
+        <span class="hv-brand__link">Ver Dingo →</span>
+      </a>
+      <a href="/collections/natura-diet" class="hv-brand" style="background:#E3EADF;color:#1E3D2F">
+        <span class="hv-brand__name">Natura Diet</span>
+        <span class="hv-brand__text" style="color:#3A4A3E">Ração seca e húmida para cães e gatos: frango, cordeiro, salmão e receitas sem cereais.</span>
+        <span class="hv-brand__pics hv-stk hv-stk--end" aria-hidden="true">
+          <img src="{{ 'home-natura-dailyfood.webp' | file_url }}" alt="" style="height:92%" loading="lazy" width="353" height="640">
+          <img src="{{ 'home-natura-grainfree.webp' | file_url }}" alt="" style="height:100%" loading="lazy" width="385" height="640">
+          <img src="{{ 'home-natura-pate.webp' | file_url }}" alt="" style="height:58%" loading="lazy" width="595" height="640">
+        </span>
+        <span class="hv-brand__link">Ver Natura Diet →</span>
+      </a>
+    </div>
+  </section>
+
+  {%- comment -%} ========== Coleção Burbur ========== {%- endcomment -%}
+  <section class="wrap hv-section">
+    <div class="hv-split">
+      <div class="hv-cpanel" style="background:#3D2B4A">
+        <span class="eyebrow" style="color:#D9C7E4">Coleção Burbur</span>
+        <span class="hv-cpanel__title">O spa do seu pet, em casa</span>
+        <p>Quatro linhas para cada necessidade:</p>
+        <div class="hv-cpanel__chips"><span>Friends</span><span>Pro</span><span>Aura</span><span>Basics</span></div>
+        <div class="hv-cpanel__pics hv-stk hv-stk--start" aria-hidden="true">
+          <img src="{{ 'home-burbur-pro-whitening.webp' | file_url }}" alt="" style="height:86%" loading="lazy" width="191" height="497">
+          <img src="{{ 'home-burbur-pro-2em1.webp' | file_url }}" alt="" style="height:100%" loading="lazy" width="166" height="640">
+          <img src="{{ 'home-burbur-aloe.webp' | file_url }}" alt="" style="height:88%" loading="lazy" width="270" height="640">
+        </div>
+        <a href="/collections/burbur" class="hv-btn hv-btn--ghost-light">Ver toda a coleção</a>
+      </div>
+      <div class="prod-grid">
+        {%- assign burbur_handles = 'burbur-champo-extrato-cha-400ml,burbur-perfume-nº-8-100ml,burbur-aura-mascara-royal-silk,burbur-pro-acondicionador-bifasico-2-em-1-500ml' | split: ',' -%}
+        {%- for h in burbur_handles -%}{%- assign p = all_products[h] -%}{%- if p != blank -%}{% render 'product-card', card_product: p %}{%- endif -%}{%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ========== Coleção Dingonatura ========== {%- endcomment -%}
+  <section class="wrap hv-section" data-hv-tabs>
+    <div class="hv-head" style="align-items:center">
+      <div><span class="eyebrow">Coleção Dingonatura</span><h2>Nutrição natural, todos os dias</h2></div>
+      <div class="hv-seg" role="group" aria-label="Escolher marca">
+        <button type="button" aria-pressed="true" data-hv-tab="natura">Natura Diet</button>
+        <button type="button" aria-pressed="false" data-hv-tab="dingo">Dingo</button>
+      </div>
+    </div>
+    <div class="hv-panel hv-split hv-split--rev" data-hv-panel="natura">
+      <div class="prod-grid">
+        {%- assign natura_handles = 'natura-diet-fish-rice,natura-diet-grain-free-salmon-coconut,natura-diet-cat-adult-salmon,natura-diet-dog-chicken-vegs-400-gr-cx-12-un' | split: ',' -%}
+        {%- for h in natura_handles -%}{%- assign p = all_products[h] -%}{%- if p != blank -%}{% render 'product-card', card_product: p %}{%- endif -%}{%- endfor -%}
+      </div>
+      <div class="hv-cpanel" style="background:#2F5A3F">
+        <span class="eyebrow" style="color:#F1E2C5">Natura Diet</span>
+        <span class="hv-cpanel__title">Receitas com carne e peixe para cães e gatos</span>
+        <p>Daily Food, Lamb &amp; Rice, Fish &amp; Rice, Grain Free e gamas para gatos esterilizados e gatinhos.</p>
+        <div class="hv-cpanel__pics hv-stk hv-stk--start" aria-hidden="true">
+          <img src="{{ 'home-natura-grainfree.webp' | file_url }}" alt="" style="height:100%" loading="lazy" width="385" height="640">
+          <img src="{{ 'home-natura-pate.webp' | file_url }}" alt="" style="height:60%" loading="lazy" width="595" height="640">
+        </div>
+        <a href="/collections/natura-diet" class="hv-btn hv-btn--ghost-light">Ver Natura Diet</a>
+      </div>
+    </div>
+    <div class="hv-panel hv-split hv-split--rev" data-hv-panel="dingo" hidden>
+      <div class="prod-grid">
+        {%- assign dingo_handles = 'dingo-puppy-junior,dingo-mature-daily,moments-dog-sticks-iberico-600-g,moments-dog-dental-mini-medium-500-g' | split: ',' -%}
+        {%- for h in dingo_handles -%}{%- assign p = all_products[h] -%}{%- if p != blank -%}{% render 'product-card', card_product: p %}{%- endif -%}{%- endfor -%}
+      </div>
+      <div class="hv-cpanel" style="background:#7A3216">
+        <span class="eyebrow" style="color:#F1E2C5">Dingo</span>
+        <span class="hv-cpanel__title">Ração diária e snacks Moments</span>
+        <p>Da fase Puppy &amp; Junior à Mature &amp; Daily, com snacks semi-húmidos e dentais para recompensar.</p>
+        <div class="hv-cpanel__pics hv-stk hv-stk--start" aria-hidden="true">
+          <img src="{{ 'home-dingo-puppy.webp' | file_url }}" alt="" style="height:100%" loading="lazy" width="367" height="640">
+          <img src="{{ 'home-moments-turkey.webp' | file_url }}" alt="" style="height:74%" loading="lazy" width="490" height="640">
+        </div>
+        <a href="/collections/dingo" class="hv-btn hv-btn--ghost-light">Ver Dingo</a>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ========== Dois banners médios ========== {%- endcomment -%}
+  <section class="wrap hv-section">
+    <div class="hv-duo">
+      <a href="/collections/gatos-acessorios-e-conforto-moveis-e-arranhadores" class="hv-banner hv-banner--photos" style="background:#F1E9D8">
+        <span class="hv-banner__text">
+          <span class="eyebrow">Gatos</span>
+          <span class="hv-banner__title" style="color:#1E3D2F">Arranhadores Pawppin, do pequeno à torre</span>
+          <span class="hv-more" style="align-self:flex-start">Ver arranhadores →</span>
+        </span>
+        <span class="hv-banner__photos">
+          <img src="{{ 'home-pawppin-ragdoll.webp' | file_url }}" alt="Arranhador Pawppin Ragdoll numa sala" loading="lazy" width="600" height="600">
+          <img src="{{ 'home-pawppin-climber.webp' | file_url }}" alt="Arranhador Pawppin Climber numa sala" loading="lazy" width="600" height="600">
+        </span>
+      </a>
+      <a href="/collections/peluches-red-dingo" class="hv-banner hv-banner--pack" style="background:#FBE8D8">
+        <span class="hv-banner__text">
+          <span class="eyebrow" style="color:#9A4A20">Red Dingo · Cães</span>
+          <span class="hv-banner__title" style="color:#7A3216;max-width:10ch">Peluches resistentes com som</span>
+          <span class="hv-more" style="align-self:flex-start;color:#7A3216;border-bottom-color:#7A3216">{% if min_reddingo > 0 %}Desde {{ min_reddingo | money }}{% else %}Ver peluches{% endif %} →</span>
+        </span>
+        <span class="hv-stk hv-stk--end" aria-hidden="true">
+          <img src="{{ 'home-reddingo-platypus.webp' | file_url }}" alt="" style="height:80%;max-width:26%" loading="lazy" width="267" height="499">
+          <img src="{{ 'home-reddingo-kangaroo.webp' | file_url }}" alt="" style="height:100%;max-width:34%;position:relative;z-index:2" loading="lazy" width="381" height="462">
+          <img src="{{ 'home-reddingo-echidna.webp' | file_url }}" alt="" style="height:52%;max-width:40%" loading="lazy" width="509" height="311">
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <div class="hv-bottom-space"></div>
+</div>
 
 {% section 'brands' %}
+
+<script src="{{ 'home-v2.js' | asset_url }}" defer></script>
