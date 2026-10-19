@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>{{ page_title }}{% unless page_title contains shop.name %} — {{ shop.name }}{% endunless %}</title>
+  {%- assign page_title_down = page_title | downcase -%}
+  <title>{{ page_title }}{% unless page_title_down contains 'hukopets' %} — {{ shop.name }}{% endunless %}</title>
   {%- comment -%} Listagens de fornecedor: o Google deve preferir as coleções de marca. {%- endcomment -%}
   {%- if template.name == 'collection' and collection.handle == 'vendors' -%}
   <meta name="robots" content="noindex,follow">
@@ -314,6 +315,10 @@
   </div>
 
   <main>
+    {%- comment -%} H1 único da home (os títulos dos slides são h2). {%- endcomment -%}
+    {%- if template.name == 'index' -%}
+      <h1 class="visually-hidden">Hukopets — loja online de produtos para cães, gatos e grooming profissional</h1>
+    {%- endif %}
     {% if is_grooming %}
       <div class="grooming-space-bar">
         <div class="wrap">
