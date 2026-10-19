@@ -11,7 +11,7 @@
 {%- endcomment -%}
 {%- assign card_variant = card_product.selected_or_first_available_variant -%}
 {%- assign card_variant_attr = '' -%}
-{%- if card_variant.id != card_product.first_available_variant.id -%}
+{%- if card_product.first_available_variant and card_variant.id != card_product.first_available_variant.id -%}
   {%- assign card_variant_attr = ' data-variant-id="' | append: card_variant.id | append: '"' -%}
 {%- endif -%}
 {%- comment -%}
