@@ -3,8 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  {%- comment -%}
+    Sufixo " — hukopets.com" só se o título ainda não tiver o nome da loja e o
+    total não passar de 60 caracteres (o que o Google costuma mostrar).
+  {%- endcomment -%}
   {%- assign page_title_down = page_title | downcase -%}
-  <title>{{ page_title }}{% unless page_title_down contains 'hukopets' %} — {{ shop.name }}{% endunless %}</title>
+  {%- assign title_suffix = ' — ' | append: shop.name -%}
+  {%- assign title_full_size = page_title | append: title_suffix | size -%}
+  {%- assign title_use_suffix = true -%}
+  {%- if page_title_down contains 'hukopets' or title_full_size > 60 -%}{%- assign title_use_suffix = false -%}{%- endif %}
+  <title>{{ page_title }}{% if title_use_suffix %}{{ title_suffix }}{% endif %}</title>
   {%- comment -%} Listagens de fornecedor: o Google deve preferir as coleções de marca. {%- endcomment -%}
   {%- if template.name == 'collection' and collection.handle == 'vendors' -%}
   <meta name="robots" content="noindex,follow">
@@ -503,5 +511,19 @@
   {% endif %}
 
   {% render 'google-customer-reviews-badge' %}
+
+  {%- comment -%}
+    Cartões de produto: o href é o URL canónico; se o cartão mostra outra variante
+    (data-variant-id, ver snippets/product-card.liquid), o clique simples abre-a.
+    Cliques com modificadores (novo separador, etc.) seguem o href limpo.
+  {%- endcomment -%}
+  <script>
+    document.addEventListener('click', function (e) {
+      var link = e.target.closest && e.target.closest('a[data-variant-id]');
+      if (!link || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      e.preventDefault();
+      window.location.href = link.href + (link.href.indexOf('?') === -1 ? '?' : '&') + 'variant=' + link.getAttribute('data-variant-id');
+    });
+  </script>
 </body>
 </html>

@@ -4,8 +4,16 @@
   selected_or_first_available_variant — e não a card_product.price, que é sempre o
   preço mínimo entre todas as variantes e pode pertencer a um tamanho diferente do
   que está no título.
+  O href é sempre o URL canónico do produto (sem ?variant=, por SEO). Quando a
+  variante do cartão não é a que a página de produto abre por defeito (ex.: filtro
+  de cor ativo), data-variant-id faz o clique levar a essa variante (ver
+  layout/theme.liquid).
 {%- endcomment -%}
 {%- assign card_variant = card_product.selected_or_first_available_variant -%}
+{%- assign card_variant_attr = '' -%}
+{%- if card_variant.id != card_product.first_available_variant.id -%}
+  {%- assign card_variant_attr = ' data-variant-id="' | append: card_variant.id | append: '"' -%}
+{%- endif -%}
 {%- comment -%}
   Nas listagens de coleção há espaço para a etiqueta completa; nos carrosséis da
   homepage o cartão é mais estreito, por isso mantém-se a versão curta.
@@ -16,7 +24,7 @@
   {%- assign atc_label = 'Adicionar' -%}
 {%- endif -%}
 <div class="prod-card{% if white %} prod-card--white{% endif %}">
-  <a href="{{ card_product.url }}?variant={{ card_variant.id }}" class="prod-card__img">
+  <a href="{{ card_product.url }}" class="prod-card__img"{{ card_variant_attr }}>
     {% if card_product.featured_image %}
       <img src="{{ card_product.featured_image | image_url: width: 600 }}" alt="{{ card_product.featured_image.alt | split: '#variant:' | first | strip | default: card_product.title | escape }}" loading="lazy">
     {% endif %}
@@ -29,7 +37,7 @@
     {% endif %}
   </a>
   <div class="prod-card__body">
-    <a href="{{ card_product.url }}?variant={{ card_variant.id }}" class="prod-card__title">{{ card_product.title }}</a>
+    <a href="{{ card_product.url }}" class="prod-card__title"{{ card_variant_attr }}>{{ card_product.title }}</a>
     <div class="prod-card__foot">
       <span class="price">{{ card_variant.price | money }}</span>
       {%- if card_variant.available -%}
