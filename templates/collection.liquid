@@ -9,18 +9,29 @@
 {%- capture grooming_destination -%}{%- render 'grooming-url' -%}{%- endcapture -%}
 {%- assign has_facets = false -%}
 {%- if collection.filters.size > 0 -%}{%- assign has_facets = true -%}{%- endif -%}
+{%- comment -%} Coleção de marca? (lista oficial em brand-collections) {%- endcomment -%}
+{%- capture brand_raw -%}{% render 'brand-collections' %}{%- endcapture -%}
+{%- assign brand_entries = brand_raw | strip | split: '~|~' -%}
+{%- assign brand_name = '' -%}
+{%- for entry in brand_entries -%}
+  {%- assign entry_handle = entry | split: '|' | last -%}
+  {%- if entry_handle == collection.handle -%}{%- assign brand_name = entry | split: '|' | first -%}{%- break -%}{%- endif -%}
+{%- endfor -%}
 
 <div class="wrap">
   {%- comment -%} Página de marca (listagem de fornecedor): ficha do fabricante em vez do cabeçalho normal. {%- endcomment -%}
   {%- if collection.handle == 'vendors' and collection.current_vendor != blank -%}
     {% render 'brand-hero', vendor: collection.current_vendor, count: collection.products_count %}
+  {%- elsif brand_name != blank -%}
+    {%- comment -%} Coleção de marca: cabeçalho de marca em vez do título/descrição normais. {%- endcomment -%}
+    {% render 'brand-collection-hero', brand_collection: collection, brand_name: brand_name %}
   {%- else -%}
   <div class="coll-head">
     {% if is_grooming %}
       <div class="grooming-heading__eyebrow">{{ 'general.grooming.professional' | t }} <span class="nav-grooming__badge">{{ 'general.navigation.pro' | t }}</span></div>
     {% endif %}
     <h1>{{ collection.title }}</h1>
-    {% if collection.description != blank %}<p>{{ collection.description | strip_html }}</p>{% endif %}
+    {% if collection.description != blank %}<div class="coll-head__desc">{{ collection.description }}</div>{% endif %}
     {% if is_grooming %}
       {% if collection.description == blank %}<p>{{ 'general.grooming.intro' | t }}</p>{% endif %}
       <div class="grooming-heading__meta">

@@ -1,0 +1,38 @@
+{%- comment -%}
+  Cabeçalho das coleções de marca (/collections/<handle> da lista de
+  brand-collections): mesmo markup e classes do brand-hero, com logótipo e
+  origem de brand-data e o texto da descrição da coleção, em HTML.
+
+  Parâmetros:
+    brand_collection — a coleção de marca
+    brand_name       — nome a mostrar (da lista oficial; ex.: "Agui")
+{%- endcomment -%}
+{%- capture b_data -%}{% render 'brand-data', handle: brand_collection.handle %}{%- endcapture -%}
+{%- assign b_data = b_data | strip | split: '|' -%}
+{%- assign b_logo = b_data[0] | strip -%}
+{%- assign b_origin = b_data[1] | strip -%}
+{%- assign count = brand_collection.products_count -%}
+
+<section class="brand-hero{% if b_logo == blank %} brand-hero--plain{% endif %}">
+  {%- if b_logo != blank -%}
+    <div class="brand-hero__logo">
+      <img src="{{ b_logo | asset_url }}" alt="{{ brand_name | escape }}" width="220" height="110">
+    </div>
+  {%- endif -%}
+  <div class="brand-hero__body">
+    <span class="eyebrow">Marca</span>
+    <h1 class="serif">{{ brand_name }}</h1>
+    {%- if brand_collection.description != blank -%}
+      <div class="brand-hero__text">{{ brand_collection.description }}</div>
+    {%- endif -%}
+    <div class="brand-hero__meta">
+      {%- if b_origin != blank -%}
+        <span class="brand-hero__chip">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          {{ b_origin }}
+        </span>
+      {%- endif -%}
+      <span class="brand-hero__chip">{{ count }} produto{% if count != 1 %}s{% endif %}</span>
+    </div>
+  </div>
+</section>

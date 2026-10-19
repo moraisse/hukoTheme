@@ -1,0 +1,34 @@
+{%- comment -%}
+  Dados do cabeçalho das coleções de marca, por handle: logótipo (ficheiro em
+  assets) e origem. Saída "logotipo|origem" (qualquer um pode vir vazio).
+  Uso: {%- capture d -%}{% render 'brand-data', handle: collection.handle %}{%- endcapture -%}
+{%- endcomment -%}
+{%- case handle -%}
+  {%- when '3-claveles' -%}3_claveles.png|Logroño, Espanha
+  {%- when 'camas-agui' -%}agui.png|Portugal
+  {%- when 'andis' -%}andis.png|EUA · desde 1922
+  {%- when 'antos' -%}antos.png|Países Baixos
+  {%- when 'barry-king' -%}barry_king.png|Polónia
+  {%- when 'burbur' -%}burbur_pro.png|Alicante, Espanha
+  {%- when 'natura-diet' -%}dingo_natura.jpg|Espanha · desde 2001
+  {%- when 'dingo' -%}dingo_natura.jpg|Espanha · desde 2001
+  {%- when 'flexi' -%}flexy.png|Alemanha · desde 1973
+  {%- when 'freedog' -%}freedog.png|Barcelona · desde 1998
+  {%- when 'groom-professional' -%}groom_professional.png|
+  {%- when 'groomtek' -%}groomtek.png|Portugal
+  {%- when 'hau-miau' -%}hau_miau.png|
+  {%- when 'lolo-pets' -%}lolo_pets.png|Polónia
+  {%- when 'odourlock' -%}oudor_lock.jpg|Canadá
+  {%- when 'panama-pet' -%}panama_pet.png|
+  {%- when 'pawppin' -%}pawppin.png|
+  {%- when 'red-dingo' -%}red_dingo.png|Sydney · desde 2002
+  {%- when 'transgroom' -%}transgroom.png|Bélgica
+  {%- when 'sharper-blade' -%}|Ericeira, Portugal
+  {%- when 'mp-bergamo' -%}|Itália · desde 1997
+  {%- when 'moderna' -%}|Bélgica
+  {%- when 'happy-pet' -%}|Reino Unido
+  {%- when 'petuxe' -%}|Espanha
+  {%- when 'chris-christensen' -%}|EUA · desde 1996
+  {%- when 'milk-pepper' -%}|França
+  {%- when 'solidary' -%}|Espanha · desde 2001
+{%- endcase -%}
