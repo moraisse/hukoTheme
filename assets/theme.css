@@ -303,7 +303,7 @@ body .prod-card--white{background:#fff}
 /* footer */
 .site-footer{background:var(--ink);color:var(--bg);padding:72px 0 36px}
 .site-footer__cols{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:48px;padding-bottom:56px;border-bottom:1px solid rgba(250,248,243,.12)}
-.site-footer h4{margin:0 0 12px;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:500;font-family:var(--sans)}
+.site-footer .footer__heading{margin:0 0 12px;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:500;font-family:var(--sans)}
 .site-footer a{color:rgba(250,248,243,.75);font-size:15px;font-weight:300;display:block;margin-bottom:12px}
 .site-footer a:hover{color:var(--green)}
 .footer-grooming{margin-top:18px;padding-top:14px;border-top:1px solid var(--gold)}

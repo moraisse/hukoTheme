@@ -45,7 +45,7 @@
       {%- if numeric_group != blank -%}
         {%- assign numeric_list = numeric_group | split: sep -%}
         <section class="brand-dir__group" data-brand-group="0-9">
-          <h3 class="brand-dir__letterhead">0-9</h3>
+          <p class="brand-dir__letterhead" role="presentation">0-9</p>
           <div class="brand-dir__list">
             {%- for entry in numeric_list -%}
               {%- assign b_name = entry | split: '|' | first -%}
@@ -67,7 +67,7 @@
         {%- if group != blank -%}
           {%- assign group_list = group | split: sep -%}
           <section class="brand-dir__group" data-brand-group="{{ letter }}">
-            <h3 class="brand-dir__letterhead">{{ letter }}</h3>
+            <p class="brand-dir__letterhead" role="presentation">{{ letter }}</p>
             <div class="brand-dir__list">
               {%- for entry in group_list -%}
                 {%- assign b_name = entry | split: '|' | first -%}
