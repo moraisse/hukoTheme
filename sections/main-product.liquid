@@ -343,17 +343,29 @@
 </script>
 
 {%- comment -%}
-  "Combina bem com": o contentor é preenchido por fetch com a secção
-  product-recommendations (Product Recommendations API). Até lá, ou sem JS,
-  mostra produtos da coleção mais específica do produto (a de menos produtos,
-  ignorando as coleções gerais). Sem coleção adequada não mostra nada.
+  "Também pode gostar": até 8 produtos disponíveis da subcategoria mais pequena
+  do produto (handles caes-/gatos-/grooming-), ou, sem subcategoria, da coleção
+  mais pequena que não seja geral (CÃES, GATOS, GROOMING, destaques-*, etc.).
+  Gerado só em Liquid no servidor (sem JS), para que todos os produtos tenham
+  ligações internas com URL limpo.
 {%- endcomment -%}
-{%- assign rec_skip = 'caes,gatos,grooming,frontpage,all' | split: ',' -%}
-{%- assign rec_coll = collection -%}
+{%- assign rec_skip = 'caes,gatos,grooming,frontpage,all,compra-recorrente' | split: ',' -%}
+{%- assign rec_coll = nil -%}
+{%- assign rec_best = 1000000 -%}
+{%- for c in product.collections -%}
+  {%- assign c_prefix = c.handle | split: '-' | first -%}
+  {%- if rec_skip contains c.handle or c_prefix == 'destaques' -%}{%- continue -%}{%- endif -%}
+  {%- if c_prefix == 'caes' or c_prefix == 'gatos' or c_prefix == 'grooming' -%}
+    {%- if c.products_count > 1 and c.products_count < rec_best -%}
+      {%- assign rec_coll = c -%}
+      {%- assign rec_best = c.products_count -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
 {%- unless rec_coll -%}
-  {%- assign rec_best = 1000000 -%}
   {%- for c in product.collections -%}
-    {%- if rec_skip contains c.handle -%}{%- continue -%}{%- endif -%}
+    {%- assign c_prefix = c.handle | split: '-' | first -%}
+    {%- if rec_skip contains c.handle or c_prefix == 'destaques' -%}{%- continue -%}{%- endif -%}
     {%- if c.products_count > 1 and c.products_count < rec_best -%}
       {%- assign rec_coll = c -%}
       {%- assign rec_best = c.products_count -%}
@@ -364,46 +376,24 @@
 {%- capture rec_cards -%}
   {%- if rec_coll -%}
     {%- for p in rec_coll.products -%}
-      {%- if p.id != product.id and p.available and rec_shown < 4 -%}
+      {%- if p.id != product.id and p.available -%}
         {% render 'product-card', card_product: p %}
         {%- assign rec_shown = rec_shown | plus: 1 -%}
-      {%- endif -%}
-    {%- endfor -%}
-    {%- for p in rec_coll.products -%}
-      {%- if p.id != product.id and p.available == false and rec_shown < 4 -%}
-        {% render 'product-card', card_product: p %}
-        {%- assign rec_shown = rec_shown | plus: 1 -%}
+        {%- if rec_shown >= 8 -%}{%- break -%}{%- endif -%}
       {%- endif -%}
     {%- endfor -%}
   {%- endif -%}
 {%- endcapture -%}
-<div data-product-recs data-url="{{ routes.product_recommendations_url }}?product_id={{ product.id }}&limit=4&section_id=product-recommendations">
-  {%- if rec_shown > 0 -%}
-  <section class="section section--card">
-    <div class="wrap">
-      <h2 class="serif" style="font-size:32px;margin:0 0 36px">Combina bem com</h2>
-      <div class="prod-grid">
-        {{ rec_cards }}
-      </div>
+{%- if rec_shown > 0 -%}
+<section class="section section--card pdp__related">
+  <div class="wrap">
+    <h2 class="serif" style="font-size:32px;margin:0 0 36px">Também pode gostar</h2>
+    <div class="prod-grid">
+      {{ rec_cards }}
     </div>
-  </section>
-  {%- endif -%}
-</div>
-<script>
-(function(){
-  var box = document.querySelector('[data-product-recs]');
-  if (!box || !window.fetch) return;
-  fetch(box.getAttribute('data-url'))
-    .then(function(r){ return r.ok ? r.text() : ''; })
-    .then(function(html){
-      if (!html) return;
-      var doc = new DOMParser().parseFromString(html, 'text/html');
-      var section = doc.querySelector('.section--card');
-      if (section && section.querySelector('.prod-card')) box.innerHTML = section.outerHTML;
-    })
-    .catch(function(){});
-})();
-</script>
+  </div>
+</section>
+{%- endif -%}
 {%- assign v = product.selected_or_first_available_variant -%}
 {%- comment -%} Marca: nome da coleção de marca do produto; sem correspondência, o fornecedor. {%- endcomment -%}
 {%- capture ld_brand -%}{% render 'brand-collections', for_product: product %}{%- endcapture -%}

@@ -44,7 +44,9 @@
         {% endif %}
 
         <div class="results-main">
-          {% paginate search.results by 12 %}
+          {% paginate search.results by 48 %}
+            {%- assign pagination_prev_url = paginate.previous.url -%}
+            {%- assign pagination_next_url = paginate.next.url -%}
             <div class="prod-grid">
               {% for item in search.results %}
                 {% if item.object_type == 'product' %}{% render 'product-card', card_product: item, white: true %}{% endif %}

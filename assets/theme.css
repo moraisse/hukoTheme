@@ -969,3 +969,22 @@ body.template-product .breadcrumb [aria-current]{text-transform:uppercase;letter
 @media(prefers-reduced-motion:reduce){.coll-card,.coll-card__media img{transition:none}.coll-card:hover{transform:none}.coll-card:hover .coll-card__media img{transform:none}}
 /* chat Shopify Inbox ("Precisa de ajuda?"): só em desktop */
 @media(max-width:900px){shopify-chat{display:none!important}}
+/* mapa do site (templates/page.sitemap.liquid) */
+.sitemap{padding-top:32px;padding-bottom:88px}
+.sitemap__title{font-size:46px;margin:0 0 16px}
+.sitemap__intro{max-width:720px;margin:0 0 8px;color:var(--muted)}
+.sitemap__section{padding:32px 0;border-top:1px solid var(--line)}
+.sitemap__section:first-of-type{border-top:none}
+.sitemap__heading{font-size:30px;margin:0 0 24px}
+.sitemap__heading a,.sitemap__block-title a{color:inherit}
+.sitemap__heading a:hover,.sitemap__block-title a:hover{color:var(--forest)}
+.sitemap__grid{columns:3 300px;column-gap:48px}
+.sitemap__block{break-inside:avoid;margin:0 0 28px}
+.sitemap__block-title{font-size:16px;margin:0 0 10px;letter-spacing:-.01em}
+.sitemap__list{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.5}
+.sitemap__list li{padding:3px 0}
+.sitemap__list a{color:#4A4A44}
+.sitemap__list a:hover{color:var(--forest);text-decoration:underline}
+.sitemap__list--collections{columns:4 220px;column-gap:40px}
+.sitemap__count{color:var(--soft);font-size:12.5px}
+@media(max-width:768px){.sitemap__title{font-size:34px}.sitemap__heading{font-size:24px}}

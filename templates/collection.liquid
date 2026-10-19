@@ -70,7 +70,10 @@
     {% endif %}
 
     <div class="results-main">
-      {% paginate collection.products by 12 %}
+      {% paginate collection.products by 48 %}
+        {%- comment -%} Lido em layout/theme.liquid para <link rel="prev/next">. {%- endcomment -%}
+        {%- assign pagination_prev_url = paginate.previous.url -%}
+        {%- assign pagination_next_url = paginate.next.url -%}
         <div class="prod-grid" style="padding-bottom:24px">
           {% for product in collection.products %}{% render 'product-card', card_product: product, white: true %}{% endfor %}
         </div>

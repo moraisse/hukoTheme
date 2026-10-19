@@ -1,0 +1,81 @@
+{%- comment -%}
+  Mapa do site (página com o template "sitemap", handle mapa-do-site).
+  Tudo em HTML gerado no servidor, sem JS, para que cada coleção e cada produto
+  tenha pelo menos uma ligação interna limpa:
+  1. Categorias do menu principal (CÃES, GATOS, GROOMING): para cada subcoleção
+     final, a lista de todos os seus produtos; nas subcoleções com filhos, um bloco
+     "Outros produtos" com os que não estão em nenhum filho.
+  2. Todas as coleções publicadas com produtos (exceto gerais/internas).
+  O paginate by 250 é só para passar o limite de 50 produtos por coleção.
+{%- endcomment -%}
+<div class="wrap sitemap">
+  <h1 class="serif sitemap__title">{{ page.title }}</h1>
+  {%- if page.content != blank -%}<div class="rte sitemap__intro">{{ page.content }}</div>{%- endif -%}
+
+  {%- for top in linklists.main-menu.links -%}
+    {%- if top.type != 'collection_link' -%}{%- continue -%}{%- endif -%}
+    <section class="sitemap__section">
+      <h2 class="serif sitemap__heading"><a href="{{ top.url }}">{{ top.title }}</a></h2>
+      <div class="sitemap__grid">
+        {%- for child in top.links -%}
+          {%- if child.type != 'collection_link' -%}{%- continue -%}{%- endif -%}
+          {%- if child.links.size > 0 -%}
+            {%- assign child_handles = '' -%}
+            {%- for gc in child.links -%}
+              {%- if gc.type != 'collection_link' or gc.object.products_count == 0 -%}{%- continue -%}{%- endif -%}
+              {%- assign child_handles = child_handles | append: ',' | append: gc.object.handle -%}
+              <div class="sitemap__block">
+                <h3 class="sitemap__block-title"><a href="{{ child.url }}">{{ child.title }}</a> › <a href="{{ gc.url }}">{{ gc.title }}</a></h3>
+                <ul class="sitemap__list">
+                  {%- paginate gc.object.products by 250 -%}
+                    {%- for p in gc.object.products -%}<li><a href="{{ p.url }}">{{ p.title }}</a></li>{%- endfor -%}
+                  {%- endpaginate -%}
+                </ul>
+              </div>
+            {%- endfor -%}
+            {%- assign child_handles = child_handles | split: ',' -%}
+            {%- capture others -%}
+              {%- paginate child.object.products by 250 -%}
+                {%- for p in child.object.products -%}
+                  {%- assign in_child = false -%}
+                  {%- for pc in p.collections -%}
+                    {%- if child_handles contains pc.handle -%}{%- assign in_child = true -%}{%- break -%}{%- endif -%}
+                  {%- endfor -%}
+                  {%- unless in_child -%}<li><a href="{{ p.url }}">{{ p.title }}</a></li>{%- endunless -%}
+                {%- endfor -%}
+              {%- endpaginate -%}
+            {%- endcapture -%}
+            {%- if others != blank -%}
+              <div class="sitemap__block">
+                <h3 class="sitemap__block-title"><a href="{{ child.url }}">{{ child.title }}</a> › outros produtos</h3>
+                <ul class="sitemap__list">{{ others }}</ul>
+              </div>
+            {%- endif -%}
+          {%- elsif child.object.products_count > 0 -%}
+            <div class="sitemap__block">
+              <h3 class="sitemap__block-title"><a href="{{ child.url }}">{{ child.title }}</a></h3>
+              <ul class="sitemap__list">
+                {%- paginate child.object.products by 250 -%}
+                  {%- for p in child.object.products -%}<li><a href="{{ p.url }}">{{ p.title }}</a></li>{%- endfor -%}
+                {%- endpaginate -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endfor -%}
+
+  <section class="sitemap__section">
+    <h2 class="serif sitemap__heading">Todas as coleções</h2>
+    <ul class="sitemap__list sitemap__list--collections">
+      {%- paginate collections by 250 -%}
+        {%- for c in collections -%}
+          {%- assign c_prefix = c.handle | split: '-' | first -%}
+          {%- if c.products_count == 0 or c.handle == 'frontpage' or c.handle == 'all' or c.handle == 'compra-recorrente' or c_prefix == 'destaques' -%}{%- continue -%}{%- endif -%}
+          <li><a href="{{ c.url }}">{{ c.title }}</a> <span class="sitemap__count">({{ c.products_count }})</span></li>
+        {%- endfor -%}
+      {%- endpaginate -%}
+    </ul>
+  </section>
+</div>
