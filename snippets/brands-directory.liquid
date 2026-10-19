@@ -1,21 +1,21 @@
 {%- comment -%}
   Diretório de marcas: barra de letras à esquerda, campo de procura em cima e as
-  marcas agrupadas pela inicial. A lista vem dos fornecedores reais dos produtos
-  (`all_vendors`), por isso acompanha o catálogo sem manutenção manual, e cada
-  marca aponta para `url_for_vendor` — a listagem de fornecedor da Shopify, que
-  funciona sem depender de filtros configurados no admin.
+  marcas agrupadas pela inicial. A lista vem de `brand-collections` (marcas
+  oficiais, cada uma com a sua coleção), por isso não mostra fornecedores
+  internos; cada marca aponta para a coleção de marca, com texto e SEO próprios.
 {%- endcomment -%}
-{%- assign vendors = collections.all.all_vendors | sort -%}
+{%- capture brand_raw -%}{% render 'brand-collections' %}{%- endcapture -%}
+{%- assign brands = brand_raw | strip | split: '~|~' -%}
 {%- assign letters = 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z' | split: ',' -%}
 {%- assign digits = '0,1,2,3,4,5,6,7,8,9' | split: ',' -%}
 {%- assign sep = '~|~' -%}
 
 {%- comment -%} Marcas começadas por número, agrupadas em "0-9". {%- endcomment -%}
 {%- assign numeric_group = '' -%}
-{%- for vendor in vendors -%}
-  {%- assign initial = vendor | slice: 0 -%}
+{%- for entry in brands -%}
+  {%- assign initial = entry | slice: 0 -%}
   {%- if digits contains initial -%}
-    {%- assign numeric_group = numeric_group | append: vendor | append: sep -%}
+    {%- assign numeric_group = numeric_group | append: entry | append: sep -%}
   {%- endif -%}
 {%- endfor -%}
 
@@ -27,8 +27,8 @@
     {%- endif -%}
     {%- for letter in letters -%}
       {%- assign has_any = false -%}
-      {%- for vendor in vendors -%}
-        {%- assign initial = vendor | slice: 0 | upcase -%}
+      {%- for entry in brands -%}
+        {%- assign initial = entry | slice: 0 | upcase -%}
         {%- if initial == letter -%}{%- assign has_any = true -%}{%- break -%}{%- endif -%}
       {%- endfor -%}
       <button type="button" class="brand-dir__letter" data-brand-letter="{{ letter }}"{% unless has_any %} disabled{% endunless %}>{{ letter }}</button>
@@ -47,8 +47,10 @@
         <section class="brand-dir__group" data-brand-group="0-9">
           <h3 class="brand-dir__letterhead">0-9</h3>
           <div class="brand-dir__list">
-            {%- for vendor in numeric_list -%}
-              <a href="{{ vendor | url_for_vendor }}" class="brand-dir__item" data-brand-name="{{ vendor | downcase | escape }}">{{ vendor }}</a>
+            {%- for entry in numeric_list -%}
+              {%- assign b_name = entry | split: '|' | first -%}
+              {%- assign b_handle = entry | split: '|' | last -%}
+              <a href="{{ collections[b_handle].url }}" class="brand-dir__item" data-brand-name="{{ b_name | downcase | escape }}">{{ b_name }}</a>
             {%- endfor -%}
           </div>
         </section>
@@ -56,10 +58,10 @@
 
       {%- for letter in letters -%}
         {%- assign group = '' -%}
-        {%- for vendor in vendors -%}
-          {%- assign initial = vendor | slice: 0 | upcase -%}
+        {%- for entry in brands -%}
+          {%- assign initial = entry | slice: 0 | upcase -%}
           {%- if initial == letter -%}
-            {%- assign group = group | append: vendor | append: sep -%}
+            {%- assign group = group | append: entry | append: sep -%}
           {%- endif -%}
         {%- endfor -%}
         {%- if group != blank -%}
@@ -67,8 +69,10 @@
           <section class="brand-dir__group" data-brand-group="{{ letter }}">
             <h3 class="brand-dir__letterhead">{{ letter }}</h3>
             <div class="brand-dir__list">
-              {%- for vendor in group_list -%}
-                <a href="{{ vendor | url_for_vendor }}" class="brand-dir__item" data-brand-name="{{ vendor | downcase | escape }}">{{ vendor }}</a>
+              {%- for entry in group_list -%}
+                {%- assign b_name = entry | split: '|' | first -%}
+                {%- assign b_handle = entry | split: '|' | last -%}
+                <a href="{{ collections[b_handle].url }}" class="brand-dir__item" data-brand-name="{{ b_name | downcase | escape }}">{{ b_name }}</a>
               {%- endfor -%}
             </div>
           </section>

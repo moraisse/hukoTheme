@@ -3,7 +3,7 @@
   logótipo, nome, texto sobre o fabricante, origem e número de produtos.
   Os textos só afirmam factos verificados sobre cada fabricante; para as
   marcas sem informação pública fiável descrevem apenas a gama vendida.
-  Fornecedores "<MARCA> PROMO" usam a ficha da marca e ligam à gama completa.
+  Fornecedores "<MARCA> PROMO" usam a ficha da marca; todos ligam à coleção de marca.
 
   Parâmetros:
     vendor — nome do fornecedor (collection.current_vendor)
@@ -87,15 +87,20 @@
 {%- endcapture -%}
 {%- assign b_text = b_text | strip -%}
 
-{%- comment -%} Ligação entre a gama normal e a de promoções da mesma marca. {%- endcomment -%}
-{%- assign all_vendors = collections.all.all_vendors -%}
-{%- assign sibling = '' -%}
-{%- if is_promo -%}
-  {%- for v in all_vendors -%}{%- assign v_up = v | upcase -%}{%- if v_up == brand_key -%}{%- assign sibling = v -%}{%- endif -%}{%- endfor -%}
-{%- else -%}
-  {%- assign promo_key = brand_key | append: ' PROMO' -%}
-  {%- for v in all_vendors -%}{%- assign v_up = v | upcase -%}{%- if v_up == promo_key -%}{%- assign sibling = v -%}{%- endif -%}{%- endfor -%}
-{%- endif -%}
+{%- comment -%}
+  Coleção de marca correspondente ao fornecedor (texto e SEO próprios, inclui
+  também os produtos "PROMO"): é para lá que a ficha encaminha.
+{%- endcomment -%}
+{%- assign vendor_map = "3 CLAVELES:3-claveles,AGUI:camas-agui,ANDIS:andis,ANTOS:antos,BARRY KING:barry-king,BURBUR PRO:burbur,BURBUR AURA:burbur,BURBUR BASICS:burbur,BURBUR FRIENDS:burbur,CATS WAY:cats-way,DINGONATURA:natura-diet,EASY CLEAN:easy-clean,FLEXI:flexi,FREEDOG:freedog,GROOM PROFESSIONAL:groom-professional,GROOMTEK:groomtek,HAPPYPET:happy-pet,HAU&MIAU:hau-miau,LOLO PETS CLASSIC:lolo-pets,MILK & PEPPER:milk-pepper,MODERNA:moderna,MP BERGAMO:mp-bergamo,MP BERGAMO ECO LINE:mp-bergamo,ODOUR LOCK:odourlock,OMEGA PAW:omega-paw,PANAMA PET:panama-pet,PAWPPIN:pawppin,PETUXE:petuxe,RED DINGO:red-dingo,SHARPER BLADE PORTUGAL:sharper-blade,TRANSGROOM:transgroom" | split: ',' -%}
+{%- assign brand_coll = nil -%}
+{%- for pair in vendor_map -%}
+  {%- assign pair_key = pair | split: ':' | first -%}
+  {%- if pair_key == brand_key -%}
+    {%- assign pair_handle = pair | split: ':' | last -%}
+    {%- assign brand_coll = collections[pair_handle] -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
 
 <section class="brand-hero{% if b_logo == blank %} brand-hero--plain{% endif %}">
   {%- if b_logo != blank -%}
@@ -115,10 +120,8 @@
         </span>
       {%- endif -%}
       <span class="brand-hero__chip">{{ count }} produto{% if count != 1 %}s{% endif %}</span>
-      {%- if sibling != blank -%}
-        <a class="brand-hero__chip brand-hero__chip--link" href="{{ sibling | url_for_vendor }}">
-          {%- if is_promo -%}Ver toda a gama {{ b_name }}{%- else -%}Ver promoções {{ b_name }}{%- endif -%} →
-        </a>
+      {%- if brand_coll != blank and brand_coll.products_count > 0 -%}
+        <a class="brand-hero__chip brand-hero__chip--link" href="{{ brand_coll.url }}">Ver coleção {{ brand_coll.title }} →</a>
       {%- endif -%}
     </div>
   </div>

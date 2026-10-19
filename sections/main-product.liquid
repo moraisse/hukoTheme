@@ -405,6 +405,9 @@
 })();
 </script>
 {%- assign v = product.selected_or_first_available_variant -%}
+{%- comment -%} Marca: nome da coleção de marca do produto; sem correspondência, o fornecedor. {%- endcomment -%}
+{%- capture ld_brand -%}{% render 'brand-collections', for_product: product %}{%- endcapture -%}
+{%- assign ld_brand = ld_brand | strip | split: '|' | first | default: product.vendor -%}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org/",
@@ -419,7 +422,7 @@
   {%- if v.barcode != blank %}
   "gtin": {{ v.barcode | json }},
   {%- endif %}
-  "brand": { "@type": "Brand", "name": {{ product.vendor | json }} },
+  "brand": { "@type": "Brand", "name": {{ ld_brand | json }} },
   "offers": [
     {%- for variant in product.variants %}
     {

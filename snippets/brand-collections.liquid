@@ -1,0 +1,44 @@
+{%- comment -%}
+  Lista oficial de marcas: cada marca é uma coleção própria (com texto e SEO),
+  em vez das listagens de fornecedor (/collections/vendors?q=…), que incluem
+  fornecedores internos (AGUI PROMO, MERCHANDISING, linhas Burbur separadas…).
+
+  Saída (texto, para usar com capture):
+  - sem parâmetros: todas as marcas cuja coleção existe e tem produtos, no
+    formato "Nome|handle", separadas por "~|~" e ordenadas pelo nome;
+  - com for_product: só a marca desse produto ("Nome|handle"), escolhida pela
+    primeira coleção do produto que esteja na lista; vazio se não houver.
+
+  Uso:
+    {%- capture brand_raw -%}{% render 'brand-collections' %}{%- endcapture -%}
+    {%- assign brands = brand_raw | strip | split: '~|~' -%}
+    → nome: entry | split: '|' | first · handle: entry | split: '|' | last
+{%- endcomment -%}
+{%- assign brand_source = "groomtek|Groomtek,andis|Andis,sharper-blade|Sharper Blade,show-tech|Show Tech,mp-bergamo|MP Bergamo,flexi|Flexi,freedog|Freedog,hau-miau|Hau&Miau,barry-king|Barry King,antos|Antos,happy-pet|Happy Pet,pawppin|Pawppin,lolo-pets|Lolo Pets,yento|Yento,moderna|Moderna,red-dingo|Red Dingo,groom-professional|Groom Professional,groom-x|Groom-X,odourlock|OdourLock,cats-way|Cat's Way,solidary|Solidary,petuxe|Petuxe,easy-clean|Easy Clean,3-claveles|3 Claveles,milk-pepper|Milk&Pepper,transgroom|Transgroom,chris-christensen|Chris Christensen,the-sentinel|The Sentinel,panama-pet|Panama Pet,aeolus|Aeolus,omega-paw|Omega Paw,tikima|Tikima,matti|Matti,defurr-um|Defurr-UM,camas-agui|Agui,burbur|Burbur,natura-diet|Natura Diet,dingo|Dingo" | split: ',' -%}
+
+{%- if for_product -%}
+  {%- assign brand_match = '' -%}
+  {%- for c in for_product.collections -%}
+    {%- for pair in brand_source -%}
+      {%- assign b_handle = pair | split: '|' | first -%}
+      {%- if c.handle == b_handle -%}
+        {%- assign brand_match = pair | split: '|' | last | append: '|' | append: b_handle -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if brand_match != blank -%}{%- break -%}{%- endif -%}
+  {%- endfor -%}
+  {{- brand_match -}}
+{%- else -%}
+  {%- assign brand_entries = '' -%}
+  {%- for pair in brand_source -%}
+    {%- assign b_handle = pair | split: '|' | first -%}
+    {%- assign b_name = pair | split: '|' | last -%}
+    {%- assign b_coll = collections[b_handle] -%}
+    {%- if b_coll != blank and b_coll.products_count > 0 -%}
+      {%- assign brand_entries = brand_entries | append: b_name | append: '|' | append: b_handle | append: '~|~' -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- assign brand_sorted = brand_entries | split: '~|~' | sort_natural -%}
+  {{- brand_sorted | join: '~|~' -}}
+{%- endif -%}

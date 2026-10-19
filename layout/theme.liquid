@@ -4,6 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>{{ page_title }}{% unless page_title contains shop.name %} — {{ shop.name }}{% endunless %}</title>
+  {%- comment -%} Listagens de fornecedor: o Google deve preferir as coleções de marca. {%- endcomment -%}
+  {%- if template.name == 'collection' and collection.handle == 'vendors' -%}
+  <meta name="robots" content="noindex,follow">
+  {%- endif %}
   <link rel="icon" type="image/png" sizes="192x192" href="{{ 'favicon.png' | asset_url }}">
   <link rel="apple-touch-icon" href="{{ 'favicon.png' | asset_url }}">
   <meta property="og:site_name" content="HUKO pets">
@@ -285,8 +289,9 @@
         {% endfor %}
 
         {%- comment -%} Mesmas marcas do painel de desktop, em acordeão. {%- endcomment -%}
-        {%- assign drawer_vendors = collections.all.all_vendors | sort -%}
-        {%- if drawer_vendors.size > 0 -%}
+        {%- capture drawer_raw -%}{% render 'brand-collections' %}{%- endcapture -%}
+        {%- assign drawer_brands = drawer_raw | strip | split: '~|~' -%}
+        {%- if drawer_brands.size > 0 -%}
           <div class="mobile-nav__group">
             <div class="mobile-nav__row">
               <span class="mobile-nav__link">Marcas</span>
@@ -296,8 +301,9 @@
             </div>
             <div class="mobile-nav__sub">
               <div class="mobile-nav__sub-inner">
-                {%- for vendor in drawer_vendors -%}
-                  <a href="{{ vendor | url_for_vendor }}" class="mobile-nav__sublink">{{ vendor }}</a>
+                {%- for entry in drawer_brands -%}
+                  {%- assign b_handle = entry | split: '|' | last -%}
+                  <a href="{{ collections[b_handle].url }}" class="mobile-nav__sublink">{{ entry | split: '|' | first }}</a>
                 {%- endfor -%}
               </div>
             </div>

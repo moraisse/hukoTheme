@@ -20,42 +20,43 @@
     <div class="brands__track" data-brands-track>
       {%- for file in brand_files -%}
         {%- assign brand_key = file | split: '.' | first -%}
-        {%- assign brand_vendor = '' -%}
+        {%- assign brand_handle = '' -%}
         {%- case brand_key -%}
-          {%- when '3_claveles' -%}{%- assign brand_name = '3 Claveles' -%}{%- assign brand_vendor = '3 CLAVELES' -%}
-          {%- when 'agui' -%}{%- assign brand_name = 'Agui' -%}{%- assign brand_vendor = 'AGUI' -%}
-          {%- when 'andis' -%}{%- assign brand_name = 'Andis' -%}{%- assign brand_vendor = 'ANDIS' -%}
-          {%- when 'antos' -%}{%- assign brand_name = 'Antos' -%}{%- assign brand_vendor = 'ANTOS' -%}
-          {%- when 'barry_king' -%}{%- assign brand_name = 'Barry King' -%}{%- assign brand_vendor = 'BARRY KING' -%}
-          {%- when 'burbur_aura' -%}{%- assign brand_name = 'Burbur Aura' -%}{%- assign brand_vendor = 'BURBUR AURA' -%}
-          {%- when 'burbur_basics' -%}{%- assign brand_name = 'Burbur Basics' -%}{%- assign brand_vendor = 'BURBUR BASICS' -%}
-          {%- when 'burbur_friend' -%}{%- assign brand_name = 'Burbur Friends' -%}{%- assign brand_vendor = 'BURBUR FRIENDS' -%}
-          {%- when 'burbur_pro' -%}{%- assign brand_name = 'Burbur Pro' -%}{%- assign brand_vendor = 'BURBUR PRO' -%}
+          {%- when '3_claveles' -%}{%- assign brand_name = '3 Claveles' -%}{%- assign brand_handle = '3-claveles' -%}
+          {%- when 'agui' -%}{%- assign brand_name = 'Agui' -%}{%- assign brand_handle = 'camas-agui' -%}
+          {%- when 'andis' -%}{%- assign brand_name = 'Andis' -%}{%- assign brand_handle = 'andis' -%}
+          {%- when 'antos' -%}{%- assign brand_name = 'Antos' -%}{%- assign brand_handle = 'antos' -%}
+          {%- when 'barry_king' -%}{%- assign brand_name = 'Barry King' -%}{%- assign brand_handle = 'barry-king' -%}
+          {%- when 'burbur_aura' -%}{%- assign brand_name = 'Burbur Aura' -%}{%- assign brand_handle = 'burbur' -%}
+          {%- when 'burbur_basics' -%}{%- assign brand_name = 'Burbur Basics' -%}{%- assign brand_handle = 'burbur' -%}
+          {%- when 'burbur_friend' -%}{%- assign brand_name = 'Burbur Friends' -%}{%- assign brand_handle = 'burbur' -%}
+          {%- when 'burbur_pro' -%}{%- assign brand_name = 'Burbur Pro' -%}{%- assign brand_handle = 'burbur' -%}
           {%- when 'ca' -%}{%- assign brand_name = 'CA' -%}
           {%- when 'classic' -%}{%- assign brand_name = 'Classic' -%}
-          {%- when 'dingo_natura' -%}{%- assign brand_name = 'Dingonatura' -%}{%- assign brand_vendor = 'DINGONATURA' -%}
-          {%- when 'flexy' -%}{%- assign brand_name = 'Flexi' -%}{%- assign brand_vendor = 'FLEXI' -%}
-          {%- when 'freedog' -%}{%- assign brand_name = 'Freedog' -%}{%- assign brand_vendor = 'FREEDOG' -%}
-          {%- when 'groom_professional' -%}{%- assign brand_name = 'Groom Professional' -%}{%- assign brand_vendor = 'GROOM PROFESSIONAL' -%}
-          {%- when 'groomtek' -%}{%- assign brand_name = 'Groomtek' -%}{%- assign brand_vendor = 'GROOMTEK' -%}
+          {%- when 'dingo_natura' -%}{%- assign brand_name = 'Dingonatura' -%}{%- assign brand_handle = 'natura-diet' -%}
+          {%- when 'flexy' -%}{%- assign brand_name = 'Flexi' -%}{%- assign brand_handle = 'flexi' -%}
+          {%- when 'freedog' -%}{%- assign brand_name = 'Freedog' -%}{%- assign brand_handle = 'freedog' -%}
+          {%- when 'groom_professional' -%}{%- assign brand_name = 'Groom Professional' -%}{%- assign brand_handle = 'groom-professional' -%}
+          {%- when 'groomtek' -%}{%- assign brand_name = 'Groomtek' -%}{%- assign brand_handle = 'groomtek' -%}
           {%- when 'haquoss' -%}{%- assign brand_name = 'Haquoss' -%}
-          {%- when 'hau_miau' -%}{%- assign brand_name = 'Hau&Miau' -%}{%- assign brand_vendor = 'HAU&MIAU' -%}
-          {%- when 'lolo_pets' -%}{%- assign brand_name = 'Lolo Pets' -%}{%- assign brand_vendor = 'LOLO PETS CLASSIC' -%}
-          {%- when 'lolo_pets_classic' -%}{%- assign brand_name = 'Lolo Pets Classic' -%}{%- assign brand_vendor = 'LOLO PETS CLASSIC' -%}
+          {%- when 'hau_miau' -%}{%- assign brand_name = 'Hau&Miau' -%}{%- assign brand_handle = 'hau-miau' -%}
+          {%- when 'lolo_pets' -%}{%- assign brand_name = 'Lolo Pets' -%}{%- assign brand_handle = 'lolo-pets' -%}
+          {%- when 'lolo_pets_classic' -%}{%- assign brand_name = 'Lolo Pets Classic' -%}{%- assign brand_handle = 'lolo-pets' -%}
           {%- when 'max_biocide' -%}{%- assign brand_name = 'Max Biocide' -%}
-          {%- when 'oudor_lock' -%}{%- assign brand_name = 'Odour Lock' -%}{%- assign brand_vendor = 'ODOUR LOCK' -%}
-          {%- when 'panama_pet' -%}{%- assign brand_name = 'Panama Pet' -%}{%- assign brand_vendor = 'PANAMA PET' -%}
-          {%- when 'pawppin' -%}{%- assign brand_name = 'Pawppin' -%}{%- assign brand_vendor = 'PAWPPIN' -%}
-          {%- when 'red_dingo' -%}{%- assign brand_name = 'Red Dingo' -%}{%- assign brand_vendor = 'RED DINGO' -%}
-          {%- when 'transgroom' -%}{%- assign brand_name = 'Transgroom' -%}{%- assign brand_vendor = 'TRANSGROOM' -%}
+          {%- when 'oudor_lock' -%}{%- assign brand_name = 'Odour Lock' -%}{%- assign brand_handle = 'odourlock' -%}
+          {%- when 'panama_pet' -%}{%- assign brand_name = 'Panama Pet' -%}{%- assign brand_handle = 'panama-pet' -%}
+          {%- when 'pawppin' -%}{%- assign brand_name = 'Pawppin' -%}{%- assign brand_handle = 'pawppin' -%}
+          {%- when 'red_dingo' -%}{%- assign brand_name = 'Red Dingo' -%}{%- assign brand_handle = 'red-dingo' -%}
+          {%- when 'transgroom' -%}{%- assign brand_name = 'Transgroom' -%}{%- assign brand_handle = 'transgroom' -%}
           {%- else -%}{%- assign brand_name = brand_key | replace: '_', ' ' -%}
         {%- endcase -%}
         {%- comment -%}
-          Com fornecedor na loja, o cartão leva à página da marca (listagem de
-          fornecedor da Shopify, com a ficha do fabricante — ver brand-hero).
+          Com coleção de marca publicada e com produtos, o cartão leva a essa
+          coleção (texto e SEO próprios); sem ela, o logótipo fica sem link.
         {%- endcomment -%}
-        {%- if brand_vendor != blank -%}
-          <a class="brand-card" href="{{ brand_vendor | url_for_vendor }}" aria-label="Ver produtos {{ brand_name | escape }}">
+        {%- assign brand_coll = collections[brand_handle] -%}
+        {%- if brand_handle != blank and brand_coll != blank and brand_coll.products_count > 0 -%}
+          <a class="brand-card" href="{{ brand_coll.url }}" aria-label="Ver produtos {{ brand_name | escape }}">
             <img src="{{ file | asset_url }}" alt="{{ brand_name | escape }}" loading="lazy" width="150" height="72">
           </a>
         {%- else -%}
