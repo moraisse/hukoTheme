@@ -1,9 +1,122 @@
-<div class="wrap" style="max-width:900px;padding-top:28px;padding-bottom:88px">
-  <h1 class="serif" style="font-size:42px;margin:0 0 36px">{{ blog.title }}</h1>
-  {% for article in blog.articles %}
-    <article style="border-top:1px solid var(--line);padding:28px 0">
-      <a href="{{ article.url }}" class="serif" style="font-size:26px">{{ article.title }}</a>
-      <p class="rte" style="margin:10px 0 0">{{ article.excerpt_or_content | strip_html | truncate: 160 }}</p>
-    </article>
-  {% endfor %}
-</div>
+{%- comment -%}
+  Listagem do Espaço HUKO (/blogs/noticias) e páginas de tema (/tagged/...).
+  O trilho de navegação e a newsletter vêm do layout.
+{%- endcomment -%}
+{{ 'espaco-huko.css' | asset_url | stylesheet_tag }}
+{%- paginate blog.articles by 12 -%}
+  {%- liquid
+    assign first_page = true
+    if paginate.current_page > 1
+      assign first_page = false
+    endif
+    assign show_lead = false
+    if first_page and current_tags == blank and blog.articles.size > 3
+      assign show_lead = true
+    endif
+    assign grid_offset = 0
+    if show_lead
+      assign grid_offset = 4
+    endif
+    if paginate.previous
+      assign pagination_prev_url = paginate.previous.url
+    endif
+    if paginate.next
+      assign pagination_next_url = paginate.next.url
+    endif
+  -%}
+  <div class="eh">
+    <section class="eh-bloghead">
+      <div class="wrap">
+        <div class="eh-bloghead__grid">
+          <div>
+            <p class="eh-kicker">Espaço HUKO</p>
+            {%- if current_tags -%}
+              <h1 class="eh-bloghead__title">{{ current_tags | join: ', ' }}<small>Guias e conselhos do Espaço HUKO</small></h1>
+              <p class="eh-bloghead__intro">Todos os artigos do Espaço HUKO sobre {{ current_tags.first | downcase }}, com dicas práticas e ligação direta aos produtos certos.</p>
+            {%- else -%}
+              <h1 class="eh-bloghead__title">Guias e conselhos para cães e gatos</h1>
+              {%- if first_page -%}
+                <p class="eh-bloghead__intro">Dicas práticas sobre alimentação, higiene, grooming, conforto e viagem, escritas pela equipa HUKO e sempre ligadas a produtos reais disponíveis na loja.</p>
+              {%- endif -%}
+            {%- endif -%}
+          </div>
+          <form action="{{ routes.search_url }}" method="get" role="search" class="eh-search">
+            <input type="hidden" name="type" value="article">
+            <input type="hidden" name="options[prefix]" value="last">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.8-4.8"/></svg>
+            <label for="EhBlogSearch" class="visually-hidden">Pesquisar artigos</label>
+            <input id="EhBlogSearch" type="search" name="q" placeholder="Pesquisar artigos e guias" autocomplete="off">
+            <button type="submit">Pesquisar</button>
+          </form>
+        </div>
+        {%- if blog.all_tags.size > 0 -%}
+          <nav class="eh-topics" aria-label="Temas">
+            <ul class="eh-chips">
+              <li><a href="{{ blog.url }}" class="eh-chip{% unless current_tags %} eh-chip--active{% endunless %}"{% unless current_tags %} aria-current="page"{% endunless %}>Todos</a></li>
+              {%- for tag in blog.all_tags -%}
+                {%- assign is_current = false -%}
+                {%- if current_tags contains tag -%}{%- assign is_current = true -%}{%- endif -%}
+                <li><a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="eh-chip{% if is_current %} eh-chip--active{% endif %}"{% if is_current %} aria-current="page"{% endif %}>{{ tag }}</a></li>
+              {%- endfor -%}
+            </ul>
+          </nav>
+        {%- endif -%}
+      </div>
+    </section>
+
+    <section class="eh-section" style="padding-top:clamp(32px,4vw,56px)">
+      <div class="wrap">
+        {%- if show_lead -%}
+          <div class="eh-lead">
+            {% render 'eh-article-card', article: blog.articles.first, layout: 'featured', heading: 'h2', excerpt: true, eager: true %}
+            <div>
+              <p class="eh-kicker">Também recente</p>
+              <ul class="eh-side">
+                {%- for article in blog.articles offset: 1 limit: 3 -%}
+                  <li>{% render 'eh-article-card', article: article, layout: 'compact', heading: 'h2' %}</li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if blog.articles.size > grid_offset -%}
+          {%- if show_lead -%}<h2 class="eh-h2" style="margin-bottom:28px">Mais artigos</h2>{%- endif -%}
+          <ul class="eh-grid">
+            {%- for article in blog.articles offset: grid_offset -%}
+              {%- assign eager = false -%}
+              {%- if show_lead == false and forloop.index <= 3 -%}{%- assign eager = true -%}{%- endif -%}
+              <li>{% render 'eh-article-card', article: article, heading: 'h2', excerpt: true, eager: eager %}</li>
+            {%- endfor -%}
+          </ul>
+        {%- elsif blog.articles.size == 0 -%}
+          <p class="eh-bloghead__intro">Ainda não há artigos neste tema.</p>
+        {%- endif -%}
+
+        {% render 'pagination', paginate: paginate %}
+      </div>
+    </section>
+  </div>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      "name": {{ blog.title | json }},
+      "url": {{ shop.url | append: blog.url | json }},
+      "inLanguage": "pt-PT",
+      "publisher": { "@type": "Organization", "name": "HUKO pets", "url": "https://hukopets.com/" },
+      "blogPost": [
+        {%- for article in blog.articles -%}
+          {
+            "@type": "BlogPosting",
+            "headline": {{ article.title | json }},
+            "url": {{ shop.url | append: article.url | json }},
+            "datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%S%:z' | json }}
+            {%- if article.image -%},"image": {{ article.image | image_url: width: 1200 | prepend: 'https:' | json }}{%- endif -%}
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+{%- endpaginate -%}

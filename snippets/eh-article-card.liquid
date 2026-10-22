@@ -1,0 +1,58 @@
+{%- comment -%}
+  Cartão de artigo do Espaço HUKO.
+  Uso: {% render 'eh-article-card', article: article, layout: 'featured', heading: 'h2', excerpt: true, eager: true %}
+  layout: 'default' | 'featured' | 'compact'
+{%- endcomment -%}
+{%- liquid
+  assign layout = layout | default: 'default'
+  assign heading = heading | default: 'h3'
+  assign words = article.content | strip_html | split: ' ' | size
+  assign minutes = words | divided_by: 200 | at_least: 1
+  assign img_alt = article.image.alt | default: article.title
+  assign media_class = ''
+  if article.image and article.image.aspect_ratio > 0.85 and article.image.aspect_ratio < 1.15
+    assign media_class = ' eh-card__media--contain'
+  endif
+  case layout
+    when 'featured'
+      assign sizes = '(min-width: 1100px) 60vw, 92vw'
+      assign widths = '500, 800, 1100, 1400'
+    when 'compact'
+      assign sizes = '92px'
+      assign widths = '120, 200'
+    else
+      assign sizes = '(min-width: 1000px) 420px, (min-width: 600px) 46vw, 92vw'
+      assign widths = '360, 540, 720, 900'
+  endcase
+-%}
+<article class="eh-card eh-card--{{ layout }}">
+  <a href="{{ article.url }}" class="eh-card__media{{ media_class }}" tabindex="-1" aria-hidden="true">
+    {%- if article.image -%}
+      {%- if eager -%}
+        {{ article.image | image_url: width: 1400 | image_tag: widths: widths, sizes: sizes, loading: 'eager', fetchpriority: 'high', alt: img_alt }}
+      {%- else -%}
+        {{ article.image | image_url: width: 900 | image_tag: widths: widths, sizes: sizes, loading: 'lazy', decoding: 'async', alt: img_alt }}
+      {%- endif -%}
+    {%- else -%}
+      <span class="eh-card__fallback">HUKO</span>
+    {%- endif -%}
+    {%- if layout != 'compact' and article.tags.first -%}
+      <span class="eh-tag">{{ article.tags.first }}</span>
+    {%- endif -%}
+  </a>
+  <div class="eh-card__body">
+    <p class="eh-card__meta">
+      <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%d.%m.%Y' }}</time>
+      <span aria-hidden="true">·</span>
+      <span>{{ minutes }} min de leitura</span>
+    </p>
+    <{{ heading }} class="eh-card__title"><a href="{{ article.url }}">{{ article.title }}</a></{{ heading }}>
+    {%- if excerpt and layout != 'compact' -%}
+      {%- assign n = 26 -%}{%- if layout == 'featured' -%}{%- assign n = 42 -%}{%- endif -%}
+      <p class="eh-card__excerpt">{{ article.excerpt_or_content | strip_html | strip | truncatewords: n }}</p>
+    {%- endif -%}
+    {%- if layout == 'featured' -%}
+      <span class="eh-card__more" aria-hidden="true">Ler artigo →</span>
+    {%- endif -%}
+  </div>
+</article>
