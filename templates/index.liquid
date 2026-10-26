@@ -56,6 +56,21 @@
         </div>
       </div>
 
+      <a href="/collections/weego" class="hv-slide hv-slide--img" data-hv-slide style="background:#2B2E5C" aria-label="Novidade Weego: 10% de desconto com o código WEEGO10">
+        <picture>
+          <source media="(max-width: 760px)" srcset="{{ 'home-weego-banner-mobile.webp' | file_url }}" width="1080" height="1350">
+          <img src="{{ 'home-weego-banner-desktop.webp' | file_url }}" alt="Novidade Weego: alimentação natural para gatos e snacks para cães, 10% com o código WEEGO10" loading="lazy" width="1760" height="940">
+        </picture>
+      </a>
+      <style>
+        .hv-slide--img picture { position:absolute; inset:0; display:block; }
+        .hv-slide--img img { display:block; width:100%; height:100%; max-width:none; object-fit:cover; object-position:left top; }
+        @media (max-width:760px) {
+          .hv-slide--img picture { position:static; width:100%; }
+          .hv-slide--img img { height:auto; }
+        }
+      </style>
+
       <div class="hv-slide" data-hv-slide style="background:#EDE6F1;color:#2A1F33">
         <div class="hv-slide__pics" aria-hidden="true">
           <div class="hv-slide__circle" style="background:#DDCFE7"></div>
@@ -103,6 +118,7 @@
         <button type="button" class="hv-dot is-active" data-hv-dot="0" role="tab" aria-selected="true" aria-label="Destaque 1"></button>
         <button type="button" class="hv-dot" data-hv-dot="1" role="tab" aria-selected="false" aria-label="Destaque 2"></button>
         <button type="button" class="hv-dot" data-hv-dot="2" role="tab" aria-selected="false" aria-label="Destaque 3"></button>
+        <button type="button" class="hv-dot" data-hv-dot="3" role="tab" aria-selected="false" aria-label="Destaque 4"></button>
       </div>
     </div>
 
