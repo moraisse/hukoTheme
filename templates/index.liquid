@@ -30,11 +30,26 @@
   <section class="wrap hv-top">
     <div class="hv-hero" data-hv-hero aria-roledescription="carrossel" aria-label="Destaques">
 
-      <div class="hv-slide is-active" data-hv-slide style="background:#1E3D2F;color:#FAF8F3">
+      <a href="/collections/weego" class="hv-slide hv-slide--img is-active" data-hv-slide style="background:#2B2E5C" aria-label="Novidade Weego: 10% de desconto com o código WEEGO10">
+        <picture>
+          <source media="(max-width: 760px)" srcset="{{ 'home-weego-banner-mobile.webp' | file_url }}" width="1080" height="1350">
+          <img src="{{ 'home-weego-banner-desktop.webp' | file_url }}" alt="Novidade Weego: alimentação natural para gatos e snacks para cães, 10% com o código WEEGO10" fetchpriority="high" width="1760" height="940">
+        </picture>
+      </a>
+      <style>
+        .hv-slide--img picture { position:absolute; inset:0; display:block; }
+        .hv-slide--img img { display:block; width:100%; height:100%; max-width:none; object-fit:cover; object-position:left top; }
+        @media (max-width:760px) {
+          .hv-slide--img picture { position:static; width:100%; }
+          .hv-slide--img img { height:auto; }
+        }
+      </style>
+
+      <div class="hv-slide" data-hv-slide style="background:#1E3D2F;color:#FAF8F3">
         <div class="hv-slide__pics" aria-hidden="true">
           <div class="hv-slide__circle" style="background:#24493A"></div>
           <div class="hv-stk">
-            <img src="{{ 'home-agui-noble.webp' | file_url }}" alt="" style="height:58%;max-width:50%" width="640" height="320" fetchpriority="high">
+            <img src="{{ 'home-agui-noble.webp' | file_url }}" alt="" style="height:58%;max-width:50%" width="640" height="320">
             <img src="{{ 'home-agui-crib.webp' | file_url }}" alt="" style="height:100%;max-width:44%;margin-left:-10%;position:relative;z-index:2" width="640" height="650">
             <img src="{{ 'home-agui-curly.webp' | file_url }}" alt="" style="height:58%;max-width:48%;margin-left:-10%;position:relative;z-index:3" width="640" height="354">
           </div>
@@ -55,21 +70,6 @@
           </div>
         </div>
       </div>
-
-      <a href="/collections/weego" class="hv-slide hv-slide--img" data-hv-slide style="background:#2B2E5C" aria-label="Novidade Weego: 10% de desconto com o código WEEGO10">
-        <picture>
-          <source media="(max-width: 760px)" srcset="{{ 'home-weego-banner-mobile.webp' | file_url }}" width="1080" height="1350">
-          <img src="{{ 'home-weego-banner-desktop.webp' | file_url }}" alt="Novidade Weego: alimentação natural para gatos e snacks para cães, 10% com o código WEEGO10" loading="lazy" width="1760" height="940">
-        </picture>
-      </a>
-      <style>
-        .hv-slide--img picture { position:absolute; inset:0; display:block; }
-        .hv-slide--img img { display:block; width:100%; height:100%; max-width:none; object-fit:cover; object-position:left top; }
-        @media (max-width:760px) {
-          .hv-slide--img picture { position:static; width:100%; }
-          .hv-slide--img img { height:auto; }
-        }
-      </style>
 
       <div class="hv-slide" data-hv-slide style="background:#EDE6F1;color:#2A1F33">
         <div class="hv-slide__pics" aria-hidden="true">
