@@ -202,6 +202,8 @@
           {% for link in navigation_links %}
           {%- assign navigation_url = link.url -%}
           {%- if link.handle == 'grooming' -%}{%- assign navigation_url = grooming_destination -%}{%- endif -%}
+          {%- comment -%} Promoções identifica-se pelo URL, não pela posição no menu. {%- endcomment -%}
+          {%- if link.url == '/collections/promocoes' -%}{%- assign sale_class = ' nav-item--sale' -%}{%- else -%}{%- assign sale_class = '' -%}{%- endif -%}
           {%- capture navigation_label -%}
             {%- if link.handle == 'grooming' -%}
               <span class="nav-grooming__label">{{ link.title }} <span class="nav-grooming__badge">{{ 'general.navigation.pro' | t }}</span></span>
@@ -210,7 +212,7 @@
             {%- endif -%}
           {%- endcapture -%}
           {%- if link.links.size > 0 -%}
-            <div class="nav-item nav-item--parent{% if link.handle == 'grooming' %} nav-item--grooming{% endif %}">
+            <div class="nav-item nav-item--parent{% if link.handle == 'grooming' %} nav-item--grooming{% endif %}{{ sale_class }}">
               <a href="{{ navigation_url }}" class="nav-item__link" aria-haspopup="true" aria-expanded="false">{{ navigation_label }}</a>
               {%- assign mega_img = link.object.image -%}
               <div class="nav-mega" role="menu">
@@ -237,7 +239,7 @@
               </div>
             </div>
           {%- else -%}
-            <div class="nav-item{% if link.handle == 'grooming' %} nav-item--grooming{% endif %}">
+            <div class="nav-item{% if link.handle == 'grooming' %} nav-item--grooming{% endif %}{{ sale_class }}">
               <a href="{{ navigation_url }}" class="nav-item__link">{{ navigation_label }}</a>
             </div>
           {%- endif -%}
@@ -274,6 +276,8 @@
         {% for link in navigation_links %}
           {%- assign navigation_url = link.url -%}
           {%- if link.handle == 'grooming' -%}{%- assign navigation_url = grooming_destination -%}{%- endif -%}
+          {%- comment -%} Promoções identifica-se pelo URL, não pela posição no menu. {%- endcomment -%}
+          {%- if link.url == '/collections/promocoes' -%}{%- assign sale_class = ' nav-item--sale' -%}{%- else -%}{%- assign sale_class = '' -%}{%- endif -%}
           {%- capture navigation_label -%}
             {%- if link.handle == 'grooming' -%}
               <span class="nav-grooming__label">{{ link.title }} <span class="nav-grooming__badge">{{ 'general.navigation.pro' | t }}</span></span>
@@ -282,7 +286,7 @@
             {%- endif -%}
           {%- endcapture -%}
           {%- if link.links.size > 0 -%}
-            <div class="mobile-nav__group{% if link.handle == 'grooming' %} mobile-nav__group--grooming{% endif %}">
+            <div class="mobile-nav__group{% if link.handle == 'grooming' %} mobile-nav__group--grooming{% endif %}{% if sale_class != blank %} mobile-nav__group--sale{% endif %}">
               <div class="mobile-nav__row">
                 <a href="{{ navigation_url }}" class="mobile-nav__link">{{ navigation_label }}</a>
                 <button class="mobile-nav__expand" aria-label="Mostrar subcategorias de {{ link.title }}" aria-expanded="false">
@@ -316,7 +320,7 @@
               </div>
             </div>
           {%- else -%}
-            <a href="{{ navigation_url }}" class="mobile-nav__link mobile-nav__link--solo{% if link.handle == 'grooming' %} mobile-nav__link--grooming{% endif %}">{{ navigation_label }}</a>
+            <a href="{{ navigation_url }}" class="mobile-nav__link mobile-nav__link--solo{% if link.handle == 'grooming' %} mobile-nav__link--grooming{% endif %}{% if sale_class != blank %} mobile-nav__link--sale{% endif %}">{{ navigation_label }}</a>
           {%- endif -%}
         {% endfor %}
 

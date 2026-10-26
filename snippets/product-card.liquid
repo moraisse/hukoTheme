@@ -18,6 +18,15 @@
   Nas listagens de coleção há espaço para a etiqueta completa; nos carrosséis da
   homepage o cartão é mais estreito, por isso mantém-se a versão curta.
 {%- endcomment -%}
+{%- comment -%}
+  Promoção: o desconto é sempre o da MESMA variante do cartão (card_variant),
+  para a percentagem bater certo com os preços mostrados no rodapé.
+{%- endcomment -%}
+{%- assign card_on_sale = false -%}
+{%- if card_variant.compare_at_price > card_variant.price -%}
+  {%- assign card_on_sale = true -%}
+  {%- assign card_sale_pct = card_variant.compare_at_price | minus: card_variant.price | times: 100.0 | divided_by: card_variant.compare_at_price | round -%}
+{%- endif -%}
 {%- if request.page_type == 'collection' -%}
   {%- assign atc_label = 'Adicionar ao Carrinho' -%}
 {%- else -%}
@@ -28,8 +37,8 @@
     {% if card_product.featured_image %}
       <img src="{{ card_product.featured_image | image_url: width: 600 }}" alt="{{ card_product.featured_image.alt | split: '#variant:' | first | strip | default: card_product.title | escape }}" loading="lazy">
     {% endif %}
-    {% if card_variant.compare_at_price > card_variant.price %}
-      <span class="badge badge--sale">Promoção</span>
+    {% if card_on_sale %}
+      <span class="badge badge--sale">Promoção <span class="badge__pct">−{{ card_sale_pct }}%</span></span>
     {% elsif card_product.tags contains 'novo' %}
       <span class="badge badge--new">Novo</span>
     {% elsif card_product.tags contains 'mais-vendido' %}
@@ -39,7 +48,14 @@
   <div class="prod-card__body">
     <a href="{{ card_product.url }}" class="prod-card__title"{{ card_variant_attr }}>{{ card_product.title }}</a>
     <div class="prod-card__foot">
-      <span class="price">{{ card_variant.price | money }}</span>
+      {%- if card_on_sale -%}
+        <span class="price-group">
+          <s class="price price--compare"><span class="visually-hidden">Preço original: </span>{{ card_variant.compare_at_price | money }}</s>
+          <span class="price price--sale"><span class="visually-hidden">Preço de promoção: </span>{{ card_variant.price | money }}</span>
+        </span>
+      {%- else -%}
+        <span class="price">{{ card_variant.price | money }}</span>
+      {%- endif -%}
       {%- if card_variant.available -%}
         {%- comment -%}
           O formulário continua a ser um POST normal para /cart/add: sem JS o

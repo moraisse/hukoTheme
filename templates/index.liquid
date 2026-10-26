@@ -212,6 +212,24 @@
     </div>
   </section>
 
+  {%- comment -%}
+    ========== Promoções ==========
+    Coleção automática "promocoes" (produtos com preço comparativo). Só aparece
+    quando tem produtos, para a homepage não mostrar uma secção vazia.
+  {%- endcomment -%}
+  {%- assign sale_collection = collections['promocoes'] -%}
+  {%- if sale_collection.products_count > 0 -%}
+    <section class="wrap hv-section">
+      <div class="hv-head">
+        <div><span class="eyebrow">Tempo limitado</span><h2>Promoções</h2></div>
+        <a href="{{ routes.collections_url }}/promocoes" class="hv-more">Ver todas as promoções →</a>
+      </div>
+      <div class="prod-grid">
+        {%- for product in sale_collection.products limit: 8 -%}{% render 'product-card', card_product: product %}{%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
+
   {%- comment -%} ========== Promoção Camas Agui ========== {%- endcomment -%}
   <section class="wrap hv-section">
     <div class="hv-promo">

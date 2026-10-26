@@ -1,4 +1,14 @@
 {%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- comment -%}
+  Promoção da variante inicial. Ao trocar de variante, o script de seleção mais
+  abaixo atualiza o preço riscado e o badge a partir de VariantData.
+{%- endcomment -%}
+{%- assign pdp_on_sale = false -%}
+{%- assign pdp_sale_pct = 0 -%}
+{%- if current_variant.compare_at_price > current_variant.price -%}
+  {%- assign pdp_on_sale = true -%}
+  {%- assign pdp_sale_pct = current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round -%}
+{%- endif -%}
 {%- assign initial_title = current_variant.metafields.huko.variant_title.value | default: product.title -%}
 {%- assign initial_desc = current_variant.metafields.huko.variant_description.value | default: product.description -%}
 {%- comment -%}
@@ -16,6 +26,7 @@
       {%- assign featured = current_variant.featured_image | default: product.featured_image -%}
       <div class="pdp__gallery">
         <div class="pdp__main" id="MainImageWrap" role="button" tabindex="0" aria-label="Ampliar imagem">
+          <span class="badge badge--sale badge--right" id="ProductSaleBadge"{% unless pdp_on_sale %} hidden{% endunless %}>Promoção <span class="badge__pct" id="ProductSalePct">−{{ pdp_sale_pct }}%</span></span>
           {% if product.tags contains 'mais-vendido' %}<span class="badge badge--best">Mais vendido</span>{% endif %}
           {% if product.tags contains 'novo' %}<span class="badge badge--new" style="top:{% if product.tags contains 'mais-vendido' %}50{% else %}14{% endif %}px">Novo</span>{% endif %}
           {% if featured %}<img src="{{ featured | image_url: width: 1200 }}" alt="{{ featured.alt | split: '#variant:' | first | strip | escape }}" id="MainImage">{% endif %}
@@ -81,8 +92,10 @@
         {%- endif -%}
       </a>
       <p class="lead" id="ProductLead">{{ initial_desc | strip_html | truncate: 180 }}</p>
-      <div style="display:flex;align-items:baseline;gap:14px">
-        <span class="price price--big" id="ProductPrice">{{ current_variant.price | money }}</span>
+      <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 14px">
+        <s class="price price--compare price--compare-big" id="ProductComparePrice"{% unless pdp_on_sale %} hidden{% endunless %}><span class="visually-hidden">Preço original: </span><span id="ProductCompareValue">{{ current_variant.compare_at_price | money }}</span></s>
+        <span class="visually-hidden" id="ProductSaleLabel"{% unless pdp_on_sale %} hidden{% endunless %}>Preço de promoção: </span>
+        <span class="price price--big{% if pdp_on_sale %} price--sale{% endif %}" id="ProductPrice">{{ current_variant.price | money }}</span>
         {% if product.available %}<span class="stock">Em stock · envio em 24h</span>{% endif %}
       </div>
       {% form 'product', product %}
@@ -164,6 +177,10 @@
       "available": {{ variant.available }},
       "options": {{ variant.options | json }},
       "price": {{ variant.price | money | json }},
+      {%- if variant.compare_at_price > variant.price %}
+      "compare": {{ variant.compare_at_price | money | json }},
+      "salePct": {{ variant.compare_at_price | minus: variant.price | times: 100.0 | divided_by: variant.compare_at_price | round }},
+      {%- endif %}
       "title": {{ variant.metafields.huko.variant_title.value | default: product.title | json }},
       "description": {{ variant.metafields.huko.variant_description.value | default: product.description | json }}
     }{% unless forloop.last %},{% endunless %}
@@ -210,7 +227,21 @@
     var id = document.getElementById('VariantId');
     if (id) id.value = v.id;
     var price = document.getElementById('ProductPrice');
-    if (price) price.textContent = v.price;
+    if (price) {
+      price.textContent = v.price;
+      price.classList.toggle('price--sale', !!v.compare);
+    }
+    // Promoção: preço riscado, etiqueta para leitores de ecrã e badge na imagem.
+    var compare = document.getElementById('ProductComparePrice');
+    var compareValue = document.getElementById('ProductCompareValue');
+    var saleLabel = document.getElementById('ProductSaleLabel');
+    var saleBadge = document.getElementById('ProductSaleBadge');
+    var salePct = document.getElementById('ProductSalePct');
+    if (compareValue && v.compare) compareValue.textContent = v.compare;
+    if (salePct && v.compare) salePct.textContent = '−' + v.salePct + '%';
+    if (compare) compare.hidden = !v.compare;
+    if (saleLabel) saleLabel.hidden = !v.compare;
+    if (saleBadge) saleBadge.hidden = !v.compare;
     var btn = document.getElementById('AddToCart');
     if (btn) {
       btn.disabled = !v.available;

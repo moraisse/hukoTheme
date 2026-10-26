@@ -2,6 +2,8 @@
 :root{
   --green:#2ECC71; --ink:#1A1A1A; --bg:#FAF8F3; --forest:#1E3D2F; --gold:#C9B27A;
   --line:#E9E4D8; --muted:#6B6B62; --soft:#8A8A80;
+  /* promoção: tinta + dourado do tema (badge, preço de saldo, item do menu) */
+  --sale:var(--ink); --sale-accent:var(--gold);
   --serif:'Schibsted Grotesk',system-ui,sans-serif; --sans:'Hanken Grotesk',system-ui,sans-serif;
 }
 *{box-sizing:border-box}
@@ -260,7 +262,10 @@ body .prod-card--white{background:#fff}
 .badge{position:absolute;top:14px;left:14px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
 .badge--new{background:var(--green);color:var(--bg)}
 .badge--best{background:var(--gold);color:var(--ink)}
-.badge--sale{background:var(--ink);color:var(--bg)}
+.badge--sale{background:var(--sale);color:var(--bg);font-size:13px;font-weight:700;padding:6px 8px 6px 13px;display:inline-flex;align-items:center;gap:7px;box-shadow:0 4px 14px rgba(26,26,26,.22)}
+.badge__pct{background:var(--sale-accent);color:var(--ink);border-radius:999px;padding:2px 8px;font-weight:800;letter-spacing:.02em}
+.badge--right{left:auto;right:14px}
+.badge[hidden]{display:none}
 .prod-card__body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:7px;flex:1}
 .stars{color:var(--gold);font-size:13px;letter-spacing:.05em}
 .stars span{color:var(--soft)}
@@ -268,6 +273,18 @@ body .prod-card--white{background:#fff}
 .prod-card__foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px}
 .price{font-family:var(--serif);font-size:19px;font-weight:700;color:#2DAF61}
 .price--big{font-size:32px}
+/* Preço em promoção: o antigo riscado vem primeiro e, se não couber ao lado,
+   passa para cima do novo (flex-wrap) — cartões estreitos dos carrosséis e mobile. */
+.price-group{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 8px;min-width:0}
+.price--compare{font-family:var(--sans);font-size:14px;font-weight:400;color:var(--soft);text-decoration:line-through;white-space:nowrap}
+.price--compare-big{font-size:20px}
+.price--sale{color:var(--sale);white-space:nowrap}
+.price--compare[hidden]{display:none}
+/* Item PROMOÇÕES do menu (identificado pelo URL em layout/theme.liquid) */
+.site-header .nav-item--sale > .nav-item__link{color:var(--sale-accent)}
+.site-header .nav-item--sale > .nav-item__link:hover,.site-header .nav-item--sale > .nav-item__link:focus-visible{color:#fff}
+.mobile-nav__link--sale,.mobile-nav__group--sale > .mobile-nav__row > .mobile-nav__link{color:var(--forest);font-weight:700}
+.mobile-nav__link--sale::before,.mobile-nav__group--sale > .mobile-nav__row > .mobile-nav__link::before{content:"";display:inline-block;width:7px;height:7px;margin-right:9px;border-radius:50%;background:var(--sale-accent);vertical-align:middle}
 /* value props */
 .props{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:40px}
 .props h3{font-size:20px;margin:0}
