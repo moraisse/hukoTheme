@@ -12,7 +12,8 @@
     - Novidades da loja: anúncios e lançamentos (tag "Novidades");
     - Área profissional: equipamento e grooming profissional;
     - Dicas e guias: todos os restantes.
-    O destaque do topo é o guia mais recente e não se repete na grelha.
+    O destaque do topo é a novidade da loja mais recente (ou, sem novidades, o guia
+    mais recente) e não se repete por baixo.
   endcomment
   assign news_tags = 'Novidades,Lançamentos' | split: ','
   assign pro_tags = 'Área profissional,Grooming profissional,Grooming,Secadores e expulsores' | split: ','
@@ -20,7 +21,8 @@
   assign pro_ids = ','
   assign guide_ids = ','
   assign lead = nil
-  assign has_lead = false
+  assign first_news = nil
+  assign first_guide = nil
   for a in hub_blog.articles
     assign kind = 'guide'
     for t in a.tags
@@ -34,18 +36,27 @@
     case kind
       when 'news'
         assign news_ids = news_ids | append: a.id | append: ','
+        if first_news == nil
+          assign first_news = a
+        endif
       when 'pro'
         assign pro_ids = pro_ids | append: a.id | append: ','
       else
-        if has_lead == false
-          assign lead = a
-          assign has_lead = true
-        else
-          assign guide_ids = guide_ids | append: a.id | append: ','
+        assign guide_ids = guide_ids | append: a.id | append: ','
+        if first_guide == nil
+          assign first_guide = a
         endif
     endcase
   endfor
-  if has_lead == false
+  if first_news != nil
+    assign lead = first_news
+    assign needle = ',' | append: lead.id | append: ','
+    assign news_ids = news_ids | replace: needle, ','
+  elsif first_guide != nil
+    assign lead = first_guide
+    assign needle = ',' | append: lead.id | append: ','
+    assign guide_ids = guide_ids | replace: needle, ','
+  else
     assign lead = hub_blog.articles.first
   endif
   assign product_handles = 'natura-diet-grain-free-duck-sweet-potato-3-kg,burbur-aura-champo-royal-silk,transportadora-mochila-k2-pro,agui-essence-bed,moments-dog-fruit-60-g-cx-12-un,arranhador-basic,natura-diet-fish-rice,natura-diet-grain-free-salmon-coconut' | split: ','
