@@ -136,15 +136,14 @@
                   </div>
                   <a class="eh-more" href="{{ hub_blog.url }}">Ver todos os artigos →</a>
                 </div>
-                <ul class="eh-grid">
-                  {%- assign shown = 0 -%}
+                <ul class="eh-grid" id="lista-guias" data-eh-pages="9">
                   {%- for article in hub_blog.articles -%}
                     {%- assign needle = ',' | append: article.id | append: ',' -%}
-                    {%- unless guide_ids contains needle and shown < 12 -%}{%- continue -%}{%- endunless -%}
-                    {%- assign shown = shown | plus: 1 -%}
+                    {%- unless guide_ids contains needle -%}{%- continue -%}{%- endunless -%}
                     <li>{% render 'eh-article-card', article: article, heading: 'h3', excerpt: true %}</li>
                   {%- endfor -%}
                 </ul>
+                <nav class="eh-pager" data-eh-pager="lista-guias" aria-label="Páginas dos guias" hidden></nav>
               </div>
             {%- endif -%}
           </div>
@@ -187,6 +186,41 @@
         buttons.forEach(function (b) { b.addEventListener('click', function () { show(b.getAttribute('data-eh-tab')); }); });
         show(location.hash === '#area-profissional' ? 'profissional' : 'tutores');
       })();
+
+      /* Paginação das listas com data-eh-pages (sem JavaScript, mostra todos os artigos) */
+      document.querySelectorAll('[data-eh-pages]').forEach(function (list) {
+        var per = parseInt(list.getAttribute('data-eh-pages'), 10) || 9;
+        var items = Array.prototype.slice.call(list.children);
+        var pager = document.querySelector('[data-eh-pager="' + list.id + '"]');
+        var pages = Math.ceil(items.length / per);
+        if (!pager || pages < 2) return;
+        var current = 1;
+        var button = function (label, page, opts) {
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'eh-pager__btn' + (opts.cls ? ' ' + opts.cls : '');
+          b.textContent = label;
+          if (opts.aria) b.setAttribute('aria-label', opts.aria);
+          if (opts.current) b.setAttribute('aria-current', 'page');
+          if (opts.disabled) b.disabled = true;
+          b.addEventListener('click', function () { go(page, true); });
+          pager.appendChild(b);
+        };
+        var go = function (page, scroll) {
+          current = Math.min(Math.max(page, 1), pages);
+          items.forEach(function (li, i) { li.hidden = Math.floor(i / per) + 1 !== current; });
+          pager.textContent = '';
+          button('‹', current - 1, { cls: 'eh-pager__btn--nav', aria: 'Página anterior', disabled: current === 1 });
+          for (var n = 1; n <= pages; n++) button(String(n), n, { aria: 'Página ' + n, current: n === current });
+          button('›', current + 1, { cls: 'eh-pager__btn--nav', aria: 'Página seguinte', disabled: current === pages });
+          if (scroll) {
+            var head = list.closest('.eh-cat') || list;
+            head.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        };
+        pager.hidden = false;
+        go(1, false);
+      });
     </script>
   {%- endif -%}
 
