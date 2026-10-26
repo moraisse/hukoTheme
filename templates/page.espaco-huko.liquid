@@ -15,25 +15,8 @@
       <div class="eh-hero__grid">
         <div class="eh-hero__copy">
           <p class="eh-kicker">Conhecimento para uma vida mais feliz</p>
-          <h1 class="eh-hero__title">{{ page.title }}<span>guias para cães e gatos</span></h1>
+          <h1 class="eh-hero__title">{{ page.title }}</h1>
           <p class="eh-hero__lead">Dicas, guias e inspiração para quem cuida do seu animal com carinho. Ajudamos a escolher melhor alimentação, conforto, higiene, grooming e acessórios, sempre com ligação a produtos reais disponíveis na HUKO pets.</p>
-          <form action="{{ routes.search_url }}" method="get" role="search" class="eh-search">
-            <input type="hidden" name="type" value="article">
-            <input type="hidden" name="options[prefix]" value="last">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.8-4.8"/></svg>
-            <label for="EhHubSearch" class="visually-hidden">Pesquisar artigos</label>
-            <input id="EhHubSearch" type="search" name="q" placeholder="Pesquisar artigos e guias" autocomplete="off">
-            <button type="submit">Pesquisar</button>
-          </form>
-          <ul class="eh-chips" aria-label="Temas">
-            <li><a class="eh-chip" href="/collections/caes">Cães</a></li>
-            <li><a class="eh-chip" href="/collections/gatos">Gatos</a></li>
-            <li><a class="eh-chip" href="/collections/grooming">Grooming Pro</a></li>
-            <li><a class="eh-chip" href="/collections/caes-alimentacao">Alimentação</a></li>
-            <li><a class="eh-chip" href="/collections/caes-saude-e-higiene">Higiene</a></li>
-            <li><a class="eh-chip" href="/collections/caes-acessorios-e-conforto">Bem-estar</a></li>
-            <li><a class="eh-chip" href="/collections/caes-acessorios-e-conforto-transportadoras-e-viagem">Viagem</a></li>
-          </ul>
         </div>
         {%- if lead != blank -%}
           <div class="eh-hero__feature">
