@@ -126,7 +126,9 @@
 .eh .prod-card__img img{object-fit:contain;padding:10px}
 
 /* ---------- hub: novidades da loja ---------- */
-.eh-news{padding-bottom:0}
+.eh-cat+.eh-cat{margin-top:clamp(48px,6vw,72px)}
+.eh-cat__head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px 24px;margin-bottom:28px}
+.eh-cat__title{font-family:var(--serif);font-weight:700;letter-spacing:-.02em;color:var(--forest);font-size:clamp(24px,2.2vw,32px);line-height:1.1;margin:0}
 .eh-news__panel{position:relative;overflow:hidden;padding:clamp(28px,4vw,56px);border-radius:28px;background:linear-gradient(135deg,#E6F5EC 0%,#F4FAF6 100%);border:1px solid var(--eh-mint-line);color:var(--ink)}
 .eh-news__panel::after{content:"";position:absolute;right:-120px;top:-150px;width:380px;height:380px;border-radius:50%;background:rgba(46,204,113,.12);pointer-events:none}
 .eh-news__panel>*{position:relative;z-index:1}

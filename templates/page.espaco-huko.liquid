@@ -12,8 +12,9 @@
     - Novidades da loja: anúncios e lançamentos (tag "Novidades");
     - Área profissional: equipamento e grooming profissional;
     - Dicas e guias: todos os restantes.
-    O destaque do topo é a novidade da loja mais recente (ou, sem novidades, o guia
-    mais recente) e não se repete por baixo.
+    Novidades da loja e Dicas e guias ficam juntas no separador "Para tutores", cada
+    uma com os seus cartões. O destaque do topo é a novidade mais recente (que também
+    aparece nas Novidades); sem novidades, é o guia mais recente.
   endcomment
   assign news_tags = 'Novidades,Lançamentos' | split: ','
   assign pro_tags = 'Área profissional,Grooming profissional,Grooming,Secadores e expulsores' | split: ','
@@ -50,14 +51,16 @@
   endfor
   if first_news != nil
     assign lead = first_news
-    assign needle = ',' | append: lead.id | append: ','
-    assign news_ids = news_ids | replace: needle, ','
   elsif first_guide != nil
     assign lead = first_guide
     assign needle = ',' | append: lead.id | append: ','
     assign guide_ids = guide_ids | replace: needle, ','
   else
     assign lead = hub_blog.articles.first
+  endif
+  assign has_tutor = false
+  if news_ids != ',' or guide_ids != ','
+    assign has_tutor = true
   endif
   assign product_handles = 'natura-diet-grain-free-duck-sweet-potato-3-kg,burbur-aura-champo-royal-silk,transportadora-mochila-k2-pro,agui-essence-bed,moments-dog-fruit-60-g-cx-12-un,arranhador-basic,natura-diet-fish-rice,natura-diet-grain-free-salmon-coconut' | split: ','
 -%}
@@ -80,45 +83,17 @@
     </div>
   </section>
 
-  {%- if news_ids != ',' -%}
-    <section class="eh-section eh-news" id="novidades">
-      <div class="wrap">
-        <div class="eh-news__panel">
-          <div class="eh-head">
-            <div>
-              <p class="eh-kicker">Novidades da loja</p>
-              <h2 class="eh-h2">Lançamentos e anúncios HUKO</h2>
-            </div>
-            <a class="eh-more" href="{{ hub_blog.url }}/tagged/novidades">Ver todas as novidades →</a>
-          </div>
-          <ul class="eh-news__list">
-            {%- assign shown = 0 -%}
-            {%- for article in hub_blog.articles -%}
-              {%- assign needle = ',' | append: article.id | append: ',' -%}
-              {%- unless news_ids contains needle and shown < 4 -%}{%- continue -%}{%- endunless -%}
-              {%- assign shown = shown | plus: 1 -%}
-              <li class="eh-news__item">
-                <span class="eh-news__badge">Novidade</span>
-                {% render 'eh-article-card', article: article, layout: 'featured', heading: 'h3', excerpt: true %}
-              </li>
-            {%- endfor -%}
-          </ul>
-        </div>
-      </div>
-    </section>
-  {%- endif -%}
-
-  {%- if guide_ids != ',' or pro_ids != ',' -%}
+  {%- if has_tutor or pro_ids != ',' -%}
     <section class="eh-section" id="artigos" data-eh-tabs>
       <div class="wrap">
         <div class="eh-head eh-head--tabs">
           <div>
             <p class="eh-kicker">Aprender para escolher melhor</p>
-            <h2 class="eh-h2">Dicas e guias</h2>
+            <h2 class="eh-h2">Artigos do Espaço HUKO</h2>
           </div>
-          {%- if guide_ids != ',' and pro_ids != ',' -%}
-            <div class="eh-seg" role="group" aria-label="Escolher tipo de guia">
-              <button type="button" aria-pressed="true" data-eh-tab="guias" aria-controls="eh-panel-guias">
+          {%- if has_tutor and pro_ids != ',' -%}
+            <div class="eh-seg" role="group" aria-label="Escolher tipo de artigo">
+              <button type="button" aria-pressed="true" data-eh-tab="tutores" aria-controls="para-tutores">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg>
                 Para tutores
               </button>
@@ -130,18 +105,52 @@
           {%- endif -%}
         </div>
 
-        {%- if guide_ids != ',' -%}
-          <div class="eh-panel" id="eh-panel-guias" data-eh-panel="guias">
-            <ul class="eh-grid">
-              {%- assign shown = 0 -%}
-              {%- for article in hub_blog.articles -%}
-                {%- assign needle = ',' | append: article.id | append: ',' -%}
-                {%- unless guide_ids contains needle and shown < 12 -%}{%- continue -%}{%- endunless -%}
-                {%- assign shown = shown | plus: 1 -%}
-                <li>{% render 'eh-article-card', article: article, heading: 'h3', excerpt: true %}</li>
-              {%- endfor -%}
-            </ul>
-            <div class="eh-panel__foot"><a class="eh-more" href="{{ hub_blog.url }}">Ver todos os artigos →</a></div>
+        {%- if has_tutor -%}
+          <div class="eh-panel" id="para-tutores" data-eh-panel="tutores">
+            {%- if news_ids != ',' -%}
+              <div class="eh-cat eh-news__panel" id="novidades">
+                <div class="eh-cat__head">
+                  <div>
+                    <p class="eh-kicker">Novidades da loja</p>
+                    <h3 class="eh-cat__title">Lançamentos e anúncios HUKO</h3>
+                  </div>
+                  <a class="eh-more" href="{{ hub_blog.url }}/tagged/novidades">Ver todas as novidades →</a>
+                </div>
+                <ul class="eh-news__list">
+                  {%- assign shown = 0 -%}
+                  {%- for article in hub_blog.articles -%}
+                    {%- assign needle = ',' | append: article.id | append: ',' -%}
+                    {%- unless news_ids contains needle and shown < 4 -%}{%- continue -%}{%- endunless -%}
+                    {%- assign shown = shown | plus: 1 -%}
+                    <li class="eh-news__item">
+                      <span class="eh-news__badge">Novidade</span>
+                      {% render 'eh-article-card', article: article, layout: 'featured', heading: 'h4', excerpt: true %}
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            {%- endif -%}
+
+            {%- if guide_ids != ',' -%}
+              <div class="eh-cat" id="dicas-e-guias">
+                <div class="eh-cat__head">
+                  <div>
+                    <p class="eh-kicker">Dicas e guias</p>
+                    <h3 class="eh-cat__title">Guias para cuidar melhor do seu animal</h3>
+                  </div>
+                  <a class="eh-more" href="{{ hub_blog.url }}">Ver todos os artigos →</a>
+                </div>
+                <ul class="eh-grid">
+                  {%- assign shown = 0 -%}
+                  {%- for article in hub_blog.articles -%}
+                    {%- assign needle = ',' | append: article.id | append: ',' -%}
+                    {%- unless guide_ids contains needle and shown < 12 -%}{%- continue -%}{%- endunless -%}
+                    {%- assign shown = shown | plus: 1 -%}
+                    <li>{% render 'eh-article-card', article: article, heading: 'h4', excerpt: true %}</li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            {%- endif -%}
           </div>
         {%- endif -%}
 
@@ -180,7 +189,7 @@
           panels.forEach(function (p) { p.hidden = p.getAttribute('data-eh-panel') !== key; });
         };
         buttons.forEach(function (b) { b.addEventListener('click', function () { show(b.getAttribute('data-eh-tab')); }); });
-        show(location.hash === '#area-profissional' ? 'profissional' : 'guias');
+        show(location.hash === '#area-profissional' ? 'profissional' : 'tutores');
       })();
     </script>
   {%- endif -%}
