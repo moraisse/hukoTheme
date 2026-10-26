@@ -63,7 +63,7 @@
 /* ---------- topo (hub e blog) ---------- */
 .eh-hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#F2F8F4 0%,var(--bg) 70%);border-bottom:1px solid var(--line)}
 .eh-hero::after{content:"";position:absolute;right:-140px;top:-160px;width:420px;height:420px;border-radius:50%;background:rgba(46,204,113,.08);pointer-events:none}
-.eh-hero__grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(32px,5vw,72px);align-items:center;padding:clamp(28px,4vw,56px) 0 clamp(44px,6vw,80px)}
+.eh-hero__grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(32px,5vw,72px);align-items:start;padding:clamp(28px,4vw,56px) 0 clamp(44px,6vw,80px)}
 .eh-hero__copy{display:flex;flex-direction:column;align-items:flex-start;gap:20px;min-width:0}
 .eh-hero__copy .eh-kicker{margin:0}
 .eh-hero__title{font-family:var(--serif);font-weight:800;letter-spacing:-.04em;color:var(--forest);font-size:clamp(40px,5vw,72px);line-height:.98;margin:0}
@@ -74,6 +74,7 @@
 .eh-hero__feature .eh-card{background:#fff;border:1px solid var(--line);border-radius:28px;padding:16px 16px 24px;box-shadow:var(--eh-shadow)}
 .eh-hero__feature .eh-card__media{border:0;background:var(--bg);aspect-ratio:16/11}
 .eh-hero__feature .eh-card__body{padding:0 8px}
+@media(min-width:1001px){.eh-hero__copy{padding-top:17px}}
 @media(max-width:1000px){.eh-hero__grid{grid-template-columns:1fr}}
 
 .eh-bloghead{padding:clamp(24px,3vw,40px) 0 0}
