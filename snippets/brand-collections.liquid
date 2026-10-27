@@ -14,7 +14,7 @@
     {%- assign brands = brand_raw | strip | split: '~|~' -%}
     → nome: entry | split: '|' | first · handle: entry | split: '|' | last
 {%- endcomment -%}
-{%- assign brand_source = "groomtek|Groomtek,andis|Andis,sharper-blade|Sharper Blade,show-tech|Show Tech,mp-bergamo|MP Bergamo,flexi|Flexi,freedog|Freedog,hau-miau|Hau&Miau,barry-king|Barry King,antos|Antos,happy-pet|Happy Pet,pawppin|Pawppin,lolo-pets|Lolo Pets,yento|Yento,moderna|Moderna,red-dingo|Red Dingo,groom-professional|Groom Professional,groom-x|Groom-X,odourlock|OdourLock,cats-way|Cat's Way,solidary|Solidary,petuxe|Petuxe,easy-clean|Easy Clean,3-claveles|3 Claveles,milk-pepper|Milk&Pepper,transgroom|Transgroom,chris-christensen|Chris Christensen,the-sentinel|The Sentinel,panama-pet|Panama Pet,aeolus|Aeolus,omega-paw|Omega Paw,tikima|Tikima,matti|Matti,defurr-um|Defurr-UM,camas-agui|Agui,burbur|Burbur,natura-diet|Natura Diet,dingo|Dingo" | split: ',' -%}
+{%- assign brand_source = "groomtek|Groomtek,andis|Andis,sharper-blade|Sharper Blade,show-tech|Show Tech,mp-bergamo|MP Bergamo,flexi|Flexi,freedog|Freedog,hau-miau|Hau&Miau,barry-king|Barry King,antos|Antos,happy-pet|Happy Pet,pawppin|Pawppin,lolo-pets|Lolo Pets,yento|Yento,moderna|Moderna,red-dingo|Red Dingo,groom-professional|Groom Professional,groom-x|Groom-X,odourlock|OdourLock,cats-way|Cat's Way,solidary|Solidary,petuxe|Petuxe,easy-clean|Easy Clean,3-claveles|3 Claveles,milk-pepper|Milk&Pepper,transgroom|Transgroom,chris-christensen|Chris Christensen,the-sentinel|The Sentinel,panama-pet|Panama Pet,aeolus|Aeolus,omega-paw|Omega Paw,tikima|Tikima,matti|Matti,defurr-um|Defurr-UM,camas-agui|Agui,burbur|Burbur,natura-diet|Natura Diet,dingo|Dingo,weego|Weego" | split: ',' -%}
 
 {%- if for_product -%}
   {%- assign brand_match = '' -%}
