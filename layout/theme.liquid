@@ -512,6 +512,8 @@
   <script>
     window.HukoCart = {
       cart: {{ cart | json }},
+      {%- comment -%} Preço comparativo por variante (o JSON do carrinho não o traz); mini-cart.js completa o resto. {%- endcomment %}
+      compareAt: { {%- for item in cart.items -%}{%- if item.variant.compare_at_price > item.variant.price -%}"{{ item.variant_id }}": {{ item.variant.compare_at_price }},{%- endif -%}{%- endfor -%} },
       moneyFormat: {{ shop.money_format | json }},
       freeShippingThreshold: {{ settings.free_shipping_threshold | default: 45 | json }},
       routes: {

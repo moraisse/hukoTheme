@@ -62,6 +62,41 @@
     return '';
   }
 
+  /* ---------- promoções ----------
+     O JSON do carrinho não traz o preço comparativo. O estado inicial vem do
+     Liquid (cfg.compareAt); para artigos adicionados depois, lê-se o
+     /products/<handle>.js uma vez por produto e volta-se a desenhar. */
+
+  var compareAt = cfg.compareAt || {};
+  var knownVariants = {};
+  var requestedHandles = {};
+  var lastCart = null;
+  ((cfg.cart && cfg.cart.items) || []).forEach(function (item) { knownVariants[item.variant_id] = true; });
+
+  function loadCompareAt(cart) {
+    var root = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
+    var pending = (cart.items || []).filter(function (item) {
+      return !knownVariants[item.variant_id] && item.handle && !requestedHandles[item.handle];
+    }).map(function (item) {
+      requestedHandles[item.handle] = true;
+      return fetch(root + 'products/' + encodeURIComponent(item.handle) + '.js', { headers: { Accept: 'application/json' } })
+        .then(function (res) { return res.ok ? res.json() : null; })
+        .then(function (product) {
+          ((product && product.variants) || []).forEach(function (v) {
+            knownVariants[v.id] = true;
+            if (v.compare_at_price > v.price) compareAt[v.id] = v.compare_at_price;
+          });
+        })
+        .catch(function () {});
+    });
+    if (pending.length) Promise.all(pending).then(function () { if (lastCart) render(lastCart); });
+  }
+
+  function lineCompare(item) {
+    var unit = compareAt[item.variant_id];
+    return unit && unit > item.price ? unit * item.quantity : 0;
+  }
+
   function linePrice(item) {
     if (typeof item.final_line_price === 'number') return item.final_line_price;
     if (typeof item.line_price === 'number') return item.line_price;
@@ -76,6 +111,12 @@
       variant = '<span class="mini-cart__variant">' + esc(item.variant_title) + '</span>';
     }
     var image = itemImage(item);
+    var compare = lineCompare(item);
+    var price = compare
+      ? '<span class="mini-cart__sale">Promoção</span>' +
+        '<s class="mini-cart__compare"><span class="visually-hidden">Preço original: </span>' + formatMoney(compare) + '</s>' +
+        '<span class="mini-cart__price price--sale"><span class="visually-hidden">Preço de promoção: </span>' + formatMoney(linePrice(item)) + '</span>'
+      : '<span class="mini-cart__price">' + formatMoney(linePrice(item)) + '</span>';
     return '' +
       '<div class="mini-cart__item" data-line="' + line + '">' +
         '<a class="mini-cart__thumb" href="' + esc(item.url) + '">' +
@@ -94,7 +135,7 @@
           '<button type="button" class="mini-cart__remove" data-qty="0" aria-label="Remover ' + esc(item.product_title) + '">' +
             '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>' +
           '</button>' +
-          '<span class="mini-cart__price">' + formatMoney(linePrice(item)) + '</span>' +
+          '<div class="mini-cart__prices">' + price + '</div>' +
         '</div>' +
       '</div>';
   }
@@ -114,6 +155,8 @@
 
   function render(cart) {
     var count = cart.item_count || 0;
+    lastCart = cart;
+    loadCompareAt(cart);
 
     if (countEl) {
       countEl.textContent = count;

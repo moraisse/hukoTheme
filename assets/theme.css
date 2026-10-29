@@ -899,6 +899,13 @@ body.template-product .breadcrumb [aria-current]{text-transform:uppercase;letter
 .mini-cart__remove{background:none;border:none;padding:0;cursor:pointer;color:var(--soft);display:flex;transition:color .15s,transform .15s}
 .mini-cart__remove:hover{color:var(--ink);transform:rotate(90deg)}
 .mini-cart__price{font-family:var(--serif);font-size:16px;font-weight:700;color:#2DAF61;white-space:nowrap}
+/* Promoção no carrinho: etiqueta pequena + preço original riscado, como nos cartões */
+.mini-cart__prices{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.mini-cart__sale,.cart-item__sale{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--sale);color:var(--bg);font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.cart-item__sale{display:table;margin:6px 0 4px}
+.mini-cart__compare{font-size:12.5px;color:var(--soft);white-space:nowrap}
+.mini-cart__price.price--sale{color:var(--sale)}
+.cart-item .row .price{font-size:17px}
 .mini-cart__empty{margin:0;padding:10px 22px 26px;font-size:14.5px;color:var(--muted)}
 
 .mini-cart__foot{padding:16px 22px 20px;border-top:1px solid var(--line)}

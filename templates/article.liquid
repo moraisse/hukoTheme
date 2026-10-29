@@ -150,7 +150,12 @@
                 <span class="eh-buy__img">{%- if p.featured_image -%}<img src="{{ p.featured_image | image_url: width: 160 }}" alt="" width="60" height="60" loading="lazy">{%- endif -%}</span>
                 <span>
                   <span class="eh-buy__name">{{ p.title }}</span>
-                  <span class="eh-buy__price">{{ v.price | money }}</span>
+                  {%- if v.compare_at_price > v.price -%}
+                    <span class="eh-buy__sale">Promoção</span>
+                    <span class="eh-buy__prices"><s class="eh-buy__compare"><span class="visually-hidden">Preço original: </span>{{ v.compare_at_price | money }}</s> <span class="eh-buy__price price--sale"><span class="visually-hidden">Preço de promoção: </span>{{ v.price | money }}</span></span>
+                  {%- else -%}
+                    <span class="eh-buy__price">{{ v.price | money }}</span>
+                  {%- endif -%}
                 </span>
               </a>
             {%- endfor -%}
