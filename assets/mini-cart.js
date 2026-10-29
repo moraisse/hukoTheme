@@ -92,9 +92,10 @@
     if (pending.length) Promise.all(pending).then(function () { if (lastCart) render(lastCart); });
   }
 
-  function lineCompare(item) {
+  /* Percentagem de desconto da variante (0 se não estiver em promoção). */
+  function salePct(item) {
     var unit = compareAt[item.variant_id];
-    return unit && unit > item.price ? unit * item.quantity : 0;
+    return unit && unit > item.price ? Math.round((unit - item.price) * 100 / unit) : 0;
   }
 
   function linePrice(item) {
@@ -111,12 +112,9 @@
       variant = '<span class="mini-cart__variant">' + esc(item.variant_title) + '</span>';
     }
     var image = itemImage(item);
-    var compare = lineCompare(item);
-    var price = compare
-      ? '<span class="mini-cart__sale">Promoção</span>' +
-        '<s class="mini-cart__compare"><span class="visually-hidden">Preço original: </span>' + formatMoney(compare) + '</s>' +
-        '<span class="mini-cart__price price--sale"><span class="visually-hidden">Preço de promoção: </span>' + formatMoney(linePrice(item)) + '</span>'
-      : '<span class="mini-cart__price">' + formatMoney(linePrice(item)) + '</span>';
+    var pct = salePct(item);
+    var price = (pct ? '<span class="mini-cart__sale"><span class="visually-hidden">Desconto de </span>-' + pct + '%</span>' : '') +
+      '<span class="mini-cart__price">' + formatMoney(linePrice(item)) + '</span>';
     return '' +
       '<div class="mini-cart__item" data-line="' + line + '">' +
         '<a class="mini-cart__thumb" href="' + esc(item.url) + '">' +

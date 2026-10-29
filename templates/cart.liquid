@@ -14,7 +14,7 @@
             <div class="cart-item__info">
               <a href="{{ item.url }}" style="font-size:17px;font-weight:500">{{ item.product.title }}</a>
               {% unless item.product.has_only_default_variant %}<div class="variant">{{ item.variant.title }}</div>{% endunless %}
-              {% if item.variant.compare_at_price > item.variant.price %}<span class="cart-item__sale">Promoção</span>{% endif %}
+              {% if item.variant.compare_at_price > item.variant.price %}<span class="cart-item__sale"><span class="visually-hidden">Desconto de </span>-{{ item.variant.compare_at_price | minus: item.variant.price | times: 100.0 | divided_by: item.variant.compare_at_price | round }}%</span>{% endif %}
               <a href="{{ item.url_to_remove }}" class="remove">Remover</a>
             </div>
             <div class="qty">
@@ -22,15 +22,7 @@
               <span style="min-width:20px;text-align:center;font-weight:500">{{ item.quantity }}</span>
               <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}" style="padding:9px 15px">+</a>
             </div>
-            {%- comment -%} Preço desta linha; em promoção, o preço original (compare_at × quantidade) aparece riscado. {%- endcomment -%}
-            <div class="row"><span class="label">Subtotal</span><span class="price-group">
-              {%- if item.variant.compare_at_price > item.variant.price -%}
-                <s class="price price--compare"><span class="visually-hidden">Preço original: </span>{{ item.variant.compare_at_price | times: item.quantity | money }}</s>
-                <span class="price price--sale"><span class="visually-hidden">Preço de promoção: </span>{{ item.final_line_price | money }}</span>
-              {%- else -%}
-                <span class="price">{{ item.final_line_price | money }}</span>
-              {%- endif -%}
-            </span></div>
+            <div class="row"><span class="label">Subtotal</span><span class="price">{{ item.final_line_price | money }}</span></div>
 {% for d in cart.discount_applications %}
   <div class="row"><span class="label">Desconto ({{ d.title }})</span><span style="color:var(--green);font-weight:500">−{{ d.total_allocated_amount | money }}</span></div>
 {% endfor %}

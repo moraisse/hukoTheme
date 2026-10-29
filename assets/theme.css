@@ -262,8 +262,7 @@ body .prod-card--white{background:#fff}
 .badge{position:absolute;top:14px;left:14px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
 .badge--new{background:var(--green);color:var(--bg)}
 .badge--best{background:var(--gold);color:var(--ink)}
-.badge--sale{background:var(--sale);color:var(--sale-ink);font-size:14px;font-weight:800;padding:7px 8px 7px 15px;display:inline-flex;align-items:center;gap:8px;box-shadow:0 6px 18px rgba(46,204,113,.40)}
-.badge__pct{background:var(--ink);color:var(--sale);border-radius:999px;padding:2px 8px;font-weight:800;letter-spacing:.02em}
+.badge--sale{background:var(--sale);color:var(--sale-ink);font-size:14px;font-weight:800;letter-spacing:.02em;padding:6px 12px;box-shadow:0 6px 18px rgba(46,204,113,.40)}
 .badge--right{left:auto;right:14px}
 .badge[hidden]{display:none}
 .prod-card__body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:7px;flex:1}
@@ -273,14 +272,11 @@ body .prod-card--white{background:#fff}
 .prod-card__foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px}
 .price{font-family:var(--serif);font-size:19px;font-weight:700;color:#2DAF61}
 .price--big{font-size:32px}
-/* Preço em promoção: o antigo riscado vem primeiro e, se não couber ao lado,
-   passa para cima do novo (flex-wrap) — cartões estreitos dos carrosséis e mobile. */
-.price-group{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 8px;min-width:0}
+/* Preço riscado: só na página de produto */
 .price--compare{font-family:var(--sans);font-size:14px;font-weight:400;color:var(--soft);text-decoration:line-through;white-space:nowrap}
 .price--compare-big{font-size:20px}
-/* preço de promoção sobre fundo verde, para se destacar do preço riscado */
-.price--sale{background:var(--sale);color:var(--sale-ink);padding:1px 9px;border-radius:8px;white-space:nowrap}
-.price--big.price--sale{padding:2px 14px;border-radius:12px}
+/* preço de promoção sobre fundo verde, só na página de produto (junto ao preço riscado) */
+.price--big.price--sale{background:var(--sale);color:var(--sale-ink);padding:2px 14px;border-radius:12px;white-space:nowrap}
 .price--compare[hidden]{display:none}
 /* Item PROMOÇÕES do menu (identificado pelo URL em layout/theme.liquid) */
 .site-header .nav-item--sale > .nav-item__link{color:var(--sale-accent)}
@@ -901,12 +897,10 @@ body.template-product .breadcrumb [aria-current]{text-transform:uppercase;letter
 .mini-cart__remove{background:none;border:none;padding:0;cursor:pointer;color:var(--soft);display:flex;transition:color .15s,transform .15s}
 .mini-cart__remove:hover{color:var(--ink);transform:rotate(90deg)}
 .mini-cart__price{font-family:var(--serif);font-size:16px;font-weight:700;color:#2DAF61;white-space:nowrap}
-/* Promoção no carrinho: etiqueta pequena + preço original riscado, como nos cartões */
+/* Promoção no carrinho: etiqueta pequena com a percentagem de desconto */
 .mini-cart__prices{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
 .mini-cart__sale,.cart-item__sale{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--sale);color:var(--sale-ink);font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
 .cart-item__sale{display:table;margin:6px 0 4px}
-.mini-cart__compare{font-size:12.5px;color:var(--soft);white-space:nowrap}
-.mini-cart__price.price--sale{color:var(--sale-ink)}
 .cart-item .row .price{font-size:17px}
 .mini-cart__empty{margin:0;padding:10px 22px 26px;font-size:14.5px;color:var(--muted)}
 

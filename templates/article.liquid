@@ -151,11 +151,9 @@
                 <span>
                   <span class="eh-buy__name">{{ p.title }}</span>
                   {%- if v.compare_at_price > v.price -%}
-                    <span class="eh-buy__sale">Promoção</span>
-                    <span class="eh-buy__prices"><s class="eh-buy__compare"><span class="visually-hidden">Preço original: </span>{{ v.compare_at_price | money }}</s> <span class="eh-buy__price price--sale"><span class="visually-hidden">Preço de promoção: </span>{{ v.price | money }}</span></span>
-                  {%- else -%}
-                    <span class="eh-buy__price">{{ v.price | money }}</span>
+                    <span class="eh-buy__sale"><span class="visually-hidden">Desconto de </span>-{{ v.compare_at_price | minus: v.price | times: 100.0 | divided_by: v.compare_at_price | round }}%</span>
                   {%- endif -%}
+                  <span class="eh-buy__price">{{ v.price | money }}</span>
                 </span>
               </a>
             {%- endfor -%}
