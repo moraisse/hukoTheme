@@ -221,10 +221,10 @@
 .eh-buy__name{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:14px;line-height:1.3;color:var(--ink)}
 .eh-buy__price{font-family:var(--serif);font-weight:700;font-size:15px;color:#2DAF61}
 /* Promoção: mesma etiqueta e preço riscado dos cartões de produto, em ponto pequeno */
-.eh-buy__sale{display:inline-block;margin:4px 0 2px;padding:2px 8px;border-radius:999px;background:var(--sale);color:var(--bg);font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.eh-buy__sale{display:inline-block;margin:4px 0 2px;padding:2px 8px;border-radius:999px;background:var(--sale);color:var(--sale-ink);font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 .eh-buy__prices{display:block}
 .eh-buy__compare{font-size:13px;color:var(--soft)}
-.eh-buy__price.price--sale{color:var(--sale)}
+.eh-buy__price.price--sale{color:var(--sale-ink)}
 
 /* Corpo do artigo — normaliza o HTML editorial (.huko-editorial) sem tocar no conteúdo guardado */
 .eh-body{font-size:18px;line-height:1.75;color:var(--eh-text);font-weight:300}
