@@ -2,8 +2,8 @@
 :root{
   --green:#2ECC71; --ink:#1A1A1A; --bg:#FAF8F3; --forest:#1E3D2F; --gold:#C9B27A;
   --line:#E9E4D8; --muted:#6B6B62; --soft:#8A8A80;
-  /* promoção: verde ervilha como fundo (badge, preço de saldo), texto em tinta por contraste */
-  --sale:#8DB600; --sale-ink:var(--ink); --sale-accent:var(--sale);
+  /* promoção: verde da paleta como fundo (badge, preço de saldo), texto em tinta por contraste */
+  --sale:var(--green); --sale-ink:var(--ink); --sale-accent:var(--sale);
   --serif:'Schibsted Grotesk',system-ui,sans-serif; --sans:'Hanken Grotesk',system-ui,sans-serif;
 }
 *{box-sizing:border-box}
@@ -262,7 +262,7 @@ body .prod-card--white{background:#fff}
 .badge{position:absolute;top:14px;left:14px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
 .badge--new{background:var(--green);color:var(--bg)}
 .badge--best{background:var(--gold);color:var(--ink)}
-.badge--sale{background:var(--sale);color:var(--sale-ink);font-size:14px;font-weight:800;padding:7px 8px 7px 15px;display:inline-flex;align-items:center;gap:8px;box-shadow:0 6px 18px rgba(110,140,0,.40)}
+.badge--sale{background:var(--sale);color:var(--sale-ink);font-size:14px;font-weight:800;padding:7px 8px 7px 15px;display:inline-flex;align-items:center;gap:8px;box-shadow:0 6px 18px rgba(46,204,113,.40)}
 .badge__pct{background:var(--ink);color:var(--sale);border-radius:999px;padding:2px 8px;font-weight:800;letter-spacing:.02em}
 .badge--right{left:auto;right:14px}
 .badge[hidden]{display:none}
@@ -278,7 +278,7 @@ body .prod-card--white{background:#fff}
 .price-group{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 8px;min-width:0}
 .price--compare{font-family:var(--sans);font-size:14px;font-weight:400;color:var(--soft);text-decoration:line-through;white-space:nowrap}
 .price--compare-big{font-size:20px}
-/* preço de promoção sobre fundo verde ervilha, para se destacar do preço riscado */
+/* preço de promoção sobre fundo verde, para se destacar do preço riscado */
 .price--sale{background:var(--sale);color:var(--sale-ink);padding:1px 9px;border-radius:8px;white-space:nowrap}
 .price--big.price--sale{padding:2px 14px;border-radius:12px}
 .price--compare[hidden]{display:none}
