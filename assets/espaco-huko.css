@@ -133,8 +133,17 @@
 .eh-news__panel::after{content:"";position:absolute;right:-120px;top:-150px;width:380px;height:380px;border-radius:50%;background:rgba(46,204,113,.12);pointer-events:none}
 .eh-news__panel>*{position:relative;z-index:1}
 .eh-news__list{list-style:none;margin:0;padding:0;display:grid;gap:36px 28px}
-@media(min-width:1200px){.eh-news__list:has(>li:nth-child(2)){grid-template-columns:repeat(2,minmax(0,1fr))}}
-.eh-news__item{position:relative}
+.eh-news__item{position:relative;display:flex}
+.eh-news__item>.eh-card{flex:1}
+/* Com duas ou mais novidades lado a lado, cada cartão passa a imagem em cima e
+   texto em baixo (como o destaque do topo), com a mesma altura em todos. */
+@media(min-width:1200px){
+  .eh-news__list:has(>li:nth-child(2)){grid-template-columns:repeat(2,minmax(0,1fr))}
+  .eh-news__list:has(>li:nth-child(2)) .eh-card--featured{grid-template-columns:1fr;align-content:start;align-items:stretch;gap:20px}
+  .eh-news__list:has(>li:nth-child(2)) .eh-card--featured .eh-card__media{aspect-ratio:16/10}
+  .eh-news__list:has(>li:nth-child(2)) .eh-card--featured .eh-card__body{padding:0 10px 10px}
+  .eh-news__list:has(>li:nth-child(2)) .eh-card--featured .eh-card__title{font-size:clamp(24px,1.9vw,30px);line-height:1.12}
+}
 .eh-news__badge{position:absolute;z-index:2;top:-13px;left:28px;display:inline-flex;align-items:center;padding:7px 14px;border-radius:999px;background:var(--gold);color:var(--ink);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 .eh-news .eh-card--featured{border-color:var(--eh-mint-line);box-shadow:var(--eh-shadow)}
 
