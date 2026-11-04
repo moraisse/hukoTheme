@@ -23,6 +23,9 @@
     if paginate.next
       assign pagination_next_url = paginate.next.url
     endif
+    if paginate.current_page > 1 and paginate.current_page > paginate.pages
+      assign pagination_out_of_range = true
+    endif
   -%}
   <div class="eh">
     <section class="eh-bloghead">

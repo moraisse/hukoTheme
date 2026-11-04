@@ -13,8 +13,20 @@
   {%- assign title_use_suffix = true -%}
   {%- if page_title_down contains 'hukopets' or title_full_size > 60 -%}{%- assign title_use_suffix = false -%}{%- endif %}
   <title>{{ page_title }}{% if title_use_suffix %}{{ title_suffix }}{% endif %}</title>
-  {%- comment -%} Listagens de fornecedor: o Google deve preferir as coleções de marca. {%- endcomment -%}
-  {%- if template.name == 'collection' and collection.handle == 'vendors' -%}
+  {%- comment -%}
+    URL canónico explícito: sem ?variant=, UTM, gclid, etc.; as páginas ?page=N mantêm o
+    próprio URL (para o Google continuar a descobrir os produtos das páginas seguintes).
+  {%- endcomment %}
+  <link rel="canonical" href="{{ canonical_url }}">
+  {%- comment -%}
+    noindex,follow só em casos pontuais:
+    - listagens de fornecedor (/collections/vendors?q=): o Google deve preferir as coleções de marca;
+    - paginação para além da última página (ex.: ?page=999), que fica vazia.
+  {%- endcomment -%}
+  {%- assign robots_noindex = false -%}
+  {%- if template.name == 'collection' and collection.handle == 'vendors' -%}{%- assign robots_noindex = true -%}{%- endif -%}
+  {%- if pagination_out_of_range -%}{%- assign robots_noindex = true -%}{%- endif -%}
+  {%- if robots_noindex %}
   <meta name="robots" content="noindex,follow">
   {%- endif %}
   <link rel="icon" type="image/png" sizes="192x192" href="{{ 'favicon.png' | asset_url }}">
