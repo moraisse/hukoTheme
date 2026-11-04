@@ -29,8 +29,11 @@
       <nav class="coll-index__jump" aria-label="Ir para a coleção">
         {%- for rh in root_handles -%}
           {%- assign root = collections[rh] -%}
-          {%- if root.products_count > 0 -%}
-            <a href="#coll-{{ rh }}">{{ root.title | downcase | capitalize }}</a>
+          {%- comment -%} Coleções de topo que não existem (ex.: peixes) são ignoradas. {%- endcomment -%}
+          {%- if root.handle == rh -%}
+            {%- if root.products_count > 0 -%}
+              <a href="#coll-{{ rh }}">{{ root.title | downcase | capitalize }}</a>
+            {%- endif -%}
           {%- endif -%}
         {%- endfor -%}
       </nav>
@@ -38,12 +41,13 @@
 
     {%- for rh in root_handles -%}
       {%- assign root = collections[rh] -%}
+      {%- if root.handle != rh -%}{%- continue -%}{%- endif -%}
       {%- if root.products_count == 0 -%}{%- continue -%}{%- endif -%}
       {%- assign root_key = '>' | append: rh | append: '|' -%}
 
       <section class="coll-group" id="coll-{{ rh }}" aria-labelledby="coll-{{ rh }}-title">
         <div class="coll-group__head">
-          {%- if root.featured_image -%}
+          {%- if root.featured_image != blank -%}
             <div class="coll-group__thumb"><img src="{{ root.featured_image | image_url: width: 160 }}" alt="" width="80" height="80" loading="lazy"></div>
           {%- endif -%}
           <div class="coll-group__title">
@@ -62,7 +66,7 @@
 
             <article class="coll-card">
               <a href="{{ c.url }}" class="coll-card__media" tabindex="-1" aria-hidden="true">
-                {%- if c.featured_image -%}
+                {%- if c.featured_image != blank -%}
                   <img src="{{ c.featured_image | image_url: width: 640 }}"
                        srcset="{{ c.featured_image | image_url: width: 360 }} 360w, {{ c.featured_image | image_url: width: 640 }} 640w"
                        sizes="(max-width:600px) 50vw, (max-width:1100px) 33vw, 25vw"

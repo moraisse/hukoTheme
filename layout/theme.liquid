@@ -27,10 +27,24 @@
   {%- endif %}
   <link rel="icon" type="image/png" sizes="192x192" href="{{ 'favicon.png' | asset_url }}">
   <link rel="apple-touch-icon" href="{{ 'favicon.png' | asset_url }}">
-  {%- comment -%} Mapa do site (template page.sitemap) tem descrição própria. {%- endcomment -%}
+  {%- comment -%}
+    Descrições próprias onde o Shopify não tem campo (ou repetiria a da loja):
+    mapa do site, índice de coleções (/collections) e páginas de políticas.
+  {%- endcomment -%}
   {%- assign meta_description = page_description -%}
   {%- if template.name == 'page' and template.suffix == 'sitemap' -%}
     {%- assign meta_description = 'Mapa do site da Hukopets: todas as categorias, marcas e produtos para cães, gatos e grooming profissional, organizados por coleção.' -%}
+  {%- elsif template.name == 'list-collections' -%}
+    {%- assign meta_description = 'Explore as coleções HUKO pets: alimentação, higiene e acessórios para cães e gatos, além de equipamentos e produtos de grooming profissional.' -%}
+  {%- elsif request.page_type == 'policy' and meta_description == blank -%}
+    {%- case request.path -%}
+      {%- when '/policies/shipping-policy' -%}{%- assign meta_description = 'Política de envio da HUKO pets: zonas de entrega, processamento, prazos e custos de envio, e o que fazer em caso de atraso, extravio ou dano da encomenda.' -%}
+      {%- when '/policies/refund-policy' -%}{%- assign meta_description = 'Política de devolução e reembolso da HUKO pets: direito de livre resolução, como pedir uma devolução, condições, custos e prazos de reembolso.' -%}
+      {%- when '/policies/privacy-policy' -%}{%- assign meta_description = 'Política de privacidade da HUKO pets: que dados pessoais recolhemos, para que os usamos, quanto tempo os guardamos, cookies e como exercer os seus direitos.' -%}
+      {%- when '/policies/terms-of-service' -%}{%- assign meta_description = 'Termos e condições de venda da HUKO pets: encomendas, preços, pagamento, entrega, direito de livre resolução e garantia legal nas compras em hukopets.com.' -%}
+      {%- when '/policies/contact-information' -%}{%- assign meta_description = 'Contactos da HUKO pets: email, telefone e horário de apoio ao cliente, identificação legal da empresa, reclamações e Livro de Reclamações eletrónico.' -%}
+      {%- when '/policies/legal-notice' -%}{%- assign meta_description = 'Aviso legal da HUKO pets: titularidade do website hukopets.com, condições de utilização, propriedade intelectual, responsabilidade e lei aplicável.' -%}
+    {%- endcase -%}
   {%- endif %}
   {%- comment -%} Open Graph / Twitter (partilhas em redes sociais), em todas as páginas. {%- endcomment -%}
   {%- assign og_type = 'website' -%}
@@ -371,7 +385,17 @@
       </div>
     {% endif %}
     {% render 'breadcrumb' %}
-    {{ content_for_layout }}
+    {%- comment -%}
+      Políticas: o Shopify gera um <h1> com o título (escondido em theme.css) e o texto
+      da política já traz o seu próprio <h1> visível. Para ficar um único H1, o título
+      gerado passa a <div>; o texto jurídico não é alterado.
+    {%- endcomment -%}
+    {%- assign layout_h1_count = content_for_layout | split: '<h1' | size | minus: 1 -%}
+    {%- if request.page_type == 'policy' and layout_h1_count > 1 and content_for_layout contains '<div class="shopify-policy__title">' -%}
+      {{ content_for_layout | replace_first: '<h1>', '<div class="shopify-policy__heading">' | replace_first: '</h1>', '</div>' }}
+    {%- else -%}
+      {{ content_for_layout }}
+    {%- endif %}
   </main>
 
   <section class="newsletter">
@@ -399,6 +423,7 @@
           {% for link in linklists.main-menu.links limit: 4 %}
             {% unless link.handle == 'grooming' %}<a href="{{ link.url }}">{{ link.title }}</a>{% endunless %}
           {% endfor %}
+          <a href="{{ routes.collections_url }}">Todas as coleções</a>
           {% for link in grooming_links %}
             <div class="footer-grooming">
               <a href="{{ grooming_destination }}" class="footer-grooming__link">
