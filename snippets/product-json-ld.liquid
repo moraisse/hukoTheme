@@ -1,0 +1,82 @@
+{%- comment -%}
+  Dados estruturados schema.org/Product da página de produto (rich results).
+  Uso: {% render 'product-json-ld', product: product %} — só em sections/main-product.liquid.
+
+  - offers: uma Offer por variante (InStock/OutOfStock conforme variant.available).
+  - image: todas as imagens do produto (máx. 10), a 1200px.
+  - aggregateRating: só quando há avaliações nos metafields standard reviews.*
+    que o Judge.me sincroniza com o Shopify; sem avaliações o campo é omitido.
+  Todos os valores de texto passam por | json (escape de aspas, </script>, etc.).
+{%- endcomment -%}
+{%- assign v = product.selected_or_first_available_variant -%}
+{%- comment -%} Marca: nome da coleção de marca do produto; sem correspondência, o fornecedor. {%- endcomment -%}
+{%- capture ld_brand -%}{% render 'brand-collections', for_product: product %}{%- endcapture -%}
+{%- assign ld_brand = ld_brand | strip | split: '|' | first | default: product.vendor -%}
+{%- assign ld_rating = product.metafields.reviews.rating.value -%}
+{%- assign ld_rating_count = product.metafields.reviews.rating_count.value | default: 0 -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "description": {{ product.description | replace: '<', ' <' | strip_html | split: ' ' | join: ' ' | truncate: 300 | json }},
+  "url": {{ shop.url | append: product.url | json }},
+  {%- if product.images.size > 0 %}
+  "image": [
+    {%- for image in product.images limit: 10 -%}
+    {{ image | image_url: width: 1200 | prepend: 'https:' | json }}{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ],
+  {%- endif %}
+  {%- if v.sku != blank %}
+  "sku": {{ v.sku | json }},
+  {%- endif %}
+  {%- if v.barcode != blank %}
+  "gtin": {{ v.barcode | json }},
+  {%- endif %}
+  {%- if ld_rating_count > 0 and ld_rating.rating > 0 %}
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": {{ ld_rating.rating | json }},
+    "bestRating": {{ ld_rating.scale_max | default: 5 | json }},
+    "worstRating": {{ ld_rating.scale_min | default: 1 | json }},
+    "reviewCount": {{ ld_rating_count | json }}
+  },
+  {%- endif %}
+  "brand": { "@type": "Brand", "name": {{ ld_brand | json }} },
+  "offers": [
+    {%- for variant in product.variants %}
+    {
+      "@type": "Offer",
+      {%- if variant.sku != blank %}
+      "sku": {{ variant.sku | json }},
+      {%- endif %}
+      "url": {{ shop.url | append: variant.url | json }},
+      "price": {{ variant.price | divided_by: 100.0 | json }},
+      "priceCurrency": {{ cart.currency.iso_code | json }},
+      "availability": "https://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}",
+      "itemCondition": "https://schema.org/NewCondition",
+      "seller": { "@type": "Organization", "name": "HUKO pets" },
+      "shippingDetails": {
+        "@type": "OfferShippingDetails",
+        "shippingRate": { "@type": "MonetaryAmount", "value": {% if variant.price >= 4500 %}0{% else %}4.99{% endif %}, "currency": "EUR" },
+        "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "PT" },
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "handlingTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 1, "unitCode": "DAY" },
+          "transitTime":  { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 1, "unitCode": "DAY" }
+        }
+      },
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "PT",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": 14,
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": "https://schema.org/ReturnShippingFees"
+      }
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ]
+}
+</script>
