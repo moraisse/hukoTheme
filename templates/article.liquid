@@ -274,7 +274,10 @@
         {%- assign p = all_products[h] -%}
         {%- if p.id == blank -%}{%- continue -%}{%- endif -%}
         {%- unless first_mention -%},{%- endunless -%}
-        { "@type": "Product", "name": {{ p.title | json }}, "url": {{ shop.url | append: p.url | json }}{% if p.vendor != blank %}, "brand": { "@type": "Brand", "name": {{ p.vendor | json }} }{% endif %} }
+        {%- assign mv = p.selected_or_first_available_variant -%}
+        {%- assign mavail = 'OutOfStock' -%}
+        {%- if mv.available -%}{%- assign mavail = 'InStock' -%}{%- endif -%}
+        { "@type": "Product", "name": {{ p.title | json }}, "url": {{ shop.url | append: p.url | json }}{% if p.featured_image %}, "image": {{ p.featured_image | image_url: width: 1200 | prepend: 'https:' | json }}{% endif %}{% if p.vendor != blank %}, "brand": { "@type": "Brand", "name": {{ p.vendor | json }} }{% endif %}, "offers": { "@type": "Offer", "url": {{ shop.url | append: p.url | json }}, "price": {{ mv.price | divided_by: 100.0 | json }}, "priceCurrency": {{ cart.currency.iso_code | json }}, "availability": {{ mavail | prepend: 'https://schema.org/' | json }} } }
         {%- assign first_mention = false -%}
       {%- endfor -%}
     ],
