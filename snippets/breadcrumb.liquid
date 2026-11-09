@@ -136,6 +136,7 @@
     {%- when 'article' -%}
       {%- assign anc_titles = blog.title -%}
       {%- assign anc_urls = blog.url -%}
+      {%- if blog.handle == 'noticias' -%}{%- assign anc_urls = '/pages/espaco-huko' -%}{%- endif -%}
       {%- assign current_title = article.title -%}
 
     {%- when 'search' -%}
