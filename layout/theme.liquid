@@ -17,11 +17,13 @@
     Canonical: gerado nativamente pelo Shopify em content_for_header (1 por página).
     noindex,follow só em casos pontuais:
     - listagens de fornecedor (/collections/vendors?q=): o Google deve preferir as coleções de marca;
-    - paginação para além da última página (ex.: ?page=999), que fica vazia.
+    - paginação para além da última página (ex.: ?page=999), que fica vazia;
+    - páginas de tag do blog (/blogs/x/tagged/y): sem conteúdo único, só listam artigos já indexados.
   {%- endcomment -%}
   {%- assign robots_noindex = false -%}
   {%- if template.name == 'collection' and collection.handle == 'vendors' -%}{%- assign robots_noindex = true -%}{%- endif -%}
   {%- if pagination_out_of_range -%}{%- assign robots_noindex = true -%}{%- endif -%}
+  {%- if template.name == 'blog' and current_tags != blank -%}{%- assign robots_noindex = true -%}{%- endif -%}
   {%- if robots_noindex %}
   <meta name="robots" content="noindex,follow">
   {%- endif %}
