@@ -406,6 +406,8 @@ body .prod-card--white{background:#fff}
 .coll-guide::before{content:"";position:absolute;left:22px;top:20px;bottom:20px;width:4px;border-radius:4px;background:var(--green)}
 .coll-guide__summary{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;list-style:none}
 .coll-guide__summary::-webkit-details-marker{display:none}
+.coll-guide__summary{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;caret-color:transparent}
+.coll-guide__summary:focus:not(:focus-visible){outline:none}
 .coll-guide__summary:focus-visible{outline:2px solid var(--forest);outline-offset:6px;border-radius:6px}
 .coll-guide h2{font-size:17px;line-height:1.3;color:var(--forest);margin:0;letter-spacing:-.01em}
 .coll-guide__btn{flex:none;display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;background:var(--forest);color:var(--bg);font-size:13px;font-weight:500;transition:background .2s}
