@@ -404,7 +404,24 @@ body .prod-card--white{background:#fff}
 /* caixa informativa na descrição da coleção (mesmo estilo das notas dos artigos) */
 .coll-guide{position:relative;margin:22px 0 0;padding:18px 22px 18px 46px;border-radius:16px;background:#EAF6EE;border:1px solid #CFE7D8;color:var(--ink);font-size:14.5px;line-height:1.6}
 .coll-guide::before{content:"";position:absolute;left:22px;top:20px;bottom:20px;width:4px;border-radius:4px;background:var(--green)}
-.coll-guide h2{font-size:17px;line-height:1.3;color:var(--forest);margin:0 0 10px;letter-spacing:-.01em}
+.coll-guide__summary{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;list-style:none}
+.coll-guide__summary::-webkit-details-marker{display:none}
+.coll-guide__summary:focus-visible{outline:2px solid var(--forest);outline-offset:6px;border-radius:6px}
+.coll-guide h2{font-size:17px;line-height:1.3;color:var(--forest);margin:0;letter-spacing:-.01em}
+.coll-guide__btn{flex:none;display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;background:var(--forest);color:var(--bg);font-size:13px;font-weight:500;transition:background .2s}
+.coll-guide__summary:hover .coll-guide__btn{background:#2A5340}
+.coll-guide__btn svg{transition:transform .25s}
+.coll-guide[open] .coll-guide__btn svg{transform:rotate(180deg)}
+.coll-guide__less,.coll-guide[open] .coll-guide__more{display:none}
+.coll-guide[open] .coll-guide__less{display:inline}
+.coll-guide__body{padding-top:12px}
+.coll-guide__body>:last-child{margin-bottom:0}
+@supports (interpolate-size:allow-keywords){
+  .coll-guide{interpolate-size:allow-keywords}
+  .coll-guide::details-content{block-size:0;overflow:hidden;transition:block-size .3s ease,content-visibility .3s allow-discrete}
+  .coll-guide[open]::details-content{block-size:auto}
+}
+@media(prefers-reduced-motion:reduce){.coll-guide::details-content,.coll-guide__btn svg{transition:none}}
 .coll-guide p,.space-grooming .coll-guide p{font-size:14.5px;line-height:1.6;color:var(--ink);opacity:1;max-width:none;margin:0 0 8px}
 .coll-guide ul,.coll-guide ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
 .coll-guide li{position:relative;padding-left:16px;color:#3F443F}

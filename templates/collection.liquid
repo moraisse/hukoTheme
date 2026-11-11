@@ -37,7 +37,16 @@
       <div class="coll-head__desc">
         {{ desc_parts.first }}
         {%- for part in desc_parts offset: 1 -%}
-          <aside class="coll-guide"><h2{{ part }}</aside>
+          {%- assign guide_head = part | split: '</h2>' | first -%}
+          {%- assign guide_title = guide_head | split: '>' | last | strip -%}
+          {%- assign guide_body = part | remove_first: guide_head | remove_first: '</h2>' -%}
+          <details class="coll-guide">
+            <summary class="coll-guide__summary">
+              <h2 class="coll-guide__title">{{ guide_title }}</h2>
+              <span class="coll-guide__btn" aria-hidden="true"><span class="coll-guide__more">Ver mais</span><span class="coll-guide__less">Ver menos</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+            </summary>
+            <div class="coll-guide__body">{{ guide_body }}</div>
+          </details>
         {%- endfor -%}
       </div>
     {%- endif -%}
