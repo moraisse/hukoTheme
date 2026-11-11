@@ -31,7 +31,16 @@
       <div class="grooming-heading__eyebrow">{{ 'general.grooming.professional' | t }} <span class="nav-grooming__badge">{{ 'general.navigation.pro' | t }}</span></div>
     {% endif %}
     <h1>{{ collection.title }}</h1>
-    {% if collection.description != blank %}<div class="coll-head__desc">{{ collection.description }}</div>{% endif %}
+    {%- if collection.description != blank -%}
+      {%- comment -%} Cada bloco iniciado por <h2> na descrição (ex.: "Qual areia escolher?") vira uma caixa informativa. {%- endcomment -%}
+      {%- assign desc_parts = collection.description | split: '<h2' -%}
+      <div class="coll-head__desc">
+        {{ desc_parts.first }}
+        {%- for part in desc_parts offset: 1 -%}
+          <aside class="coll-guide"><h2{{ part }}</aside>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
     {% if is_grooming %}
       {% if collection.description == blank %}<p>{{ 'general.grooming.intro' | t }}</p>{% endif %}
       <div class="grooming-heading__meta">
