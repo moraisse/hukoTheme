@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="{{ request.locale.iso_code }}">
 <head>
+  {%- if request.page_type == 'index' -%}
+    <meta name="norton-safeweb-site-verification" content="JJEKLOH7EAU0WYIOJ7QFOF416T5G207JERPU9Z10YYT8GL6SDPS9DMUAFQP8IHEMZXWLW54MN4YG7CNK0RN32YJ91Y6PAUHCNUKV-YI7BYE2CY8OYCZ3CSOFU3QF7EKF" />
+  {%- endif -%}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   {%- comment -%}
