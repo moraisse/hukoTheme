@@ -48,6 +48,11 @@
           "agent_activator_font_size": 16,
           "agent_border_radius": 16
         }
+      },
+      "7924418359578431505": {
+        "type": "shopify://apps/seoant-ai-seo/blocks/seoant-core/8e57283b-dcb0-4f7b-a947-fb5c57a0d59d",
+        "disabled": false,
+        "settings": {}
       }
     }
   }
